@@ -1,8 +1,9 @@
+import { ReactNode } from "react";
 
-const layout = () => {
+const layout = ({children}:{children:ReactNode}) => {
     return (
         <div>
-            this is authentication layout page
+           {children}
         </div>
     );
 };
