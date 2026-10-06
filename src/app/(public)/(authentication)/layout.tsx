@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 
-const layout = ({children}:{children:ReactNode}) => {
+const LoginLayout = ({children}:{children:ReactNode}) => {
     return (
-        <div>
-           {children}
-        </div>
+      <>
+       {children}
+      </>
     );
 };
 
-export default layout;
+export default LoginLayout;

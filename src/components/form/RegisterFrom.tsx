@@ -14,61 +14,33 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import {useForm} from "@tanstack/react-form";
-import {loginValidation} from "@/validations"
+import { RegisterValidation} from "@/validations"
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useLogin } from "@/hooks";
-import { toast } from "../ui/toast";
-import { Spinner } from "../ui/spinner";
 
-export function LoginForm({
+export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
 
-    const route = useRouter();
-    const [showPass, setShowPass] = useState(false);
-
-    
-    const {mutate: login,isPending: loginPending}=useLogin();
-   
-
     const form = useForm({
-      defaultValues: {
-        email: "test.admin@gmail.com",
-        password: "Admin@12",
-      },
-      validators: {
-        onSubmit: loginValidation,
-      },
-      onSubmit: ({ value }) => {
-        const loginData = {
-          email: value.email,
-          password: value.password,
-        };
-        login(loginData, {
-          onSuccess: (res) => {
-            toast.add({
-              title: "Welcome Back to Room Nest",
-              description: `${res.message ? res.message :"You LogIn Successfully"}`,
-              type:"success"
-            });
-            form.reset();
-            route.push("/")
-          },
-          onError: (err) => {
-            toast.add({
-              title: "Welcome Back to Room Nest",
-              description: `${err.message ? err.message : "Something is wrong. Please try again."}`,
-              type: "error",
-            });
-          },
-        });
-      },
+        defaultValues:{
+            name:"",
+            email:"",
+            password:""
+        },
+        validators:{
+            onSubmit:RegisterValidation
+        }
+        ,
+        onSubmit:({value})=>{
+             console.log(value)
+             form.reset()
+        }
     });
 
+    const [showPass , setShowPass]=useState(false);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -83,37 +55,67 @@ export function LoginForm({
           >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
+                <h1 className="text-2xl font-bold">Welcome to Room Nest</h1>
                 <p className="text-balance text-muted-foreground">
-                  Login to your Room Nest account
+                  Create an account to get started
                 </p>
               </div>
 
-              <form.Field name="email">
-                {(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                      <Input
-                        name={field.name}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        autoComplete="off"
-                        onBlur={field.handleBlur}
-                        value={field.state.value}
-                        id={field.name}
-                        type="email"
-                        placeholder="m@example.com"
-                        required
-                      />
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  );
-                }}
-              </form.Field>
+              <Field>
+                <form.Field name="name">
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Your Full Name
+                        </FieldLabel>
+                        <Input
+                          name={field.name}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          autoComplete="off"
+                          onBlur={field.handleBlur}
+                          value={field.state.value}
+                          id={field.name}
+                          type="text"
+                          required
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                </form.Field>
+              </Field>
+              <Field>
+                <form.Field name="email">
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                        <Input
+                          name={field.name}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          autoComplete="off"
+                          onBlur={field.handleBlur}
+                          value={field.state.value}
+                          id={field.name}
+                          type="email"
+                          placeholder="m@example.com"
+                          required
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                </form.Field>
+              </Field>
               <Field>
                 <form.Field name="password">
                   {(field) => {
@@ -121,14 +123,14 @@ export function LoginForm({
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
                       <Field data-invalid={isInvalid}>
-                        <div className="flex items-center ">
+                        <div className="flex items-center">
                           <FieldLabel htmlFor="password">Password</FieldLabel>
-                          <Link
-                            href="/forget-password"
+                          <a
+                            href="#"
                             className="ml-auto text-sm underline-offset-2 hover:underline hover:text-blue-700"
                           >
                             Forgot your password?
-                          </Link>
+                          </a>
                         </div>
                         <div className="relative">
                           <Input
@@ -158,25 +160,14 @@ export function LoginForm({
                 </form.Field>
               </Field>
               <Field>
-                <Button
-                  disabled={loginPending}
-                  className="bg-[#1a3929] cursor-pointer"
-                  type="submit"
-                >
-                  {loginPending ? (
-                    <>
-                      <Spinner />
-                      Submitting...
-                    </>
-                  ) : (
-                    "Login"
-                  )}
+                <Button className="bg-[#1a3929] cursor-pointer" type="submit">
+                  Register
                 </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
-              <Field className="">
+              <Field>
                 <Button
                   className="hover:bg-[#1c392a] hover:text-white cursor-pointer"
                   variant="outline"
@@ -192,16 +183,16 @@ export function LoginForm({
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Don&apos;t have an account?{" "}
-                <Link className="text-blue-700" href="/register">
-                  Sign up
+                Already have an account?{" "}
+                <Link className="text-blue-700" href="/login">
+                  Sign In
                 </Link>
               </FieldDescription>
             </FieldGroup>
           </form>
           <div className="relative hidden bg-muted md:block">
             <Image
-              src="/login.png"
+              src="/registerImage.png"
               alt="Image"
               width={500}
               height={500}
@@ -212,7 +203,7 @@ export function LoginForm({
       </Card>
       <FieldDescription className="px-6 text-center">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <Link href="#">Privacy Policy</Link>.
+        and <a href="#">Privacy Policy</a>.
       </FieldDescription>
     </div>
   );

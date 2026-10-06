@@ -1,6 +1,8 @@
 "use client"
 
+
 const page = () => {
+  
     return (
         <div>
             this is home page
