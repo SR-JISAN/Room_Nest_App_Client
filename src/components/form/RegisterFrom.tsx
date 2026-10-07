@@ -18,11 +18,19 @@ import { RegisterValidation} from "@/validations"
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useRegistration } from "@/hooks";
+import { toast } from "../ui/toast";
+import { Spinner } from "../ui/spinner";
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+    const route = useRouter();
+    const [showPass , setShowPass]=useState(false);
+ 
+    const {mutate : register , isPending }= useRegistration()
 
     const form = useForm({
         defaultValues:{
@@ -35,12 +43,33 @@ export function RegisterForm({
         }
         ,
         onSubmit:({value})=>{
-             console.log(value)
-             form.reset()
+             const registerData = {
+                name:value.name,
+                email:value.email,
+                password:value.password
+             }
+             register(registerData,{
+                onSuccess:(res)=>{
+                    toast.add({
+                    title:"Welcome to Room Nest",
+                    description:`${res.message}`,
+                    type:"success"
+                  })
+                    form.reset()
+                    route.push("/verify-email")
+                },
+                onError:(err)=>{
+                     toast.add({
+                       title: "Registration failed",
+                       description:"Something went wrong. Please try again.",
+                       type: "error",
+                     });
+                }
+             })
+             
         }
     });
 
-    const [showPass , setShowPass]=useState(false);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -160,8 +189,19 @@ export function RegisterForm({
                 </form.Field>
               </Field>
               <Field>
-                <Button className="bg-[#1a3929] cursor-pointer" type="submit">
-                  Register
+                <Button
+                  disabled={isPending}
+                  className="bg-[#1a3929] cursor-pointer"
+                  type="submit"
+                >
+                  {isPending ? (
+                    <>
+                      <Spinner />
+                      Submitting...
+                    </>
+                  ) : (
+                   "Register"
+                  )}
                 </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
