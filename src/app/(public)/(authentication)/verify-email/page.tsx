@@ -1,6 +1,7 @@
 "use client"
 
-import VerifyEmail from "@/components/form/VerifyEmail";
+
+import { VerifyEmail } from "@/components/form/VerifyEmail";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";

@@ -1,5 +1,5 @@
 
-import {  userGoogleLogin, userLoggedOut, userLogin, userProfile, userRegistration } from "@/api"
+import {  emailVerification, userGoogleLogin, userLoggedOut, userLogin, userProfile, userRegistration } from "@/api"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 
@@ -20,6 +20,12 @@ export function useRegistration(){
         mutationFn: userRegistration,
     });
 };
+
+export function useVerifyEmail(){
+return useMutation({
+    mutationFn:emailVerification,
+})
+}
 
 export function useLoggedOut(){
     return useMutation({
