@@ -2,6 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { toast } from "@/components/ui/toast";
+import { useLoggedOut, useUserProfile } from "@/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { Menu, X } from "lucide-react";
 
 import Image from "next/image";
@@ -15,12 +18,34 @@ const Navbar = () => {
         {name:"Properties and Rooms", path:"/properties-rooms"},
         {name:"About", path:"/about"},
     ];
-
-
     const [openMenu, isOpenMenu]=useState(false);
     const pathName = usePathname()
   
+    const {data,isLoading}=useUserProfile()
+    const {mutate:logout}=useLoggedOut()
+    const queryClient = useQueryClient()
 
+    const handelLoggedOut = ()=>{
+      logout(undefined,{
+        onSuccess:()=>{
+          toast.add(
+            {
+              title:"Logged Out Successful",
+              description:"You Logged Out Successfully",
+              type:"success"
+            }
+          ),
+          queryClient.removeQueries({queryKey:["user"]})
+        },
+        onError(){
+          toast.add({
+            title:"Logged Out Failed",
+            description:"Something went wrong",
+            type:"error"
+          })
+        }
+      })
+    }
 
     return (
       <header className="w-full shadow-2xl bg-[#0f1f17] text-white">
@@ -45,7 +70,7 @@ const Navbar = () => {
           </div>
           <nav className="hidden md:flex lg:flex justify-center items-center gap-4 ">
             {routes.map((route) => {
-                const isActive = pathName === route.path;
+              const isActive = pathName === route.path;
               return (
                 <Link key={route.path} href={route.path}>
                   <div
@@ -65,16 +90,26 @@ const Navbar = () => {
               );
             })}
           </nav>
-          <div className="flex items-center gap-4">
-            <Button
-              variant="secondary"
-              render={<Link href="/login">Login</Link>}
-              nativeButton={false}
-            >
-              Login
-            </Button>
-
-
+          <div className="flex items-center gap-4 ">
+            {data ? (
+              <Button
+                onClick={handelLoggedOut}
+                variant="secondary"
+                nativeButton={false}
+                className="font-bold"
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                variant="secondary"
+                render={<Link href="/login">Login</Link>}
+                nativeButton={false}
+                className="font-bold shadow"
+              >
+                Login
+              </Button>
+            )}
 
             {/* Mobile Menu */}
 
@@ -128,7 +163,7 @@ const Navbar = () => {
 
                   <DrawerDescription className="flex flex-col justify-normal items-start gap-3 mt-4 text-sm font-semibold">
                     {routes.map((route) => {
-                        const isActive =pathName ===route.path;
+                      const isActive = pathName === route.path;
                       return (
                         <Link
                           className={`w-full ${isActive ? "bg-[#0f1f17] text-white rounded-xl" : ""}`}
@@ -144,24 +179,36 @@ const Navbar = () => {
                   </DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter>
-                  <div className="flex w-full items-center gap-4">
-                    <Button
-                      className="flex-1 shadow bg-[#0f1f17] text-white hover:bg-[#0f1f17] hover:text-white"
-                      variant="secondary"
-                      render={<Link href="/login">Login</Link>}
-                      nativeButton={false}
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      className="flex-1 shadow bg-[#0f1f17] text-white hover:bg-[#0f1f17] hover:text-white"
-                      variant="secondary"
-                      render={<Link href="/register">Register</Link>}
-                      nativeButton={false}
-                    >
-                      Login
-                    </Button>
-                  </div>
+                  {data ? (
+                    <div className="flex w-full items-center gap-4">
+                      <Button
+                        onClick={handelLoggedOut}
+                        variant="secondary"
+                        className="font-bold w-full bg-[#0f1f17] text-white hover:bg-[#0f1f17] shadow hover:text-red-500 hover:shadow-red-700 cursor-pointer"
+                      >
+                        Logout
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex w-full items-center gap-4">
+                      <Button
+                        className="flex-1 shadow bg-[#0f1f17] text-white hover:bg-[#0f1f17] hover:text-white"
+                        variant="secondary"
+                        render={<Link href="/login">Login</Link>}
+                        nativeButton={false}
+                      >
+                        Login
+                      </Button>
+                      <Button
+                        className="flex-1 shadow bg-[#0f1f17] text-white hover:bg-[#0f1f17] hover:text-white"
+                        variant="secondary"
+                        render={<Link href="/register">Register</Link>}
+                        nativeButton={false}
+                      >
+                        Register
+                      </Button>
+                    </div>
+                  )}
                 </DrawerFooter>
               </DrawerContent>
             </Drawer>

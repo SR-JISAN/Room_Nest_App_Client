@@ -1,6 +1,6 @@
 
-import { userLogin, userRegistration } from "@/api"
-import { useMutation } from "@tanstack/react-query"
+import {  userGoogleLogin, userLoggedOut, userLogin, userProfile, userRegistration } from "@/api"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 
 export function useLogin(){
@@ -9,8 +9,27 @@ export function useLogin(){
     });
 };
 
+export function useGoogleLogin() {
+  return useMutation({
+    mutationFn: userGoogleLogin,
+  });
+}
+
 export function useRegistration(){
     return useMutation({
         mutationFn: userRegistration,
+    });
+};
+
+export function useLoggedOut(){
+    return useMutation({
+        mutationFn: userLoggedOut,
+    });
+};
+export function useUserProfile(){
+    return useQuery({
+        queryKey:["user"],
+        queryFn: userProfile,
+        retry:false
     });
 };
