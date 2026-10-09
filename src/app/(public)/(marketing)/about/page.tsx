@@ -653,12 +653,7 @@ const AboutPage = () => {
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
 
-            <Link
-              href="/register"
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-7 py-3 font-semibold transition-colors hover:bg-white/10"
-            >
-              Join Room Nest
-            </Link>
+         
           </div>
         </motion.div>
       </section>

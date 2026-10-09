@@ -14,17 +14,21 @@ import { useState } from "react";
 import { Profile } from "../userProfile/Profile";
 
 const Navbar = () => {
+
+  const [openMenu, isOpenMenu] = useState(false);
+  const pathName = usePathname();
+
+  const { data } = useUserProfile();
+  const { mutate: logout } = useLoggedOut();
+  const queryClient = useQueryClient();
+
+
     const routes = [
         {name:"Home", path:"/"},
         {name:"Properties and Rooms", path:"/properties-rooms"},
         {name:"About", path:"/about"},
     ];
-    const [openMenu, isOpenMenu]=useState(false);
-    const pathName = usePathname()
-  
-    const {data}=useUserProfile()
-    const {mutate:logout}=useLoggedOut()
-    const queryClient = useQueryClient()
+    
 
     const handelLoggedOut = ()=>{
       logout(undefined,{
@@ -49,8 +53,8 @@ const Navbar = () => {
     }
 
     return (
-      <header className="w-full shadow-2xl bg-[#0f1f17] text-white static">
-        <div className=" py-5 px-6 md:px-4  rounded-2xl flex justify-between mx-auto max-w-7xl gap-5 items-center ">
+      <header className="w-full shadow-2xl bg-[#0f1f17] text-white fixed inset-x-0 top-0 z-50">
+        <nav className=" py-5 px-6 md:px-4  rounded-2xl flex justify-between mx-auto max-w-7xl gap-5 items-center ">
           <div>
             <Link className="flex gap-2 justify-center items-end" href="/">
               <Image
@@ -93,7 +97,7 @@ const Navbar = () => {
           </nav>
           <div className="flex items-center gap-4 ">
             {data ? (
-            <Profile/>
+              <Profile />
             ) : (
               <Button
                 variant="secondary"
@@ -207,7 +211,7 @@ const Navbar = () => {
               </DrawerContent>
             </Drawer>
           </div>
-        </div>
+        </nav>
       </header>
     );
 };
