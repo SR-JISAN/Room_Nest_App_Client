@@ -307,7 +307,7 @@ export default function HeroBanner() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute -left-2 top-[27%] hidden max-w-[190px] rounded-2xl border border-white/15 bg-[#20392a]/95 p-3 shadow-xl backdrop-blur-xl sm:block sm:-left-7 sm:p-4"
+              className="absolute -left-2 top-[27%] hidden max-w-47.5 rounded-2xl border border-white/15 bg-[#20392a]/95 p-3 shadow-xl backdrop-blur-xl sm:block sm:-left-7 sm:p-4"
             >
               <div className="flex items-center gap-2.5">
                 <div className="flex size-9 items-center justify-center rounded-xl bg-lime-300/15">
