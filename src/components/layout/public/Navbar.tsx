@@ -49,8 +49,8 @@ const Navbar = () => {
     }
 
     return (
-      <header className="w-full shadow-2xl bg-[#0f1f17] text-white">
-        <div className=" py-5 px-6 md:px-4 static rounded-2xl flex justify-between mx-auto max-w-7xl gap-5 items-center ">
+      <header className="w-full shadow-2xl bg-[#0f1f17] text-white static">
+        <div className=" py-5 px-6 md:px-4  rounded-2xl flex justify-between mx-auto max-w-7xl gap-5 items-center ">
           <div>
             <Link className="flex gap-2 justify-center items-end" href="/">
               <Image

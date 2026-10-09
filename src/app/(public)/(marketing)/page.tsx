@@ -1,12 +1,14 @@
 "use client"
 
+import HeroBanner from "@/components/modules/homepage/hero";
+
 
 const page = () => {
   
     return (
-        <div>
-            this is home page
-        </div>
+        <section>
+            <HeroBanner/>
+        </section>
     );
 };
 

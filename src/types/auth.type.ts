@@ -26,6 +26,12 @@ export interface IUser {
   profiles: IUpdateProfile;
 }
 
+export interface IUpdatePassword{
+  currentPassword: string
+  newPassword:string
+  confirmPassword:string
+};
+
 export interface IApiResponse<T> {
   success: boolean;
   message: string;

@@ -113,9 +113,10 @@ export function Profile() {
           {user?.role === "USER" && <Link href="/user">Dashboard</Link>}
         </DropdownMenuItem>
 
+        
         <DropdownMenuItem className="cursor-pointer gap-3 rounded-lg py-2.5">
           <Settings className="h-4 w-4" />
-          <span>Settings</span>
+          <Link href="/settings">Settings</Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

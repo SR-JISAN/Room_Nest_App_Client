@@ -24,6 +24,7 @@ import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
 import { GoogleLogin } from "@react-oauth/google";
 import GoogleLoginComponents from "../layout/google/GoogleLoginComponents";
+import { FetchError } from "ofetch";
 
 
 export function LoginForm({
@@ -61,9 +62,10 @@ export function LoginForm({
             route.push("/")
           },
           onError: (err) => {
+            const error = err as FetchError;
             toast.add({
               title: "Welcome Back to Room Nest",
-              description: `${err.message ? err.message : "Something is wrong. Please try again."}`,
+              description: `${error.data.message} `,
               type: "error",
             });
           },

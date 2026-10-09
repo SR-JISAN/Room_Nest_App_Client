@@ -22,6 +22,7 @@ import type { IUpdateProfile } from "@/types/user.type";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { FetchError } from "ofetch";
 
 const inputClass = "mt-2 h-11 w-full min-w-0 rounded-xl";
 type UpdateProfileFormProps = {
@@ -33,7 +34,6 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
   const queryClient = useQueryClient();
   const user = data?.data;
   const profilePicture = data?.data.imageURL;
-  const route = useRouter();
 
   const form = useForm({
     defaultValues: {
@@ -68,9 +68,10 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
           form.reset();
         },
         onError: (err) => {
+            const error = err as FetchError;
           toast.add({
             title: "Profile Update failed",
-            description: "Something went wrong. Please try again.",
+            description: `${error.data.message} `,
             type: "error",
           });
         },

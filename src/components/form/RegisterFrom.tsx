@@ -23,6 +23,7 @@ import { useRegistration } from "@/hooks";
 import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
 import GoogleLoginComponents from "../layout/google/GoogleLoginComponents";
+import { FetchError } from "ofetch";
 
 export function RegisterForm({
   className,
@@ -61,9 +62,10 @@ export function RegisterForm({
                   form.reset()
                 },
                 onError:(err)=>{
+                    const error = err as FetchError;
                      toast.add({
                        title: "Registration failed",
-                       description:"Something went wrong. Please try again.",
+                       description: `${error.data.message} `,
                        type: "error",
                      });
                 }

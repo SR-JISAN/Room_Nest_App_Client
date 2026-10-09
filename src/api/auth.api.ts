@@ -1,5 +1,5 @@
 import apiClient from "@/lib/ofetch"
-import { IApiResponse, IEmailVerification, IUser, IUserLogin, IUserRegistration } from "@/types/auth.type";
+import { IApiResponse, IEmailVerification, IUpdatePassword, IUser, IUserLogin, IUserRegistration } from "@/types/auth.type";
 
 
 
@@ -26,4 +26,11 @@ export const userProfile = () => {
 };
 export const userLoggedOut = () => {
   return apiClient("/api/auth/logout", { method: "POST" });
+};
+
+export const updatePassword = (payload: IUpdatePassword) => {
+  return apiClient("/api/auth/update-password", {
+    method: "PATCH",
+    body:payload
+  });
 };
