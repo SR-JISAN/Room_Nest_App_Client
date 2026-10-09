@@ -105,7 +105,7 @@ export function VerifyEmail() {
             onSuccess:(res)=>{
                 toast.add({
                     title:"Email Verified Successfully",
-                    description:`${res.message} `,
+                    description:"Welcome to room nest.Your registration completed.",
                     type:"success"
                 });
                 router.push("/")

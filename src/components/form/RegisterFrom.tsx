@@ -53,7 +53,7 @@ export function RegisterForm({
                 onSuccess:(res)=>{
                     toast.add({
                     title:"Welcome to Room Nest",
-                    description:`${res.message}`,
+                    description:"An OTP sent your email. Verify your email to complete registration",
                     type:"success"
                   })
                   const params = new URLSearchParams({email:value.email})

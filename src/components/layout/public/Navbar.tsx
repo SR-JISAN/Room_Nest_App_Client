@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { Profile } from "../userProfile/Profile";
 
 const Navbar = () => {
     const routes = [
@@ -21,7 +22,7 @@ const Navbar = () => {
     const [openMenu, isOpenMenu]=useState(false);
     const pathName = usePathname()
   
-    const {data,isLoading}=useUserProfile()
+    const {data}=useUserProfile()
     const {mutate:logout}=useLoggedOut()
     const queryClient = useQueryClient()
 
@@ -92,14 +93,7 @@ const Navbar = () => {
           </nav>
           <div className="flex items-center gap-4 ">
             {data ? (
-              <Button
-                onClick={handelLoggedOut}
-                variant="secondary"
-                nativeButton={false}
-                className="font-bold"
-              >
-                Logout
-              </Button>
+            <Profile/>
             ) : (
               <Button
                 variant="secondary"

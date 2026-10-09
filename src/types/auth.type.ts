@@ -1,3 +1,5 @@
+import { IUpdateProfile } from "./user.type";
+
 export interface IUserLogin {
   email: string;
   password: string;
@@ -11,4 +13,21 @@ export interface IUserRegistration {
 export interface IEmailVerification {
   email: string;
   otp: string;
+}
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN" | "LANDLORD";
+  imageURL?: string | null;
+  emailVerified: boolean;
+  status: "ACTIVE" | "BLOCKED" | "DELETED";
+  profiles: IUpdateProfile;
+}
+
+export interface IApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
 }
