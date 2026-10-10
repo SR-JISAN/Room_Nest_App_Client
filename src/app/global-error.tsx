@@ -77,7 +77,7 @@ export default function GlobalError({
             {/* Error icon */}
             <motion.div
               variants={fadeUp}
-              className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-3xl border border-red-500/20 bg-red-500/[0.08] shadow-lg shadow-red-950/5 sm:h-24 sm:w-24"
+              className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-3xl border border-red-500/20 bg-red-500/8 shadow-lg shadow-red-950/5 sm:h-24 sm:w-24"
             >
               <motion.div
                 animate={shouldReduceMotion ? undefined : { y: [0, -4, 0] }}
