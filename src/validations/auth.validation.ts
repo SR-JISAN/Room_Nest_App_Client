@@ -1,14 +1,11 @@
 import z from "zod";
 
-
 const allowedEmailDomains = [
   "gmail.com",
   "yahoo.com",
   "outlook.com",
   "hotmail.com",
 ];
-
-
 
 export const RegisterValidation = z.object({
   name: z
@@ -68,7 +65,6 @@ export const loginValidation = z.object({
     .regex(/[0-9]/, "Password must contain one number")
     .regex(/[^A-Za-z0-9]/, "Password must contain one special character"),
 });
-
 
 export const UpdatePasswordValidation = z
   .object({

@@ -1,22 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { useForm } from "@tanstack/react-form";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Eye,
-  EyeOff,
-  KeyRound,
-  LockKeyhole,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowLeft, KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-
+import { useState } from "react";
+import UpdatePasswordForm from "@/components/form/UpdatePasswordFrom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -24,14 +13,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import UpdatePasswordForm from "@/components/form/UpdatePasswordFrom";
 
 type PasswordFieldName = "currentPassword" | "newPassword" | "confirmPassword";
 
 const ResetPassword = () => {
-  
-
-  const [visiblePasswords, setVisiblePasswords] = useState<
+  const [_visiblePasswords, setVisiblePasswords] = useState<
     Record<PasswordFieldName, boolean>
   >({
     currentPassword: false,
@@ -39,15 +25,12 @@ const ResetPassword = () => {
     confirmPassword: false,
   });
 
- 
-
-  const togglePassword = (name: PasswordFieldName) => {
+  const _togglePassword = (name: PasswordFieldName) => {
     setVisiblePasswords((previous) => ({
       ...previous,
       [name]: !previous[name],
     }));
   };
-
 
   return (
     <div className="flex w-full items-start justify-center py-4 sm:py-8 lg:py-12">

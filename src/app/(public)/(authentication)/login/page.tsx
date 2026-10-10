@@ -1,13 +1,13 @@
-"use client"
-import { LoginForm } from "@/components/form/LoginForm";
-import { Button } from "@/components/ui/button";
+"use client";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { LoginForm } from "@/components/form/LoginForm";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
-    const route = useRouter()
+  const route = useRouter();
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-4xl">
@@ -28,7 +28,11 @@ export default function LoginPage() {
               </span>
             </h1>
           </Link>
-          <Button className="cursor-pointer" onClick={() => route.back()} variant="secondary">
+          <Button
+            className="cursor-pointer"
+            onClick={() => route.back()}
+            variant="secondary"
+          >
             <ArrowLeft size={20} strokeWidth={2.25} />
             <span className="font-semibold">Back</span>
           </Button>

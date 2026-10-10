@@ -1,3 +1,4 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   emailVerification,
   updatePassword,
@@ -7,17 +8,24 @@ import {
   userProfile,
   userRegistration,
 } from "@/api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useLogin() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: userLogin,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
   });
 }
 
 export function useGoogleLogin() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: userGoogleLogin,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
   });
 }
 
@@ -34,8 +42,15 @@ export function useVerifyEmail() {
 }
 
 export function useLoggedOut() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: userLoggedOut,
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.removeQueries({ queryKey: ["dashboard"] });
+      queryClient.removeQueries({ queryKey: ["booking"] });
+      queryClient.removeQueries({ queryKey: ["payments"] });
+    },
   });
 }
 export function useUserProfile() {
@@ -44,7 +59,7 @@ export function useUserProfile() {
     queryFn: userProfile,
     retry: false,
   });
-};
+}
 
 export const useUpdatePassword = () => {
   const queryClient = useQueryClient();

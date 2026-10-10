@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { cn } from "cn";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDown,
@@ -14,9 +14,9 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
-import { cn } from "cn";
+import Link from "next/link";
 
-const stats = [
+const _stats = [
   { value: "01", label: "A place to call home" },
   { value: "02", label: "People you can trust" },
   { value: "03", label: "A simpler way to find rooms" },
@@ -652,8 +652,6 @@ const AboutPage = () => {
               Find your space
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
-
-         
           </div>
         </motion.div>
       </section>

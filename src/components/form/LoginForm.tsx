@@ -1,6 +1,14 @@
-"use client"
+"use client";
+import { useForm } from "@tanstack/react-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "cn";
-
+import { Eye, EyeClosed } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type { FetchError } from "ofetch";
+import { useState } from "react";
+import { userProfile } from "@/api/auth.api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -12,69 +20,63 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
-import {useForm} from "@tanstack/react-form";
-import {loginValidation} from "@/validations"
-import {  useState } from "react";
-import { Eye, EyeClosed } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useGoogleLogin, useLogin } from "@/hooks";
-import { toast } from "../ui/toast";
-import { Spinner } from "../ui/spinner";
-import { GoogleLogin } from "@react-oauth/google";
+import { useLogin } from "@/hooks";
+import { homeForRole } from "@/lib/auth-routing";
+import { loginValidation } from "@/validations";
 import GoogleLoginComponents from "../layout/google/GoogleLoginComponents";
-import { FetchError } from "ofetch";
-
+import { Spinner } from "../ui/spinner";
+import { toast } from "../ui/toast";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const route = useRouter();
+  const queryClient = useQueryClient();
+  const [showPass, setShowPass] = useState(false);
 
-    const route = useRouter();
-    const [showPass, setShowPass] = useState(false);
+  const { mutate: login, isPending: loginPending } = useLogin();
 
-    
-    const {mutate: login,isPending: loginPending}=useLogin();
-
-    const form = useForm({
-      defaultValues: {
-        email: "test.admin@gmail.com",
-        password: "Admin@12",
-      },
-      validators: {
-        onSubmit: loginValidation,
-      },
-      onSubmit: ({ value }) => {
-        const loginData = {
-          email: value.email,
-          password: value.password,
-        };
-        login(loginData, {
-          onSuccess: (res) => {
-            toast.add({
-              title: "Welcome Back to Room Nest",
-              description: "You LogIn Successfully",
-              type:"success"
-            });
-            form.reset();
-            route.push("/")
-          },
-          onError: (err) => {
-            const error = err as FetchError;
-            toast.add({
-              title: "Welcome Back to Room Nest",
-              description: `${error.data.message} `,
-              type: "error",
-            });
-          },
-        });
-      },
-    });
-
-    
-
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    validators: {
+      onSubmit: loginValidation,
+    },
+    onSubmit: ({ value }) => {
+      const loginData = {
+        email: value.email,
+        password: value.password,
+      };
+      login(loginData, {
+        onSuccess: async () => {
+          toast.add({
+            title: "Welcome Back to Room Nest",
+            description: "You LogIn Successfully",
+            type: "success",
+          });
+          form.reset();
+          try {
+            const profile = await userProfile();
+            queryClient.setQueryData(["user"], profile);
+            route.replace(homeForRole(profile.data.role));
+          } catch {
+            route.replace("/");
+          }
+        },
+        onError: (err) => {
+          const error = err as FetchError;
+          toast.add({
+            title: "Welcome Back to Room Nest",
+            description: `${error.data.message} `,
+            type: "error",
+          });
+        },
+      });
+    },
+  });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -105,7 +107,7 @@ export function LoginForm({
                       <Input
                         name={field.name}
                         onChange={(e) => field.handleChange(e.target.value)}
-                        autoComplete="off"
+                        autoComplete="email"
                         onBlur={field.handleBlur}
                         value={field.state.value}
                         id={field.name}
@@ -130,17 +132,17 @@ export function LoginForm({
                         <div className="flex items-center ">
                           <FieldLabel htmlFor="password">Password</FieldLabel>
                           <Link
-                            href="/forget-password"
+                            href="/resetPassword"
                             className="ml-auto text-sm underline-offset-2 hover:underline hover:text-blue-700"
                           >
-                            Forgot your password?
+                            Change password (signed in)
                           </Link>
                         </div>
                         <div className="relative">
                           <Input
                             name={field.name}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            autoComplete="off"
+                            autoComplete="current-password"
                             onBlur={field.handleBlur}
                             value={field.state.value}
                             id="password"
@@ -183,7 +185,7 @@ export function LoginForm({
                 Or continue with
               </FieldSeparator>
               <Field>
-                <GoogleLoginComponents/>
+                <GoogleLoginComponents />
               </Field>
               <FieldDescription className="text-center">
                 Don&apos;t have an account?{" "}
@@ -205,8 +207,7 @@ export function LoginForm({
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <Link href="#">Privacy Policy</Link>.
+        Room Nest account sign-in
       </FieldDescription>
     </div>
   );

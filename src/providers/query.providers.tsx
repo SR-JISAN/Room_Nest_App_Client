@@ -1,35 +1,39 @@
-"use client"
-import {environmentManager, QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import type{ ReactNode } from "react";
+"use client";
+import {
+  environmentManager,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import type { ReactNode } from "react";
 
-function makeQueryClient(){
-    return new QueryClient({
-      defaultOptions: {
-        queries: {
-          staleTime: 60 * 1000,
-        },
+function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
       },
-    });
+    },
+  });
 }
 
-let browserQueryClient :QueryClient |undefined = undefined;
+let browserQueryClient: QueryClient | undefined;
 
-function getQueryClient(){
-    if(environmentManager.isServer()){
-        return makeQueryClient();
-    }else{
-        if(!browserQueryClient){
-            browserQueryClient=makeQueryClient();
-        }
-        return browserQueryClient;
+function getQueryClient() {
+  if (environmentManager.isServer()) {
+    return makeQueryClient();
+  } else {
+    if (!browserQueryClient) {
+      browserQueryClient = makeQueryClient();
     }
+    return browserQueryClient;
+  }
 }
 
-const QueryProviders = ({children}:{children:ReactNode}) => {
-    const queryClient = getQueryClient();
-    return <QueryClientProvider client={queryClient}>
-        {children}
-    </QueryClientProvider>;
+const QueryProviders = ({ children }: { children: ReactNode }) => {
+  const queryClient = getQueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 };
 
 export default QueryProviders;

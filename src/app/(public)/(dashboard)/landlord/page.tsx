@@ -1,11 +1,5 @@
-"use client"
+import RoleDashboard from "@/components/modules/dashboard/RoleDashboard";
 
-const page = () => {
-    return (
-        <div>
-            landlord page
-        </div>
-    );
-};
-
-export default page;
+export default function LandlordDashboardPage() {
+  return <RoleDashboard dashboardRole="landlord" />;
+}

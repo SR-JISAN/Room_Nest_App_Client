@@ -1,16 +1,15 @@
-"use client"
+"use client";
 
-
-import { VerifyEmail } from "@/components/form/VerifyEmail";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
+import { VerifyEmail } from "@/components/form/VerifyEmail";
+import { Button } from "@/components/ui/button";
 
 export default function RegisterPage() {
-    const route = useRouter()
+  const route = useRouter();
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-4xl">
@@ -40,7 +39,11 @@ export default function RegisterPage() {
             <span className="font-semibold">Back</span>
           </Button>
         </div>
-        <Suspense fallback={<div className="text-center text-lg font-semibold">Loading...</div>}>
+        <Suspense
+          fallback={
+            <div className="text-center text-lg font-semibold">Loading...</div>
+          }
+        >
           <VerifyEmail />
         </Suspense>
       </div>

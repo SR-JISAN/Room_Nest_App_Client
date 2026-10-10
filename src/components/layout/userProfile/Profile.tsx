@@ -1,5 +1,8 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { LayoutDashboard, LogOut, Settings, UserRound } from "lucide-react";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -10,16 +13,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/toast";
 import { useLoggedOut, useUserProfile } from "@/hooks";
-import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, LogOut, Settings, UserRound } from "lucide-react";
-import Link from "next/link";
 
 export function Profile() {
   const { data, isLoading } = useUserProfile();
   const user = data?.data;
 
-  const {mutate:logout}=useLoggedOut()
-      const queryClient = useQueryClient()
+  const { mutate: logout } = useLoggedOut();
+  const queryClient = useQueryClient();
 
   const getInitials = (name?: string) => {
     if (!name?.trim()) return "U";
@@ -39,28 +39,26 @@ export function Profile() {
     return <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />;
   }
 
-  const handelLoggedOut = ()=>{
-        logout(undefined,{
-          onSuccess:()=>{
-            queryClient.setQueryData(["user"], null);
-            toast.add(
-              {
-                title:"Logged Out Successful",
-                description:"You Logged Out Successfully",
-                type:"success"
-              }
-            ),
-            queryClient.removeQueries({queryKey:["user"]})
-          },
-          onError(){
-            toast.add({
-              title:"Logged Out Failed",
-              description:"Something went wrong",
-              type:"error"
-            })
-          }
-        })
-      }
+  const handelLoggedOut = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        queryClient.setQueryData(["user"], null);
+        toast.add({
+          title: "Logged Out Successful",
+          description: "You Logged Out Successfully",
+          type: "success",
+        }),
+          queryClient.removeQueries({ queryKey: ["user"] });
+      },
+      onError() {
+        toast.add({
+          title: "Logged Out Failed",
+          description: "Something went wrong",
+          type: "error",
+        });
+      },
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -113,7 +111,6 @@ export function Profile() {
           {user?.role === "USER" && <Link href="/user">Dashboard</Link>}
         </DropdownMenuItem>
 
-        
         <DropdownMenuItem className="cursor-pointer gap-3 rounded-lg py-2.5">
           <Settings className="h-4 w-4" />
           <Link href="/settings">Settings</Link>

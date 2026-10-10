@@ -1,6 +1,12 @@
-"use client"
+"use client";
+import { useForm } from "@tanstack/react-form";
 import { cn } from "cn";
-
+import { Eye, EyeClosed } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type { FetchError } from "ofetch";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -12,68 +18,59 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
-import {useForm} from "@tanstack/react-form";
-import { RegisterValidation} from "@/validations"
-import { useState } from "react";
-import { Eye, EyeClosed } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useRegistration } from "@/hooks";
-import { toast } from "../ui/toast";
-import { Spinner } from "../ui/spinner";
+import { RegisterValidation } from "@/validations";
 import GoogleLoginComponents from "../layout/google/GoogleLoginComponents";
-import { FetchError } from "ofetch";
+import { Spinner } from "../ui/spinner";
+import { toast } from "../ui/toast";
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-    const route = useRouter();
-    const [showPass , setShowPass]=useState(false);
- 
-    const {mutate : register , isPending }= useRegistration()
+  const route = useRouter();
+  const [showPass, setShowPass] = useState(false);
 
-    const form = useForm({
-        defaultValues:{
-            name:"",
-            email:"",
-            password:""
+  const { mutate: register, isPending } = useRegistration();
+
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    validators: {
+      onSubmit: RegisterValidation,
+    },
+    onSubmit: ({ value }) => {
+      const registerData = {
+        name: value.name,
+        email: value.email,
+        password: value.password,
+      };
+      register(registerData, {
+        onSuccess: (_res) => {
+          toast.add({
+            title: "Welcome to Room Nest",
+            description:
+              "An OTP sent your email. Verify your email to complete registration",
+            type: "success",
+          });
+          const params = new URLSearchParams({ email: value.email });
+          route.push(`/verify-email?${params.toString()}`);
+          form.reset();
         },
-        validators:{
-            onSubmit:RegisterValidation
-        }
-        ,
-        onSubmit:({value})=>{
-             const registerData = {
-                name:value.name,
-                email:value.email,
-                password:value.password
-             }
-             register(registerData,{
-                onSuccess:(res)=>{
-                    toast.add({
-                    title:"Welcome to Room Nest",
-                    description:"An OTP sent your email. Verify your email to complete registration",
-                    type:"success"
-                  })
-                  const params = new URLSearchParams({email:value.email})
-                  route.push(`/verify-email?${params.toString()}`)
-                  form.reset()
-                },
-                onError:(err)=>{
-                    const error = err as FetchError;
-                     toast.add({
-                       title: "Registration failed",
-                       description: `${error.data.message} `,
-                       type: "error",
-                     });
-                }
-             })
-             
-        }
-    });
-
+        onError: (err) => {
+          const error = err as FetchError;
+          toast.add({
+            title: "Registration failed",
+            description: `${error.data.message} `,
+            type: "error",
+          });
+        },
+      });
+    },
+  });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -204,7 +201,7 @@ export function RegisterForm({
                       Submitting...
                     </>
                   ) : (
-                   "Register"
+                    "Register"
                   )}
                 </Button>
               </Field>
@@ -212,7 +209,7 @@ export function RegisterForm({
                 Or continue with
               </FieldSeparator>
               <Field>
-                <GoogleLoginComponents/>
+                <GoogleLoginComponents />
               </Field>
               <FieldDescription className="text-center">
                 Already have an account?{" "}

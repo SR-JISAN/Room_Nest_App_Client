@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDown,
@@ -17,6 +16,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 

@@ -1,98 +1,106 @@
-"use client"
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useUserProfile } from "@/hooks";
-import Image from "next/image";
+"use client";
 import { motion } from "framer-motion";
-import { ArrowLeft, CalendarDays, Mail, MapPin, Pencil, Phone, User, UserStar } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  ArrowLeft,
+  CalendarDays,
+  Mail,
+  MapPin,
+  Pencil,
+  Phone,
+  User,
+  UserStar,
+} from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import UpdateProfileForm from "@/components/form/UpdateProfileForm";
-import { useRouter } from "next/navigation";
-
-
-
-
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useUserProfile } from "@/hooks";
 
 export default function ProfilePage() {
-const route= useRouter()
-const { data, isLoading } = useUserProfile();
-const [open, setOpen] = useState(false);
-if (isLoading) {
-  return (
-    <section className="container mx-auto w-full py-8">
-      <div className="flex min-h-100 flex-col items-center justify-center">
-        
-        <div className="relative flex h-16 w-16 items-center justify-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute inset-0 rounded-full border-4 border-muted border-t-[#1a3929]"
-          />
+  const route = useRouter();
+  const { data, isLoading } = useUserProfile();
+  const [open, setOpen] = useState(false);
+  if (isLoading) {
+    return (
+      <section className="container mx-auto w-full py-8">
+        <div className="flex min-h-100 flex-col items-center justify-center">
+          <div className="relative flex h-16 w-16 items-center justify-center">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="absolute inset-0 rounded-full border-4 border-muted border-t-[#1a3929]"
+            />
 
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1a3929]">
-             <Image
-               src="/logo.png"
-               alt="Room Nest"
-               width={45}
-               height={45}
-               priority
-               />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1a3929]">
+              <Image
+                src="/logo.png"
+                alt="Room Nest"
+                width={45}
+                height={45}
+                priority
+              />
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="mt-6 text-center"
+          >
+            <h2 className="text-lg font-semibold">Loading your profile</h2>
+
+            <p className="mt-1 text-sm text-muted-foreground">
+              Please wait while we fetch your account information.
+            </p>
+          </motion.div>
+
+          <div className="mt-4 flex gap-1.5">
+            {[0, 1, 2].map((dot) => (
+              <motion.span
+                key={dot}
+                animate={{
+                  opacity: [0.3, 1, 0.3],
+                  scale: [0.8, 1, 0.8],
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  delay: dot * 0.15,
+                }}
+                className="h-1.5 w-1.5 rounded-full bg-[#1a3929]"
+              />
+            ))}
           </div>
         </div>
-
-      
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mt-6 text-center"
-        >
-          <h2 className="text-lg font-semibold">Loading your profile</h2>
-
-          <p className="mt-1 text-sm text-muted-foreground">
-            Please wait while we fetch your account information.
-          </p>
-        </motion.div>
-
-      
-        <div className="mt-4 flex gap-1.5">
-          {[0, 1, 2].map((dot) => (
-            <motion.span
-              key={dot}
-              animate={{
-                opacity: [0.3, 1, 0.3],
-                scale: [0.8, 1, 0.8],
-              }}
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                delay: dot * 0.15,
-              }}
-              className="h-1.5 w-1.5 rounded-full bg-[#1a3929]"
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-const user = data?.data;
+      </section>
+    );
+  }
+  const user = data?.data;
   console.log(user);
-if (!user) {
-  return (
-    <section className="container mx-auto flex min-h-100 items-center justify-center">
-      <p className="text-muted-foreground">
-        Unable to load profile information.
-      </p>
-    </section>
-  );
-};
+  if (!user) {
+    return (
+      <section className="container mx-auto flex min-h-100 items-center justify-center">
+        <p className="text-muted-foreground">
+          Unable to load profile information.
+        </p>
+      </section>
+    );
+  }
   return (
     <section className="container w-full mx-auto py-8">
       <div className="mb-8 text-center">

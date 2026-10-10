@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { type ReactNode, useState } from "react";
 
 import SettingsSideBar from "@/components/layout/public/SettingsSideBar";
 import { Button } from "@/components/ui/button";

@@ -1,17 +1,20 @@
-import apiClient from "@/lib/ofetch"
-import { IApiResponse, IEmailVerification, IUpdatePassword, IUser, IUserLogin, IUserRegistration } from "@/types/auth.type";
-
-
-
+import apiClient from "@/lib/ofetch";
+import type {
+  IApiResponse,
+  IEmailVerification,
+  IUpdatePassword,
+  IUser,
+  IUserLogin,
+  IUserRegistration,
+} from "@/types/auth.type";
 
 export const userLogin = (payload: IUserLogin) => {
   return apiClient("/api/auth/login", { method: "POST", body: payload });
 };
-export const userGoogleLogin = (payload:{idToken: string}) => {
-  console.log("Google payload:", payload);
+export const userGoogleLogin = (payload: { idToken: string }) => {
   return apiClient("/api/auth/google-login", {
     method: "POST",
-    body:  payload
+    body: payload,
   });
 };
 
@@ -31,6 +34,6 @@ export const userLoggedOut = () => {
 export const updatePassword = (payload: IUpdatePassword) => {
   return apiClient("/api/auth/update-password", {
     method: "PATCH",
-    body:payload
+    body: payload,
   });
 };

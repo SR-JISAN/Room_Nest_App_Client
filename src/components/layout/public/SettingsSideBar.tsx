@@ -1,8 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -13,6 +10,9 @@ import {
   UserRound,
   X,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -263,11 +263,7 @@ const SettingsSideBar = ({
               Manage your account and personalize your Room Nest experience.
             </p>
 
-            <Button
-             
-              variant="outline"
-              className="mt-3 w-full rounded-xl"
-            >
+            <Button variant="outline" className="mt-3 w-full rounded-xl">
               <Link href="/" onClick={mobile ? onToggle : undefined}>
                 Back to home
               </Link>

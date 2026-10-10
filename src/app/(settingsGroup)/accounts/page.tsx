@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { ArrowLeft, Mail, ShieldCheck, UserRound } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {

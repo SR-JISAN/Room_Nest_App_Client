@@ -1,4 +1,4 @@
-import { IUpdateProfile } from "./user.type";
+import type { IUpdateProfile } from "./user.type";
 
 export interface IUserLogin {
   email: string;
@@ -26,11 +26,11 @@ export interface IUser {
   profiles: IUpdateProfile;
 }
 
-export interface IUpdatePassword{
-  currentPassword: string
-  newPassword:string
-  confirmPassword:string
-};
+export interface IUpdatePassword {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 
 export interface IApiResponse<T> {
   success: boolean;

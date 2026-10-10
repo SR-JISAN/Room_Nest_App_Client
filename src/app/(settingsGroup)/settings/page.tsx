@@ -23,7 +23,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {

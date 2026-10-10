@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Home } from "lucide-react";
 import Image from "next/image";
 
 export default function Loading() {

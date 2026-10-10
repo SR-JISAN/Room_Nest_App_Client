@@ -1,28 +1,26 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
+import { useQueryClient } from "@tanstack/react-query";
 import {
-  Camera,
-  UserRound,
-  Phone,
-  CalendarDays,
   BriefcaseBusiness,
-  MapPin,
+  CalendarDays,
+  Camera,
   FileText,
   LoaderCircle,
+  MapPin,
+  Phone,
   UserCircle,
+  UserRound,
 } from "lucide-react";
-
+import type { FetchError } from "ofetch";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useUserProfile } from "@/hooks";
-import { useProfileUpdate } from "@/hooks/user.hooks";
-import type { IUpdateProfile } from "@/types/user.type";
-import { useRouter } from "next/navigation";
+import { useProfileUpdate, useUpdateProfileImage } from "@/hooks/user.hooks";
 import { toast } from "../ui/toast";
-import { useQueryClient } from "@tanstack/react-query";
-import { FetchError } from "ofetch";
 
 const inputClass = "mt-2 h-11 w-full min-w-0 rounded-xl";
 type UpdateProfileFormProps = {
@@ -31,9 +29,51 @@ type UpdateProfileFormProps = {
 export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
   const { data, isLoading, isError } = useUserProfile();
   const { mutate: updateProfile, isPending } = useProfileUpdate();
+  const { mutate: uploadPhoto, isPending: isUploadingPhoto } =
+    useUpdateProfileImage();
   const queryClient = useQueryClient();
   const user = data?.data;
   const profilePicture = data?.data.imageURL;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageError, setImageError] = useState("");
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageError("");
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setImageError("Please upload a JPG, PNG, or WebP image.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setImageError("Image size must not exceed 5 MB.");
+      return;
+    }
+    setSelectedImage(file);
+    setImagePreview(URL.createObjectURL(file));
+    uploadPhoto(file, {
+      onSuccess: () => {
+        toast.add({
+          title: "Profile photo updated",
+          description: "Your new profile picture has been saved.",
+          type: "success",
+        });
+      },
+      onError: (err: unknown) => {
+        const error = err as FetchError<{ message?: string }>;
+        setImageError(
+          error.data?.message || "Failed to upload profile picture.",
+        );
+        toast.add({
+          title: "Photo upload failed",
+          description: error.data?.message || "Please try again.",
+          type: "error",
+        });
+      },
+    });
+  };
 
   const form = useForm({
     defaultValues: {
@@ -54,8 +94,8 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
         bio: value.bio,
       };
       updateProfile(updateProfileData, {
-        onSuccess: (res) => {
-           queryClient.invalidateQueries({
+        onSuccess: (_res) => {
+          queryClient.invalidateQueries({
             queryKey: ["user"],
           });
           toast.add({
@@ -68,7 +108,7 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
           form.reset();
         },
         onError: (err) => {
-            const error = err as FetchError;
+          const error = err as FetchError;
           toast.add({
             title: "Profile Update failed",
             description: `${error.data.message} `,
@@ -128,9 +168,10 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
         <aside className="min-w-0 rounded-2xl border bg-card p-4 shadow-sm sm:p-6 lg:top-6">
           <div className="flex min-w-0 flex-col items-center text-center sm:flex-row sm:items-start sm:gap-5 sm:text-left lg:flex-col lg:items-center lg:text-center">
             <div className="flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-full border bg-muted sm:size-20 lg:size-28">
-              {profilePicture ? (
+              {imagePreview || profilePicture ? (
+                // biome-ignore lint/performance/noImgElement: avatar image is dynamically loaded from Cloudinary or blob URL.
                 <img
-                  src={profilePicture}
+                  src={imagePreview || profilePicture || ""}
                   alt={`${displayName}'s profile`}
                   className="size-full object-cover"
                 />
@@ -148,11 +189,11 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
                 {user.email}
               </p>
 
-              {/* <div className="mt-5">
+              <div className="mt-5">
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/webp"
                   className="hidden"
                   onChange={handleImageChange}
                 />
@@ -160,15 +201,25 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
                 <Button
                   type="button"
                   variant="outline"
+                  disabled={isUploadingPhoto}
                   className="w-full rounded-xl sm:w-auto lg:w-full"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <Camera className="mr-2 size-4" />
-                  Upload photo
+                  {isUploadingPhoto ? (
+                    <>
+                      <LoaderCircle className="mr-2 size-4 animate-spin" />
+                      Uploading photo...
+                    </>
+                  ) : (
+                    <>
+                      <Camera className="mr-2 size-4" />
+                      Upload photo
+                    </>
+                  )}
                 </Button>
 
                 <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                  Choose an image from your device. Maximum size: 5 MB.
+                  Choose a JPG, PNG, or WebP image. Maximum size: 5 MB.
                 </p>
 
                 {selectedImage && (
@@ -185,7 +236,7 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
                     {imageError}
                   </p>
                 )}
-              </div> */}
+              </div>
             </div>
           </div>
         </aside>
