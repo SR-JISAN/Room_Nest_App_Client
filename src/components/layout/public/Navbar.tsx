@@ -229,14 +229,6 @@ const Navbar = () => {
                     >
                       Login
                     </Button>
-                    <Button
-                      className="flex-1 shadow bg-[#0f1f17] dark:bg-emerald-900 text-white hover:bg-[#1a3828] dark:hover:bg-emerald-800 hover:text-white"
-                      variant="secondary"
-                      render={<Link href="/register">Register</Link>}
-                      nativeButton={false}
-                    >
-                      Register
-                    </Button>
                   </div>
                 )}
               </DrawerFooter>
