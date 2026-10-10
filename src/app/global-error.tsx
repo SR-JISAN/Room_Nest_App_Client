@@ -139,7 +139,7 @@ export default function GlobalError({
                 onClick={() => {
                   window.location.href = "/";
                 }}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#dce5df] bg-white px-6 py-3 text-sm font-semibold text-[#1a3929] transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/[0.08]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#dce5df] bg-white px-6 py-3 text-sm font-semibold text-[#1a3929] transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:border-white/10 dark:bg-white/4 dark:text-white dark:hover:bg-white/8"
               >
                 <Home size={17} />
                 Back to Home
