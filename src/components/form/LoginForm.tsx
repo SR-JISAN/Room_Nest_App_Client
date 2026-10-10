@@ -81,6 +81,20 @@ export function LoginForm({
     },
   });
 
+  const handleAdminLogin = () => {
+    form.setFieldValue("email", "test.admin@gmail.com");
+    form.setFieldValue("password", "Admin@12");
+  };
+
+  const handleProviderLogin = () => {
+    form.setFieldValue("email", "test.landlord@gmail.com");
+    form.setFieldValue("password", "Landlord@12");
+  };
+
+  const handleCustomerLogin = () => {
+    form.setFieldValue("email", "shajidurrahmanjisan89712@gmail.com");
+    form.setFieldValue("password", "jisanA@12");
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -157,7 +171,11 @@ export function LoginForm({
                             type="button"
                             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                           >
-                            {showPass ? <EyeClosed /> : <Eye />}
+                            {showPass ? (
+                              <EyeClosed className="text-green-600" />
+                            ) : (
+                              <Eye className="text-green-600" />
+                            )}
                           </button>
                         </div>
                         {isInvalid && (
@@ -200,6 +218,35 @@ export function LoginForm({
                 </Link>
               </FieldDescription>
             </FieldGroup>
+            <div className="block md:flex justify-center mt-4  items-center gap-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleAdminLogin}
+                disabled={loginPending}
+                className="hover:bg-cyan-600 hover:text-white"
+              >
+                 Admin
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleProviderLogin}
+                disabled={loginPending}
+                className="hover:bg-cyan-600 hover:text-white"
+              >
+                Landlord
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCustomerLogin}
+                disabled={loginPending}
+                className="hover:bg-cyan-600 hover:text-white"
+              >
+                User
+              </Button>
+            </div>
           </form>
           <div className="relative hidden bg-muted md:block">
             <Image
