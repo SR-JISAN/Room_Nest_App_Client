@@ -152,7 +152,7 @@ const AllPropertyPage = () => {
   };
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#f7f9f6] text-[#172b20]">
+    <main className="min-h-screen overflow-hidden bg-[#f7f9f6] text-[#172b20] dark:bg-background dark:text-foreground">
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-[#0f1f17]">
         <div
@@ -236,10 +236,10 @@ const AllPropertyPage = () => {
           className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 md:flex-row md:items-end"
         >
           <div>
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-emerald-800">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-emerald-800 dark:text-emerald-400">
               Room Nest listings
             </p>
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
               Explore available properties
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
@@ -249,8 +249,8 @@ const AllPropertyPage = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 rounded-xl border border-[#e0e8df] bg-white px-4 py-3 text-sm">
-              <Building2 className="h-4 w-4 text-emerald-800" />
+            <div className="flex items-center gap-2 rounded-xl border border-[#e0e8df] bg-white dark:border-border dark:bg-card px-4 py-3 text-sm">
+              <Building2 className="h-4 w-4 text-emerald-800 dark:text-emerald-400" />
               <span className="font-semibold">
                 {isLoading ? "..." : (meta?.total ?? properties.length)}
               </span>
@@ -261,7 +261,7 @@ const AllPropertyPage = () => {
               <Button
                 variant="outline"
                 onClick={resetFilters}
-                className="h-11 rounded-xl border-[#dce5dc] bg-white"
+                className="h-11 rounded-xl border-[#dce5dc] bg-white dark:border-border dark:bg-card"
               >
                 Clear property type
               </Button>
@@ -277,7 +277,7 @@ const AllPropertyPage = () => {
               value={search}
               onChange={(event) => handleSearch(event.target.value)}
               placeholder="Search properties or locations..."
-              className="h-12 rounded-xl border-[#dce5dc] bg-white pl-11"
+              className="h-12 rounded-xl border-[#dce5dc] bg-white dark:border-border dark:bg-card pl-11"
             />
           </div>
 
@@ -289,8 +289,8 @@ const AllPropertyPage = () => {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="h-12 rounded-xl border-[#dce5dc] bg-white">
-              <Home className="mr-2 h-4 w-4 shrink-0 text-emerald-800" />
+            <SelectTrigger className="h-12 rounded-xl border-[#dce5dc] bg-white dark:border-border dark:bg-card">
+              <Home className="mr-2 h-4 w-4 shrink-0 text-emerald-800 dark:text-emerald-400" />
               <SelectValue placeholder="Property type" />
             </SelectTrigger>
             <SelectContent>
@@ -310,8 +310,8 @@ const AllPropertyPage = () => {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="h-12 rounded-xl border-[#dce5dc] bg-white">
-              <ArrowUpDown className="mr-2 h-4 w-4 shrink-0 text-emerald-800" />
+            <SelectTrigger className="h-12 rounded-xl border-[#dce5dc] bg-white dark:border-border dark:bg-card">
+              <ArrowUpDown className="mr-2 h-4 w-4 shrink-0 text-emerald-800 dark:text-emerald-400" />
               <SelectValue placeholder="Sort properties" />
             </SelectTrigger>
             <SelectContent>
@@ -328,7 +328,7 @@ const AllPropertyPage = () => {
               (skeleton) => (
                 <Card
                   key={skeleton}
-                  className="overflow-hidden rounded-2xl border-[#e1e8df] p-0"
+                  className="overflow-hidden rounded-2xl border-[#e1e8df] dark:border-border dark:bg-card p-0"
                 >
                   <Skeleton className="h-56 w-full rounded-none" />
                   <CardContent className="space-y-4 p-5">
@@ -345,15 +345,17 @@ const AllPropertyPage = () => {
 
         {/* Error */}
         {!isLoading && isError && (
-          <div className="rounded-2xl border border-red-200 bg-white px-5 py-14 text-center">
+          <div className="rounded-2xl border border-red-200 bg-white dark:border-red-900/50 dark:bg-card px-5 py-14 text-center">
             <Building2 className="mx-auto mb-4 h-10 w-10 text-red-400" />
-            <h3 className="text-lg font-semibold">Unable to load properties</h3>
+            <h3 className="text-lg font-semibold text-foreground">
+              Unable to load properties
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               Something went wrong while fetching the listings.
             </p>
             <Button
               onClick={() => refetch()}
-              className="mt-5 rounded-xl bg-[#173b28] hover:bg-[#245638]"
+              className="mt-5 rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600"
             >
               Try again
             </Button>
@@ -395,9 +397,9 @@ const AllPropertyPage = () => {
                         }}
                         className="min-w-0"
                       >
-                        <Card className="group h-full overflow-hidden rounded-2xl border-[#e0e8df] bg-white p-0 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-[#183c25]/10">
+                        <Card className="group h-full overflow-hidden rounded-2xl border-[#e0e8df] bg-white dark:border-border dark:bg-card p-0 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-[#183c25]/10 dark:hover:shadow-black/40">
                           {/* Image */}
-                          <div className="relative h-56 overflow-hidden bg-[#e3ede3] sm:h-60">
+                          <div className="relative h-56 overflow-hidden bg-[#e3ede3] dark:bg-muted sm:h-60">
                             {image ? (
                               <Image
                                 src={image}
@@ -410,11 +412,11 @@ const AllPropertyPage = () => {
                                 }}
                               />
                             ) : (
-                              <div className="flex h-full flex-col items-center justify-center bg-linear-to-br from-[#dcebdd] via-[#edf4eb] to-[#c4ddc8]">
-                                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/80 text-[#315c3e] shadow-sm">
+                              <div className="flex h-full flex-col items-center justify-center bg-linear-to-br from-[#dcebdd] via-[#edf4eb] to-[#c4ddc8] dark:from-emerald-950/40 dark:via-muted dark:to-emerald-900/40">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/80 dark:bg-card/80 text-[#315c3e] dark:text-emerald-300 shadow-sm">
                                   <Building2 className="h-8 w-8" />
                                 </div>
-                                <span className="mt-3 text-xs font-medium text-[#496d50]">
+                                <span className="mt-3 text-xs font-medium text-[#496d50] dark:text-emerald-400">
                                   Room Nest Homes
                                 </span>
                               </div>
@@ -422,7 +424,7 @@ const AllPropertyPage = () => {
 
                             <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/10" />
 
-                            <Badge className="absolute left-4 top-4 rounded-lg border-0 bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#193d27] shadow-sm hover:bg-white">
+                            <Badge className="absolute left-4 top-4 rounded-lg border-0 bg-white/95 dark:bg-background/90 px-3 py-1.5 text-xs font-semibold text-[#193d27] dark:text-foreground shadow-sm hover:bg-white dark:hover:bg-background">
                               {getPropertyTypeLabel(property.propertyType)}
                             </Badge>
 
@@ -437,8 +439,8 @@ const AllPropertyPage = () => {
                               onClick={() => toggleFavorite(property.id)}
                               className={`absolute right-4 top-4 h-10 w-10 rounded-full shadow-sm transition-colors ${
                                 isFavorite
-                                  ? "bg-rose-100 text-rose-600 hover:bg-rose-200"
-                                  : "bg-white/95 text-[#253c2d] hover:bg-white"
+                                  ? "bg-rose-100 text-rose-600 hover:bg-rose-200 dark:bg-rose-950 dark:text-rose-400"
+                                  : "bg-white/95 dark:bg-card/90 text-[#253c2d] dark:text-foreground hover:bg-white dark:hover:bg-card"
                               }`}
                             >
                               <Heart
@@ -449,7 +451,7 @@ const AllPropertyPage = () => {
                             </Button>
 
                             {property.verified && (
-                              <Badge className="absolute bottom-4 left-4 rounded-lg border-0 bg-[#c4efcc] text-[#164426] hover:bg-[#c4efcc]">
+                              <Badge className="absolute bottom-4 left-4 rounded-lg border-0 bg-[#c4efcc] text-[#164426] dark:bg-emerald-950 dark:text-emerald-300 dark:border dark:border-emerald-800/40 hover:bg-[#c4efcc]">
                                 <Check className="mr-1 h-3.5 w-3.5" />
                                 Verified
                               </Badge>
@@ -458,28 +460,28 @@ const AllPropertyPage = () => {
 
                           <CardContent className="flex h-[calc(100%-14rem)] flex-col p-5 sm:p-5">
                             <div className="flex items-start justify-between gap-3">
-                              <h3 className="line-clamp-2 min-h-12 flex-1 text-lg font-bold leading-6 text-[#183321] transition-colors group-hover:text-emerald-800">
+                              <h3 className="line-clamp-2 min-h-12 flex-1 text-lg font-bold leading-6 text-[#183321] dark:text-card-foreground transition-colors group-hover:text-emerald-800 dark:group-hover:text-emerald-400">
                                 {property.title}
                               </h3>
                             </div>
 
                             <p className="mt-2 flex items-start gap-2 text-sm text-muted-foreground">
-                              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-800" />
+                              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-800 dark:text-emerald-400" />
                               <span className="line-clamp-1">
                                 {property.address || "Location not specified"}
                               </span>
                             </p>
 
-                            <p className="mt-3 line-clamp-2 min-h-10 text-sm leading-5 text-[#718074]">
+                            <p className="mt-3 line-clamp-2 min-h-10 text-sm leading-5 text-[#718074] dark:text-muted-foreground/80">
                               {property.description ||
                                 "Discover the details of this property and find your next comfortable living space."}
                             </p>
 
-                            <div className="mt-5 flex items-center justify-between gap-3 border-t border-[#edf0eb] pt-4">
+                            <div className="mt-5 flex items-center justify-between gap-3 border-t border-[#edf0eb] dark:border-border pt-4">
                               <div className="min-w-0">
                                 {price > 0 ? (
                                   <>
-                                    <p className="text-xl font-bold tracking-tight text-[#183b26]">
+                                    <p className="text-xl font-bold tracking-tight text-[#183b26] dark:text-emerald-300">
                                       ৳{formatPrice(price)}
                                     </p>
                                     <p className="mt-0.5 text-xs text-muted-foreground">
@@ -488,7 +490,7 @@ const AllPropertyPage = () => {
                                   </>
                                 ) : (
                                   <>
-                                    <p className="text-base font-bold text-[#183b26]">
+                                    <p className="text-base font-bold text-[#183b26] dark:text-emerald-300">
                                       Contact for price
                                     </p>
                                     <p className="mt-0.5 text-xs text-muted-foreground">
@@ -498,7 +500,7 @@ const AllPropertyPage = () => {
                                 )}
                               </div>
 
-                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#315d3d]">
+                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] dark:bg-emerald-950 text-[#315d3d] dark:text-emerald-300">
                                 {property.propertyType === "ROOM" ||
                                 property.propertyType === "SUBLET" ||
                                 property.propertyType === "HOSTEL" ? (
@@ -511,7 +513,7 @@ const AllPropertyPage = () => {
 
                             <Button
                               onClick={() => handleMoveToDetails(property.id)}
-                              className="mt-5 h-11 w-full rounded-xl bg-[#173b28] font-semibold text-white transition-colors hover:bg-[#245638] flex items-center"
+                              className="mt-5 h-11 w-full rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600 font-semibold text-white transition-colors flex items-center"
                             >
                               View property details
                               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -526,19 +528,21 @@ const AllPropertyPage = () => {
             ) : (
               <motion.div
                 {...motionProps}
-                className="rounded-3xl border border-dashed border-[#d2dfd1] bg-white px-5 py-16 text-center sm:py-20"
+                className="rounded-3xl border border-dashed border-[#d2dfd1] bg-white dark:border-border dark:bg-card px-5 py-16 text-center sm:py-20"
               >
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#edf5ed] text-[#315d3d]">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#edf5ed] dark:bg-emerald-950 text-[#315d3d] dark:text-emerald-300">
                   <Search className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-bold">No properties found</h3>
+                <h3 className="mt-5 text-xl font-bold text-foreground">
+                  No properties found
+                </h3>
                 <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
                   Try another search term, select a different property type, or
                   change your search or property type.
                 </p>
                 <Button
                   onClick={resetFilters}
-                  className="mt-6 rounded-xl bg-[#173b28] hover:bg-[#245638]"
+                  className="mt-6 rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600"
                 >
                   <X className="mr-2 h-4 w-4" />
                   Clear all filters
@@ -548,10 +552,10 @@ const AllPropertyPage = () => {
 
             {/* Pagination */}
             {(meta?.total ?? properties.length) > 0 && (
-              <div className="mt-9 flex flex-col gap-5 border-t border-[#e0e8df] pt-6 sm:mt-12 sm:flex-row sm:items-center sm:justify-between">
+              <div className="mt-9 flex flex-col gap-5 border-t border-[#e0e8df] dark:border-border pt-6 sm:mt-12 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                   Showing{" "}
-                  <span className="font-semibold text-[#193d27]">
+                  <span className="font-semibold text-[#193d27] dark:text-emerald-300">
                     {(safePage - 1) * Number(pageSize) + 1}
                     {" – "}
                     {Math.min(
@@ -560,7 +564,7 @@ const AllPropertyPage = () => {
                     )}
                   </span>{" "}
                   of{" "}
-                  <span className="font-semibold text-[#193d27]">
+                  <span className="font-semibold text-[#193d27] dark:text-emerald-300">
                     {meta?.total ?? properties.length}
                   </span>{" "}
                   properties
@@ -575,7 +579,7 @@ const AllPropertyPage = () => {
                       setCurrentPage(1);
                     }}
                   >
-                    <SelectTrigger className="h-10 w-31.25 rounded-xl bg-white">
+                    <SelectTrigger className="h-10 w-31.25 rounded-xl bg-white dark:bg-card dark:border-border">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -596,7 +600,7 @@ const AllPropertyPage = () => {
                       onClick={() =>
                         setCurrentPage((page) => Math.max(1, page - 1))
                       }
-                      className="h-10 w-10 rounded-xl bg-white"
+                      className="h-10 w-10 rounded-xl bg-white dark:bg-card dark:border-border"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
@@ -637,8 +641,8 @@ const AllPropertyPage = () => {
                             onClick={() => setCurrentPage(page)}
                             className={`h-10 min-w-10 rounded-xl ${
                               safePage === page
-                                ? "border-[#173b28] bg-[#173b28] text-white hover:bg-[#245638] hover:text-white"
-                                : "bg-white"
+                                ? "border-[#173b28] bg-[#173b28] text-white hover:bg-[#245638] hover:text-white dark:border-emerald-600 dark:bg-emerald-700 dark:hover:bg-emerald-600"
+                                : "bg-white dark:bg-card dark:border-border"
                             }`}
                           >
                             {page}
@@ -654,7 +658,7 @@ const AllPropertyPage = () => {
                       onClick={() =>
                         setCurrentPage((page) => Math.min(totalPages, page + 1))
                       }
-                      className="h-10 w-10 rounded-xl bg-white"
+                      className="h-10 w-10 rounded-xl bg-white dark:bg-card dark:border-border"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -670,7 +674,7 @@ const AllPropertyPage = () => {
       <section className="px-4 pb-14 sm:px-6 sm:pb-20 lg:px-8">
         <motion.div
           {...motionProps}
-          className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[#173b28] px-6 py-10 sm:px-10 sm:py-14 lg:px-14"
+          className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[#173b28] dark:bg-card dark:border dark:border-border px-6 py-10 sm:px-10 sm:py-14 lg:px-14"
         >
           <div
             aria-hidden="true"
@@ -679,7 +683,7 @@ const AllPropertyPage = () => {
 
           <div className="relative flex flex-col justify-between gap-7 md:flex-row md:items-center">
             <div className="max-w-2xl">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#b7e7c1]">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#b7e7c1] dark:text-emerald-400">
                 Have a property?
               </p>
               <h2 className="text-2xl font-bold text-white sm:text-3xl">
@@ -692,7 +696,7 @@ const AllPropertyPage = () => {
             </div>
 
             <Link
-              className="inline-flex h-12 shrink-0 items-center rounded-xl bg-[#b5e8bf] px-6 font-semibold text-[#10251a] hover:bg-[#a0dcae]"
+              className="inline-flex h-12 shrink-0 items-center rounded-xl bg-[#b5e8bf] dark:bg-emerald-700 dark:hover:bg-emerald-600 dark:text-white px-6 font-semibold text-[#10251a] hover:bg-[#a0dcae]"
               href="/landlord/properties/create"
             >
               List your property

@@ -60,16 +60,16 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="bg-[#f7f9f6] py-16 sm:py-24">
+    <section className="bg-[#f7f9f6] dark:bg-background/95 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#2d5839]">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#2d5839] dark:text-emerald-400">
             Transparent Process
           </p>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-[#14251b] sm:text-4xl">
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-[#14251b] dark:text-foreground sm:text-4xl">
             How Room Nest Works
           </h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-[#5a6e60] sm:text-base">
+          <p className="mx-auto mt-2 max-w-xl text-sm text-[#5a6e60] dark:text-muted-foreground sm:text-base">
             A reliable experience designed for both tenants seeking spaces and
             landlords listing properties.
           </p>
@@ -78,10 +78,10 @@ export default function HowItWorks() {
         {/* For Tenants */}
         <div className="mt-14">
           <div className="mb-6 flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#173b28] text-xs font-bold text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#173b28] dark:bg-emerald-700 text-xs font-bold text-white">
               T
             </span>
-            <h3 className="text-xl font-bold text-[#14251b]">
+            <h3 className="text-xl font-bold text-[#14251b] dark:text-foreground">
               For Tenants & Seekers
             </h3>
           </div>
@@ -92,16 +92,18 @@ export default function HowItWorks() {
               return (
                 <Card
                   key={s.step}
-                  className="relative overflow-hidden rounded-2xl border-[#e1e9e2] bg-white p-6 shadow-xs"
+                  className="relative overflow-hidden rounded-2xl border-[#e1e9e2] bg-white dark:border-border dark:bg-card p-6 shadow-xs"
                 >
-                  <span className="text-3xl font-black text-[#d2e3d5]">
+                  <span className="text-3xl font-black text-[#d2e3d5] dark:text-emerald-950">
                     {s.step}
                   </span>
-                  <div className="mt-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eaf3eb] text-[#214d2e]">
+                  <div className="mt-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eaf3eb] text-[#214d2e] dark:bg-emerald-950 dark:text-emerald-300">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h4 className="mt-4 font-bold text-[#14251b]">{s.title}</h4>
-                  <p className="mt-1.5 text-xs leading-relaxed text-[#5a6e60]">
+                  <h4 className="mt-4 font-bold text-[#14251b] dark:text-card-foreground">
+                    {s.title}
+                  </h4>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#5a6e60] dark:text-muted-foreground">
                     {s.description}
                   </p>
                 </Card>
@@ -113,10 +115,10 @@ export default function HowItWorks() {
         {/* For Landlords */}
         <div className="mt-14">
           <div className="mb-6 flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#275d3c] text-xs font-bold text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#275d3c] dark:bg-emerald-700 text-xs font-bold text-white">
               L
             </span>
-            <h3 className="text-xl font-bold text-[#14251b]">
+            <h3 className="text-xl font-bold text-[#14251b] dark:text-foreground">
               For Property Owners
             </h3>
           </div>
@@ -127,16 +129,18 @@ export default function HowItWorks() {
               return (
                 <Card
                   key={s.step}
-                  className="relative overflow-hidden rounded-2xl border-[#e1e9e2] bg-white p-6 shadow-xs"
+                  className="relative overflow-hidden rounded-2xl border-[#e1e9e2] bg-white dark:border-border dark:bg-card p-6 shadow-xs"
                 >
-                  <span className="text-3xl font-black text-[#d2e3d5]">
+                  <span className="text-3xl font-black text-[#d2e3d5] dark:text-emerald-950">
                     {s.step}
                   </span>
-                  <div className="mt-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eaf3eb] text-[#214d2e]">
+                  <div className="mt-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eaf3eb] text-[#214d2e] dark:bg-emerald-950 dark:text-emerald-300">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h4 className="mt-4 font-bold text-[#14251b]">{s.title}</h4>
-                  <p className="mt-1.5 text-xs leading-relaxed text-[#5a6e60]">
+                  <h4 className="mt-4 font-bold text-[#14251b] dark:text-card-foreground">
+                    {s.title}
+                  </h4>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#5a6e60] dark:text-muted-foreground">
                     {s.description}
                   </p>
                 </Card>

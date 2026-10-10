@@ -90,7 +90,7 @@ export default function ContactPage() {
       };
 
   return (
-    <main className="min-h-screen bg-[#f7faf7] text-[#14251b]">
+    <main className="min-h-screen bg-[#f7faf7] text-[#14251b] dark:bg-background dark:text-foreground">
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-[#0f1f17] text-white">
         <div
@@ -112,7 +112,7 @@ export default function ContactPage() {
               We are here to help
             </div>
 
-            <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
+            <h1 className="text-3xl font-bold tracking-tight sm:text-5xl text-white">
               Get in Touch with{" "}
               <span className="text-[#a8e6b5]">Room Nest</span>
             </h1>
@@ -132,81 +132,89 @@ export default function ContactPage() {
           {/* Contact Details */}
           <div className="space-y-6 lg:col-span-5">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-[#345840]">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#345840] dark:text-emerald-400">
                 Contact Information
               </p>
-              <h2 className="mt-2 text-2xl font-bold text-[#14251b]">
+              <h2 className="mt-2 text-2xl font-bold text-[#14251b] dark:text-foreground">
                 Let us assist your journey
               </h2>
-              <p className="mt-2 text-sm text-[#5a6e60]">
+              <p className="mt-2 text-sm text-[#5a6e60] dark:text-muted-foreground">
                 Feel free to email us, call our office, or submit an inquiry
                 using the form.
               </p>
             </div>
 
             <div className="space-y-4">
-              <Card className="rounded-2xl border-[#e2eae3] bg-white p-5 shadow-sm">
+              <Card className="rounded-2xl border-[#e2eae3] bg-white dark:border-border dark:bg-card p-5 shadow-sm">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#2d5839]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#2d5839] dark:bg-emerald-950 dark:text-emerald-300">
                     <MapPin className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#14251b]">Headquarters</h3>
-                    <p className="mt-1 text-sm text-[#5a6e60]">
+                    <h3 className="font-bold text-[#14251b] dark:text-card-foreground">
+                      Headquarters
+                    </h3>
+                    <p className="mt-1 text-sm text-[#5a6e60] dark:text-muted-foreground">
                       Dhaka, Bangladesh
                     </p>
-                    <p className="text-xs text-[#7d9083]">
+                    <p className="text-xs text-[#7d9083] dark:text-muted-foreground/80">
                       Central operations and landlord support center
                     </p>
                   </div>
                 </div>
               </Card>
 
-              <Card className="rounded-2xl border-[#e2eae3] bg-white p-5 shadow-sm">
+              <Card className="rounded-2xl border-[#e2eae3] bg-white dark:border-border dark:bg-card p-5 shadow-sm">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#2d5839]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#2d5839] dark:bg-emerald-950 dark:text-emerald-300">
                     <Mail className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#14251b]">Email Support</h3>
-                    <p className="mt-1 text-sm text-[#5a6e60]">
+                    <h3 className="font-bold text-[#14251b] dark:text-card-foreground">
+                      Email Support
+                    </h3>
+                    <p className="mt-1 text-sm text-[#5a6e60] dark:text-muted-foreground">
                       support@roomnest.com
                     </p>
-                    <p className="text-xs text-[#7d9083]">
+                    <p className="text-xs text-[#7d9083] dark:text-muted-foreground/80">
                       Typical response time within 24 hours
                     </p>
                   </div>
                 </div>
               </Card>
 
-              <Card className="rounded-2xl border-[#e2eae3] bg-white p-5 shadow-sm">
+              <Card className="rounded-2xl border-[#e2eae3] bg-white dark:border-border dark:bg-card p-5 shadow-sm">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#2d5839]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#2d5839] dark:bg-emerald-950 dark:text-emerald-300">
                     <Phone className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#14251b]">Direct Phone</h3>
-                    <p className="mt-1 text-sm text-[#5a6e60]">
+                    <h3 className="font-bold text-[#14251b] dark:text-card-foreground">
+                      Direct Phone
+                    </h3>
+                    <p className="mt-1 text-sm text-[#5a6e60] dark:text-muted-foreground">
                       +880 1700-000000
                     </p>
-                    <p className="text-xs text-[#7d9083]">
+                    <p className="text-xs text-[#7d9083] dark:text-muted-foreground/80">
                       Available Sunday – Thursday, 9:00 AM – 6:00 PM
                     </p>
                   </div>
                 </div>
               </Card>
 
-              <Card className="rounded-2xl border-[#e2eae3] bg-white p-5 shadow-sm">
+              <Card className="rounded-2xl border-[#e2eae3] bg-white dark:border-border dark:bg-card p-5 shadow-sm">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#2d5839]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ed] text-[#2d5839] dark:bg-emerald-950 dark:text-emerald-300">
                     <Clock className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#14251b]">Office Hours</h3>
-                    <p className="mt-1 text-sm text-[#5a6e60]">
+                    <h3 className="font-bold text-[#14251b] dark:text-card-foreground">
+                      Office Hours
+                    </h3>
+                    <p className="mt-1 text-sm text-[#5a6e60] dark:text-muted-foreground">
                       Sunday – Thursday: 9:00 AM – 6:00 PM
                     </p>
-                    <p className="text-xs text-[#7d9083]">
+                    <p className="text-xs text-[#7d9083] dark:text-muted-foreground/80">
                       Friday & Saturday: Emergency inquiries only
                     </p>
                   </div>
@@ -217,31 +225,31 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div className="lg:col-span-7">
-            <Card className="rounded-3xl border-[#e0e8df] bg-white p-6 shadow-sm sm:p-8">
+            <Card className="rounded-3xl border-[#e0e8df] bg-white dark:border-border dark:bg-card p-6 shadow-sm sm:p-8">
               <div className="mb-6">
-                <p className="text-xs font-bold uppercase tracking-wider text-[#345840]">
+                <p className="text-xs font-bold uppercase tracking-wider text-[#345840] dark:text-emerald-400">
                   Send a Message
                 </p>
-                <h3 className="mt-1 text-xl font-bold text-[#14251b]">
+                <h3 className="mt-1 text-xl font-bold text-[#14251b] dark:text-card-foreground">
                   How can we assist you?
                 </h3>
               </div>
 
               {submitted ? (
-                <div className="rounded-2xl bg-[#edf5ed] p-8 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#173b28] text-white">
+                <div className="rounded-2xl bg-[#edf5ed] dark:bg-emerald-950/40 dark:border dark:border-emerald-800/40 p-8 text-center">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#173b28] dark:bg-emerald-700 text-white">
                     <ShieldCheck className="h-7 w-7" />
                   </div>
-                  <h4 className="mt-4 text-lg font-bold text-[#173b28]">
+                  <h4 className="mt-4 text-lg font-bold text-[#173b28] dark:text-emerald-300">
                     Inquiry Received
                   </h4>
-                  <p className="mt-2 text-sm text-[#5a6e60]">
+                  <p className="mt-2 text-sm text-[#5a6e60] dark:text-muted-foreground">
                     Thank you for reaching out. One of our support specialists
                     will get in touch with you shortly.
                   </p>
                   <Button
                     onClick={() => setSubmitted(false)}
-                    className="mt-6 rounded-xl bg-[#173b28] hover:bg-[#245638]"
+                    className="mt-6 rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600"
                   >
                     Send another message
                   </Button>
@@ -261,7 +269,7 @@ export default function ContactPage() {
                         <div>
                           <label
                             htmlFor="name"
-                            className="block text-xs font-semibold text-[#34483a]"
+                            className="block text-xs font-semibold text-[#34483a] dark:text-card-foreground"
                           >
                             Full Name *
                           </label>
@@ -271,7 +279,7 @@ export default function ContactPage() {
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            className="mt-1.5 h-11 rounded-xl border-[#dbe4dc]"
+                            className="mt-1.5 h-11 rounded-xl border-[#dbe4dc] dark:border-border dark:bg-muted/30"
                           />
                         </div>
                       )}
@@ -282,7 +290,7 @@ export default function ContactPage() {
                         <div>
                           <label
                             htmlFor="email"
-                            className="block text-xs font-semibold text-[#34483a]"
+                            className="block text-xs font-semibold text-[#34483a] dark:text-card-foreground"
                           >
                             Email Address *
                           </label>
@@ -293,7 +301,7 @@ export default function ContactPage() {
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            className="mt-1.5 h-11 rounded-xl border-[#dbe4dc]"
+                            className="mt-1.5 h-11 rounded-xl border-[#dbe4dc] dark:border-border dark:bg-muted/30"
                           />
                         </div>
                       )}
@@ -306,7 +314,7 @@ export default function ContactPage() {
                         <div>
                           <label
                             htmlFor="phone"
-                            className="block text-xs font-semibold text-[#34483a]"
+                            className="block text-xs font-semibold text-[#34483a] dark:text-card-foreground"
                           >
                             Phone Number (Optional)
                           </label>
@@ -316,7 +324,7 @@ export default function ContactPage() {
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            className="mt-1.5 h-11 rounded-xl border-[#dbe4dc]"
+                            className="mt-1.5 h-11 rounded-xl border-[#dbe4dc] dark:border-border dark:bg-muted/30"
                           />
                         </div>
                       )}
@@ -327,7 +335,7 @@ export default function ContactPage() {
                         <div>
                           <label
                             htmlFor="subject"
-                            className="block text-xs font-semibold text-[#34483a]"
+                            className="block text-xs font-semibold text-[#34483a] dark:text-card-foreground"
                           >
                             Subject *
                           </label>
@@ -337,7 +345,7 @@ export default function ContactPage() {
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            className="mt-1.5 h-11 rounded-xl border-[#dbe4dc]"
+                            className="mt-1.5 h-11 rounded-xl border-[#dbe4dc] dark:border-border dark:bg-muted/30"
                           />
                         </div>
                       )}
@@ -349,7 +357,7 @@ export default function ContactPage() {
                       <div>
                         <label
                           htmlFor="message"
-                          className="block text-xs font-semibold text-[#34483a]"
+                          className="block text-xs font-semibold text-[#34483a] dark:text-card-foreground"
                         >
                           Message *
                         </label>
@@ -360,7 +368,7 @@ export default function ContactPage() {
                           value={field.state.value}
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          className="mt-1.5 w-full rounded-xl border border-[#dbe4dc] bg-white p-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
+                          className="mt-1.5 w-full rounded-xl border border-[#dbe4dc] bg-white dark:border-border dark:bg-muted/30 dark:text-foreground p-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                         />
                       </div>
                     )}
@@ -368,7 +376,7 @@ export default function ContactPage() {
 
                   <Button
                     type="submit"
-                    className="h-12 w-full rounded-xl bg-[#173b28] font-semibold text-white hover:bg-[#245638]"
+                    className="h-12 w-full rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600 font-semibold text-white"
                   >
                     <Send className="mr-2 h-4 w-4" />
                     Submit Inquiry
@@ -381,17 +389,17 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Accordion Section */}
-      <section className="border-t border-[#e2eae3] bg-white px-4 py-16 sm:px-6 lg:px-8">
+      <section className="border-t border-[#e2eae3] dark:border-border bg-white dark:bg-background px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#edf5ed] px-3.5 py-1.5 text-xs font-bold text-[#2a5537]">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#edf5ed] dark:bg-emerald-950 dark:text-emerald-300 dark:border dark:border-emerald-800/40 px-3.5 py-1.5 text-xs font-bold text-[#2a5537]">
               <HelpCircle className="h-3.5 w-3.5" />
               Frequently Asked Questions
             </div>
-            <h2 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               Common questions about Room Nest
             </h2>
-            <p className="mt-2 text-sm text-[#5a6e60]">
+            <p className="mt-2 text-sm text-[#5a6e60] dark:text-muted-foreground">
               Everything you need to know about properties, booking, and
               security.
             </p>
@@ -401,10 +409,12 @@ export default function ContactPage() {
             {faqs.map((faq) => (
               <Card
                 key={faq.q}
-                className="rounded-2xl border-[#e2eae3] bg-[#f9fbf9] p-5 shadow-xs"
+                className="rounded-2xl border-[#e2eae3] bg-[#f9fbf9] dark:border-border dark:bg-card p-5 shadow-xs"
               >
-                <h3 className="text-base font-bold text-[#14251b]">{faq.q}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#5a6e60]">
+                <h3 className="text-base font-bold text-[#14251b] dark:text-card-foreground">
+                  {faq.q}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#5a6e60] dark:text-muted-foreground">
                   {faq.a}
                 </p>
               </Card>

@@ -21,7 +21,7 @@ function PropertyImage({
     // biome-ignore lint/performance/noImgElement: URLs are supplied dynamically by the backend.
     <img src={image} alt={title} className="h-full w-full object-cover" />
   ) : (
-    <div className="flex h-full items-center justify-center bg-emerald-50 text-emerald-900">
+    <div className="flex h-full items-center justify-center bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300">
       <Building2 aria-hidden="true" className="size-10" />
     </div>
   );
@@ -56,7 +56,7 @@ export default function LandlordPropertiesPage() {
     <main className="mx-auto min-h-[70vh] max-w-6xl px-4 py-10 sm:px-6">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-emerald-800">
+          <p className="text-sm font-medium text-emerald-800 dark:text-emerald-400">
             Landlord workspace
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight">
@@ -68,7 +68,7 @@ export default function LandlordPropertiesPage() {
         </div>
         <Link
           href="/landlord/properties/create"
-          className="inline-flex h-10 items-center rounded-lg bg-emerald-900 px-4 text-sm font-medium text-white hover:bg-emerald-800"
+          className="inline-flex h-10 items-center rounded-lg bg-emerald-900 dark:bg-emerald-700 px-4 text-sm font-medium text-white hover:bg-emerald-800 dark:hover:bg-emerald-600"
         >
           <Plus aria-hidden="true" className="mr-2 size-4" />
           Add property
@@ -95,7 +95,7 @@ export default function LandlordPropertiesPage() {
       {!isPending && !isError && properties.length === 0 && (
         <Card>
           <CardContent className="flex flex-col items-center py-14 text-center">
-            <Home className="size-10 text-emerald-800" />
+            <Home className="size-10 text-emerald-800 dark:text-emerald-400" />
             <h2 className="mt-4 text-xl font-semibold">No properties yet</h2>
             <p className="mt-2 text-muted-foreground">
               Create a listing to start managing your rentals here.
@@ -127,7 +127,7 @@ export default function LandlordPropertiesPage() {
               return (
                 <Card
                   key={property.id}
-                  className="overflow-hidden rounded-2xl border-emerald-950/10"
+                  className="overflow-hidden rounded-2xl border-emerald-950/10 dark:border-border"
                 >
                   <div className="h-48">
                     <PropertyImage image={photo} title={property.title} />
@@ -142,7 +142,7 @@ export default function LandlordPropertiesPage() {
                           {property.area}, {property.city}
                         </p>
                       </div>
-                      <span className="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-900">
+                      <span className="shrink-0 rounded-full bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 text-xs font-medium text-emerald-900 dark:text-emerald-300">
                         {property.propertyStatus ?? "Pending review"}
                       </span>
                     </div>
@@ -152,13 +152,13 @@ export default function LandlordPropertiesPage() {
                     </div>
                     <div className="mt-5 flex gap-2">
                       <Link
-                        className="inline-flex h-9 flex-1 items-center justify-center rounded-lg border px-3 text-sm hover:bg-muted"
+                        className="inline-flex h-9 flex-1 items-center justify-center rounded-lg border dark:border-border px-3 text-sm hover:bg-muted dark:text-foreground"
                         href={`/propertyDetails?id=${encodeURIComponent(property.id)}`}
                       >
                         View listing
                       </Link>
                       <Link
-                        className="inline-flex h-9 flex-1 items-center justify-center rounded-lg bg-emerald-900 px-3 text-sm text-white hover:bg-emerald-800"
+                        className="inline-flex h-9 flex-1 items-center justify-center rounded-lg bg-emerald-900 dark:bg-emerald-700 px-3 text-sm text-white hover:bg-emerald-800 dark:hover:bg-emerald-600"
                         href={`/landlord/properties/edit?id=${encodeURIComponent(property.id)}`}
                       >
                         Edit

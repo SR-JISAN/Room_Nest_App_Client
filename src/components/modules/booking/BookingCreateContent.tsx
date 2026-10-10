@@ -136,9 +136,9 @@ export default function BookingCreateContent() {
   }
 
   return (
-    <main className="min-h-[70vh] bg-[#f7f9f6] px-4 py-10 text-[#172b20] sm:px-6">
+    <main className="min-h-[70vh] bg-[#f7f9f6] dark:bg-background px-4 py-10 text-[#172b20] dark:text-foreground sm:px-6">
       <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_360px]">
-        <Card className="rounded-2xl border-[#e0e8df]">
+        <Card className="rounded-2xl border-[#e0e8df] dark:border-border dark:bg-card">
           <CardHeader>
             <CardTitle>Request this room</CardTitle>
             <CardDescription>
@@ -149,7 +149,7 @@ export default function BookingCreateContent() {
           <CardContent>
             {bookingId ? (
               <div className="space-y-5">
-                <div className="rounded-xl bg-emerald-50 p-4 text-sm text-emerald-950">
+                <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border dark:border-emerald-800/40 p-4 text-sm text-emerald-950">
                   Your booking request was created. Continue to bKash to pay the
                   security deposit. The booking is not confirmed until the
                   backend updates its status.
@@ -157,7 +157,7 @@ export default function BookingCreateContent() {
                 <Button
                   onClick={() => void beginPayment()}
                   disabled={pay.isPending}
-                  className="w-full bg-[#173b28]"
+                  className="w-full bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white"
                 >
                   {pay.isPending ? (
                     <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
@@ -168,7 +168,7 @@ export default function BookingCreateContent() {
                 </Button>
                 <Link
                   href="/dashboard/my-bookings"
-                  className="block text-center text-sm font-semibold text-[#173b28] underline"
+                  className="block text-center text-sm font-semibold text-[#173b28] dark:text-emerald-400 underline"
                 >
                   View my bookings
                 </Link>
@@ -259,7 +259,10 @@ export default function BookingCreateContent() {
                   )}
                 </form.Field>
                 {requestError && (
-                  <p role="alert" className="flex gap-2 text-sm text-red-700">
+                  <p
+                    role="alert"
+                    className="flex gap-2 text-sm text-red-700 dark:text-red-400"
+                  >
                     <CircleAlert className="h-4 w-4 shrink-0" />
                     {requestError}
                   </p>
@@ -267,7 +270,7 @@ export default function BookingCreateContent() {
                 <Button
                   type="submit"
                   disabled={create.isPending}
-                  className="w-full bg-[#173b28]"
+                  className="w-full bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white"
                 >
                   {create.isPending && (
                     <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
@@ -277,28 +280,33 @@ export default function BookingCreateContent() {
               </form>
             )}
             {requestError && bookingId && (
-              <p role="alert" className="mt-4 text-sm text-red-700">
+              <p
+                role="alert"
+                className="mt-4 text-sm text-red-700 dark:text-red-400"
+              >
                 {requestError}
               </p>
             )}
           </CardContent>
         </Card>
 
-        <Card className="h-fit rounded-2xl border-[#e0e8df]">
+        <Card className="h-fit rounded-2xl border-[#e0e8df] dark:border-border dark:bg-card">
           <CardHeader>
             <CardTitle className="text-lg">Booking summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div className="flex gap-3">
-              <Home className="h-5 w-5 text-emerald-800" />
+              <Home className="h-5 w-5 text-emerald-800 dark:text-emerald-400" />
               <div>
-                <p className="font-semibold">{property.title}</p>
+                <p className="font-semibold text-foreground">
+                  {property.title}
+                </p>
                 <p className="text-muted-foreground">
                   {room.title} · {property.city}
                 </p>
               </div>
             </div>
-            <div className="flex items-center justify-between border-t pt-4">
+            <div className="flex items-center justify-between border-t border-border pt-4">
               <span>Monthly rent</span>
               <strong>{money(room.rentAmount)}</strong>
             </div>
@@ -330,15 +338,15 @@ function BookingState({
     <main className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="max-w-md text-center">
         {loading ? (
-          <LoaderCircle className="mx-auto h-8 w-8 animate-spin text-emerald-800" />
+          <LoaderCircle className="mx-auto h-8 w-8 animate-spin text-emerald-800 dark:text-emerald-400" />
         ) : (
-          <CircleAlert className="mx-auto h-8 w-8 text-amber-700" />
+          <CircleAlert className="mx-auto h-8 w-8 text-amber-700 dark:text-amber-400" />
         )}
         <h1 className="mt-4 text-2xl font-bold">{title}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{description}</p>
         <Link
           href="/properties"
-          className="mt-5 inline-block font-semibold text-[#173b28] underline"
+          className="mt-5 inline-block font-semibold text-[#173b28] dark:text-emerald-400 underline"
         >
           Browse properties
         </Link>

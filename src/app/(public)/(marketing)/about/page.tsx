@@ -30,7 +30,8 @@ const features = [
     title: "Find your place",
     description:
       "Explore rooms, apartments, and shared living spaces that fit your lifestyle and everyday needs.",
-    color: "bg-emerald-100 text-emerald-800",
+    color:
+      "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300",
   },
   {
     number: "02",
@@ -38,7 +39,8 @@ const features = [
     title: "Feel more confident",
     description:
       "Discover a more transparent rental experience with property information and verification features.",
-    color: "bg-amber-100 text-amber-800",
+    color:
+      "bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300",
   },
   {
     number: "03",
@@ -46,7 +48,7 @@ const features = [
     title: "Find your people",
     description:
       "Make shared living easier by discovering spaces that bring compatible people together.",
-    color: "bg-sky-100 text-sky-800",
+    color: "bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300",
   },
 ];
 
@@ -337,7 +339,7 @@ const AboutPage = () => {
                 }}
                 className="absolute -left-3 top-1/4 flex items-center gap-3 rounded-2xl border border-border/50 bg-background p-3 text-foreground shadow-xl sm:-left-10 sm:p-4"
               >
-                <span className="flex size-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
                   <MapPin className="size-5" />
                 </span>
                 <div>
@@ -358,7 +360,7 @@ const AboutPage = () => {
                 }}
                 className="absolute -right-2 bottom-24 flex items-center gap-3 rounded-2xl border border-border/50 bg-background p-3 text-foreground shadow-xl sm:-right-8 sm:p-4"
               >
-                <span className="flex size-10 items-center justify-center rounded-xl bg-lime-100 text-lime-800">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-lime-100 dark:bg-lime-950/60 text-lime-800 dark:text-lime-300">
                   <ShieldCheck className="size-5" />
                 </span>
                 <div>

@@ -39,7 +39,9 @@ export default function AdminPropertiesContent() {
   return (
     <main className="mx-auto min-h-[70vh] max-w-6xl space-y-6 px-4 py-10 sm:px-6">
       <header>
-        <p className="text-sm font-medium text-emerald-800">Administration</p>
+        <p className="text-sm font-medium text-emerald-800 dark:text-emerald-400">
+          Administration
+        </p>
         <h1 className="mt-2 text-3xl font-bold">Property moderation</h1>
         <p className="mt-2 text-muted-foreground">
           Review real submissions and set the backend listing status.
@@ -48,7 +50,7 @@ export default function AdminPropertiesContent() {
       <label className="flex w-full max-w-xs flex-col gap-2 text-sm font-medium">
         Filter by status
         <select
-          className="h-10 rounded-lg border bg-background px-3"
+          className="h-10 rounded-lg border dark:border-border bg-background text-foreground px-3"
           value={status}
           onChange={(event) => {
             setStatus(event.target.value);
@@ -108,7 +110,7 @@ export default function AdminPropertiesContent() {
                 </p>
                 {property.propertyStatus === "APPROVED" && (
                   <Link
-                    className="mt-2 inline-flex text-sm font-medium text-emerald-900 underline"
+                    className="mt-2 inline-flex text-sm font-medium text-emerald-900 dark:text-emerald-300 underline"
                     href={`/propertyDetails?id=${encodeURIComponent(property.id)}`}
                   >
                     Open public details

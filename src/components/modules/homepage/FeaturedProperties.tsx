@@ -48,18 +48,18 @@ export default function FeaturedProperties() {
   const properties = data?.data.result ?? [];
 
   return (
-    <section className="bg-[#f7f9f6] py-16 sm:py-24">
+    <section className="bg-[#f7f9f6] dark:bg-background/95 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#e8f2e9] px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#2d5839]">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#e8f2e9] dark:bg-emerald-950 dark:text-emerald-300 dark:border dark:border-emerald-800/40 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#2d5839]">
               <Sparkles className="h-3.5 w-3.5" />
               Verified & Handpicked
             </div>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#14251b] sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#14251b] dark:text-foreground sm:text-4xl">
               Featured Properties
             </h2>
-            <p className="mt-2 max-w-xl text-sm text-[#5a6e60] sm:text-base">
+            <p className="mt-2 max-w-xl text-sm text-[#5a6e60] dark:text-muted-foreground sm:text-base">
               Discover verified apartments, rooms, and sublets recently listed
               on Room Nest.
             </p>
@@ -67,7 +67,7 @@ export default function FeaturedProperties() {
 
           <Link
             href="/properties"
-            className="inline-flex items-center gap-2 text-sm font-bold text-[#173b28] hover:underline"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#173b28] dark:text-emerald-400 dark:hover:text-emerald-300 hover:underline"
           >
             Explore all listings
             <ArrowRight className="h-4 w-4" />
@@ -80,7 +80,7 @@ export default function FeaturedProperties() {
             {[1, 2, 3].map((key) => (
               <Card
                 key={key}
-                className="overflow-hidden rounded-2xl border-[#e1e8df] p-0"
+                className="overflow-hidden rounded-2xl border-[#e1e8df] dark:border-border dark:bg-card p-0"
               >
                 <Skeleton className="h-56 w-full rounded-none" />
                 <CardContent className="space-y-4 p-5">
@@ -104,9 +104,9 @@ export default function FeaturedProperties() {
               return (
                 <Card
                   key={property.id}
-                  className="group h-full overflow-hidden rounded-2xl border-[#e0e8df] bg-white p-0 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-[#183c25]/10"
+                  className="group h-full overflow-hidden rounded-2xl border-[#e0e8df] bg-white dark:border-border dark:bg-card p-0 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-[#183c25]/10 dark:hover:shadow-black/40"
                 >
-                  <div className="relative h-56 overflow-hidden bg-[#e3ede3]">
+                  <div className="relative h-56 overflow-hidden bg-[#e3ede3] dark:bg-muted">
                     {image ? (
                       <Image
                         src={image}
@@ -116,9 +116,9 @@ export default function FeaturedProperties() {
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="flex h-full flex-col items-center justify-center bg-linear-to-br from-[#dcebdd] to-[#c4ddc8]">
-                        <Building2 className="h-8 w-8 text-[#315c3e]" />
-                        <span className="mt-2 text-xs font-semibold text-[#496d50]">
+                      <div className="flex h-full flex-col items-center justify-center bg-linear-to-br from-[#dcebdd] to-[#c4ddc8] dark:from-emerald-950/40 dark:to-emerald-900/40">
+                        <Building2 className="h-8 w-8 text-[#315c3e] dark:text-emerald-300" />
+                        <span className="mt-2 text-xs font-semibold text-[#496d50] dark:text-emerald-400">
                           Room Nest
                         </span>
                       </div>
@@ -126,13 +126,13 @@ export default function FeaturedProperties() {
 
                     <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/10" />
 
-                    <Badge className="absolute left-4 top-4 rounded-lg border-0 bg-white/95 px-3 py-1 text-xs font-semibold text-[#193d27]">
+                    <Badge className="absolute left-4 top-4 rounded-lg border-0 bg-white/95 dark:bg-background/90 px-3 py-1 text-xs font-semibold text-[#193d27] dark:text-foreground">
                       {property.propertyType?.replaceAll("_", " ") ??
                         "Property"}
                     </Badge>
 
                     {property.verified && (
-                      <Badge className="absolute bottom-4 left-4 rounded-lg border-0 bg-[#c4efcc] text-[#164426]">
+                      <Badge className="absolute bottom-4 left-4 rounded-lg border-0 bg-[#c4efcc] text-[#164426] dark:bg-emerald-950 dark:text-emerald-300 dark:border dark:border-emerald-800/40">
                         <Check className="mr-1 h-3.5 w-3.5" />
                         Verified
                       </Badge>
@@ -140,12 +140,12 @@ export default function FeaturedProperties() {
                   </div>
 
                   <CardContent className="flex flex-col p-5">
-                    <h3 className="line-clamp-1 text-lg font-bold text-[#183321] transition-colors group-hover:text-emerald-800">
+                    <h3 className="line-clamp-1 text-lg font-bold text-[#183321] dark:text-card-foreground transition-colors group-hover:text-emerald-800 dark:group-hover:text-emerald-400">
                       {property.title}
                     </h3>
 
-                    <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#5a6e60]">
-                      <MapPin className="h-3.5 w-3.5 text-emerald-800 shrink-0" />
+                    <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#5a6e60] dark:text-muted-foreground">
+                      <MapPin className="h-3.5 w-3.5 text-emerald-800 dark:text-emerald-400 shrink-0" />
                       <span className="line-clamp-1">
                         {property.area ||
                           property.city ||
@@ -154,16 +154,16 @@ export default function FeaturedProperties() {
                       </span>
                     </p>
 
-                    <p className="mt-2.5 line-clamp-2 text-xs leading-relaxed text-[#718074]">
+                    <p className="mt-2.5 line-clamp-2 text-xs leading-relaxed text-[#718074] dark:text-muted-foreground/80">
                       {property.description ||
                         "Discover comfort and convenience at this verified rental."}
                     </p>
 
-                    <div className="mt-4 flex items-center justify-between border-t border-[#edf0eb] pt-4">
+                    <div className="mt-4 flex items-center justify-between border-t border-[#edf0eb] dark:border-border pt-4">
                       <div>
                         {price > 0 ? (
                           <>
-                            <p className="text-lg font-bold text-[#183b26]">
+                            <p className="text-lg font-bold text-[#183b26] dark:text-emerald-300">
                               ৳{formatPrice(price)}
                             </p>
                             <p className="text-[11px] text-muted-foreground">
@@ -171,7 +171,7 @@ export default function FeaturedProperties() {
                             </p>
                           </>
                         ) : (
-                          <p className="text-sm font-semibold text-[#183b26]">
+                          <p className="text-sm font-semibold text-[#183b26] dark:text-emerald-300">
                             Contact for rent
                           </p>
                         )}
@@ -181,7 +181,7 @@ export default function FeaturedProperties() {
                         onClick={() =>
                           router.push(`/propertyDetails/?id=${property.id}`)
                         }
-                        className="h-10 rounded-xl bg-[#173b28] px-4 text-xs font-semibold text-white hover:bg-[#245638]"
+                        className="h-10 rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600 px-4 text-xs font-semibold text-white"
                       >
                         View Details
                         <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
@@ -196,16 +196,18 @@ export default function FeaturedProperties() {
 
         {/* Fallback if no properties available yet */}
         {!isLoading && properties.length === 0 && (
-          <div className="mt-10 rounded-2xl border border-dashed border-[#cfe0d2] bg-white p-12 text-center">
-            <Building2 className="mx-auto h-10 w-10 text-emerald-700" />
-            <h3 className="mt-4 text-lg font-bold">New listings coming soon</h3>
+          <div className="mt-10 rounded-2xl border border-dashed border-[#cfe0d2] dark:border-border bg-white dark:bg-card p-12 text-center">
+            <Building2 className="mx-auto h-10 w-10 text-emerald-700 dark:text-emerald-400" />
+            <h3 className="mt-4 text-lg font-bold text-foreground">
+              New listings coming soon
+            </h3>
             <p className="mt-1 text-sm text-muted-foreground">
               Are you a landlord? Be the first to list your property on Room
               Nest.
             </p>
             <Link
               href="/landlord/properties/create"
-              className="mt-5 inline-flex h-10 items-center rounded-xl bg-[#173b28] px-5 text-sm font-semibold text-white hover:bg-[#245638]"
+              className="mt-5 inline-flex h-10 items-center rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600 px-5 text-sm font-semibold text-white"
             >
               List a property
             </Link>

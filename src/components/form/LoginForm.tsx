@@ -192,7 +192,10 @@ export function LoginForm({
               </Field>
               <FieldDescription className="text-center">
                 Don&apos;t have an account?{" "}
-                <Link className="text-blue-700" href="/register">
+                <Link
+                  className="font-semibold text-emerald-700 hover:underline dark:text-emerald-400"
+                  href="/register"
+                >
                   Sign up
                 </Link>
               </FieldDescription>
@@ -204,7 +207,7 @@ export function LoginForm({
               alt="Image"
               width={500}
               height={500}
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-90 dark:opacity-90"
             />
           </div>
         </CardContent>

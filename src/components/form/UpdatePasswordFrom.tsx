@@ -105,8 +105,8 @@ export default function UpdatePasswordForm() {
                     <Input
                       id={field.name}
                       name={field.name}
-                      type="tel"
-                      autoComplete="tel"
+                      type="password"
+                      autoComplete="current-password"
                       placeholder="Enter Current Password"
                       className={inputClass}
                       value={field.state.value}
@@ -142,6 +142,8 @@ export default function UpdatePasswordForm() {
                     <Input
                       id={field.name}
                       name={field.name}
+                      type="password"
+                      autoComplete="new-password"
                       placeholder="New Password"
                       className={inputClass}
                       value={field.state.value}
@@ -175,6 +177,8 @@ export default function UpdatePasswordForm() {
                     <Input
                       id={field.name}
                       name={field.name}
+                      type="password"
+                      autoComplete="new-password"
                       placeholder="Enter Your Confirm Password"
                       className={inputClass}
                       value={field.state.value}
@@ -197,7 +201,7 @@ export default function UpdatePasswordForm() {
             <Button
               type="submit"
               disabled={isPending}
-              className="h-11 w-full rounded-xl bg-emerald-700 text-white hover:bg-emerald-800 sm:w-auto sm:min-w-44"
+              className="h-11 w-full rounded-xl bg-emerald-700 dark:bg-emerald-600 text-white hover:bg-emerald-800 dark:hover:bg-emerald-500 sm:w-auto sm:min-w-44"
             >
               {isPending ? (
                 <>

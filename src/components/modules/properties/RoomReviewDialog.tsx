@@ -92,9 +92,9 @@ export default function RoomReviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md rounded-2xl bg-white p-6">
+      <DialogContent className="max-w-md rounded-2xl bg-white dark:bg-card dark:border-border p-6">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-[#14251b]">
+          <DialogTitle className="text-xl font-bold text-[#14251b] dark:text-foreground">
             Review Room: {room.title || "Selected Room"}
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
@@ -104,7 +104,7 @@ export default function RoomReviewDialog({
         </DialogHeader>
 
         {errorMessage && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+          <div className="rounded-xl border border-red-200 bg-red-50 text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300 p-3 text-xs">
             {errorMessage}
           </div>
         )}
@@ -120,7 +120,7 @@ export default function RoomReviewDialog({
           <form.Field name="rating">
             {(field) => (
               <div>
-                <label className="text-xs font-semibold text-[#2f4234]">
+                <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                   Rating *
                 </label>
                 <div className="mt-2 flex items-center gap-1.5">
@@ -140,7 +140,7 @@ export default function RoomReviewDialog({
                           className={`h-6 w-6 ${
                             active
                               ? "fill-amber-400 text-amber-400"
-                              : "text-gray-300"
+                              : "text-gray-300 dark:text-gray-600"
                           }`}
                         />
                       </button>
@@ -154,7 +154,7 @@ export default function RoomReviewDialog({
           <form.Field name="note">
             {(field) => (
               <div>
-                <label className="text-xs font-semibold text-[#2f4234]">
+                <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                   Your Experience *
                 </label>
                 <textarea
@@ -164,7 +164,7 @@ export default function RoomReviewDialog({
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="How was the comfort, cleanliness, and living experience?"
-                  className="mt-1 w-full rounded-xl border border-[#d6dfd7] p-3 text-xs outline-none focus:border-emerald-700"
+                  className="mt-1 w-full rounded-xl border border-[#d6dfd7] dark:border-border bg-white dark:bg-muted/30 dark:text-foreground p-3 text-xs outline-none focus:border-emerald-700"
                 />
                 <div className="mt-1 text-right text-[11px] text-muted-foreground">
                   {field.state.value.length}/300
@@ -185,7 +185,7 @@ export default function RoomReviewDialog({
             <Button
               type="submit"
               disabled={addReview.isPending}
-              className="rounded-xl bg-[#173b28] hover:bg-[#245638]"
+              className="rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white"
             >
               {addReview.isPending ? (
                 <>

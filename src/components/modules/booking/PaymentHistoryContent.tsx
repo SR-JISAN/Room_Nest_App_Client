@@ -17,11 +17,11 @@ export default function PaymentHistoryContent() {
   const { data, isPending, isError, refetch } = useMyPayments();
   const payments = data?.data ?? [];
   return (
-    <main className="min-h-[70vh] bg-[#f7f9f6] px-4 py-10 text-[#172b20] sm:px-6">
+    <main className="min-h-[70vh] bg-[#f7f9f6] dark:bg-background px-4 py-10 text-[#172b20] dark:text-foreground sm:px-6">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800 dark:text-emerald-400">
               Your account
             </p>
             <h1 className="mt-2 text-3xl font-bold">Payment history</h1>
@@ -31,7 +31,7 @@ export default function PaymentHistoryContent() {
           </div>
           <Link
             href="/dashboard/my-bookings"
-            className="text-sm font-semibold text-[#173b28] underline"
+            className="text-sm font-semibold text-[#173b28] dark:text-emerald-300 underline"
           >
             My bookings
           </Link>
@@ -47,7 +47,7 @@ export default function PaymentHistoryContent() {
           <Card className="mt-7 rounded-2xl">
             <CardContent className="flex items-center justify-between gap-4 p-6">
               <p className="flex gap-2 text-sm">
-                <CircleAlert className="h-5 w-5 text-amber-700" />
+                <CircleAlert className="h-5 w-5 text-amber-700 dark:text-amber-400" />
                 Payments could not be loaded. Sign in and try again.
               </p>
               <Button variant="outline" onClick={() => void refetch()}>
@@ -59,7 +59,7 @@ export default function PaymentHistoryContent() {
         {!isPending && !isError && payments.length === 0 && (
           <Card className="mt-7 rounded-2xl">
             <CardContent className="py-14 text-center">
-              <ReceiptText className="mx-auto h-9 w-9 text-emerald-800" />
+              <ReceiptText className="mx-auto h-9 w-9 text-emerald-800 dark:text-emerald-400" />
               <h2 className="mt-4 text-xl font-semibold">No payments yet</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 Payment records appear here after you start a booking payment.
@@ -69,10 +69,13 @@ export default function PaymentHistoryContent() {
         )}
         <div className="mt-7 space-y-3">
           {payments.map((payment) => (
-            <Card key={payment.id} className="rounded-2xl border-[#e0e8df]">
+            <Card
+              key={payment.id}
+              className="rounded-2xl border-[#e0e8df] dark:border-border dark:bg-card"
+            >
               <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="rounded-xl bg-[#edf5ed] p-2 text-[#315d3d]">
+                  <div className="rounded-xl bg-[#edf5ed] dark:bg-emerald-950/40 p-2 text-[#315d3d] dark:text-emerald-300">
                     <CreditCard className="h-5 w-5" />
                   </div>
                   <div>
@@ -84,7 +87,7 @@ export default function PaymentHistoryContent() {
                     </p>
                   </div>
                 </div>
-                <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold">
+                <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-foreground">
                   {label(payment.paymentStatus)}
                 </span>
               </CardHeader>
@@ -108,7 +111,7 @@ export default function PaymentHistoryContent() {
                   <p>
                     Booking:{" "}
                     <Link
-                      className="font-semibold underline"
+                      className="font-semibold text-[#173b28] dark:text-emerald-300 underline"
                       href="/dashboard/my-bookings"
                     >
                       View bookings

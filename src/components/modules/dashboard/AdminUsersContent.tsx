@@ -32,7 +32,9 @@ export default function AdminUsersContent() {
   return (
     <main className="mx-auto min-h-[70vh] max-w-6xl space-y-6 px-4 py-10 sm:px-6">
       <header>
-        <p className="text-sm font-medium text-emerald-800">Administration</p>
+        <p className="text-sm font-medium text-emerald-800 dark:text-emerald-400">
+          Administration
+        </p>
         <h1 className="mt-2 text-3xl font-bold">User management</h1>
         <p className="mt-2 text-muted-foreground">
           Review account roles and access status. Passwords and private profile

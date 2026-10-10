@@ -114,11 +114,11 @@ export default function RoommateRequestDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg rounded-2xl bg-white p-6">
+      <DialogContent className="max-w-lg rounded-2xl bg-white dark:bg-card dark:border-border p-6">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-emerald-800">
+          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-400">
             <Users className="h-5 w-5" />
-            <DialogTitle className="text-xl font-bold">
+            <DialogTitle className="text-xl font-bold text-foreground">
               Apply as a Roommate
             </DialogTitle>
           </div>
@@ -133,7 +133,7 @@ export default function RoommateRequestDialog({
         </DialogHeader>
 
         {formError && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+          <div className="rounded-xl border border-red-200 bg-red-50 text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300 p-3 text-xs">
             {formError}
           </div>
         )}
@@ -150,7 +150,7 @@ export default function RoommateRequestDialog({
             <form.Field name="name">
               {(field) => (
                 <div>
-                  <label className="text-xs font-semibold text-[#2f4234]">
+                  <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                     Full Name *
                   </label>
                   <Input
@@ -167,7 +167,7 @@ export default function RoommateRequestDialog({
             <form.Field name="age">
               {(field) => (
                 <div>
-                  <label className="text-xs font-semibold text-[#2f4234]">
+                  <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                     Age *
                   </label>
                   <Input
@@ -188,7 +188,7 @@ export default function RoommateRequestDialog({
             <form.Field name="gender">
               {(field) => (
                 <div>
-                  <label className="text-xs font-semibold text-[#2f4234]">
+                  <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                     Gender *
                   </label>
                   <Select
@@ -212,7 +212,7 @@ export default function RoommateRequestDialog({
             <form.Field name="occupantCount">
               {(field) => (
                 <div>
-                  <label className="text-xs font-semibold text-[#2f4234]">
+                  <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                     Number of Applicants *
                   </label>
                   <Input
@@ -236,7 +236,7 @@ export default function RoommateRequestDialog({
             <form.Field name="startDate">
               {(field) => (
                 <div>
-                  <label className="text-xs font-semibold text-[#2f4234]">
+                  <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                     Move-in Date *
                   </label>
                   <Input
@@ -254,7 +254,7 @@ export default function RoommateRequestDialog({
             <form.Field name="endDate">
               {(field) => (
                 <div>
-                  <label className="text-xs font-semibold text-[#2f4234]">
+                  <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                     Move-out Date (Optional)
                   </label>
                   <Input
@@ -273,7 +273,7 @@ export default function RoommateRequestDialog({
           <form.Field name="note">
             {(field) => (
               <div>
-                <label className="text-xs font-semibold text-[#2f4234]">
+                <label className="text-xs font-semibold text-[#2f4234] dark:text-card-foreground">
                   Introduction / Notes for Roommates
                 </label>
                 <textarea
@@ -282,7 +282,7 @@ export default function RoommateRequestDialog({
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="Introduce yourself, your daily routine, or profession..."
-                  className="mt-1 w-full rounded-xl border border-[#d6dfd7] p-2.5 text-xs outline-none focus:border-emerald-700"
+                  className="mt-1 w-full rounded-xl border border-[#d6dfd7] dark:border-border bg-white dark:bg-muted/30 dark:text-foreground p-2.5 text-xs outline-none focus:border-emerald-700"
                 />
               </div>
             )}
@@ -300,7 +300,7 @@ export default function RoommateRequestDialog({
             <Button
               type="submit"
               disabled={createSubBooking.isPending}
-              className="rounded-xl bg-[#173b28] hover:bg-[#245638]"
+              className="rounded-xl bg-[#173b28] hover:bg-[#245638] dark:bg-emerald-700 dark:hover:bg-emerald-600"
             >
               {createSubBooking.isPending ? (
                 <>

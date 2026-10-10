@@ -196,11 +196,11 @@ const Navbar = () => {
                     const isActive = pathName === route.path;
                     return (
                       <Link
-                        className={`w-full ${isActive ? "bg-[#0f1f17] text-white rounded-xl" : ""}`}
+                        className={`w-full ${isActive ? "bg-[#0f1f17] dark:bg-emerald-950 text-white rounded-xl" : "text-foreground"}`}
                         key={route.path}
                         href={route.path}
                       >
-                        <DrawerClose className="w-full py-2.5 rounded-xl shadow hover:shadow-[#0f1f17] cursor-pointer">
+                        <DrawerClose className="w-full py-2.5 rounded-xl shadow hover:shadow-[#0f1f17] dark:hover:shadow-emerald-950 cursor-pointer">
                           {route.name}
                         </DrawerClose>
                       </Link>
@@ -214,7 +214,7 @@ const Navbar = () => {
                     <Button
                       onClick={handelLoggedOut}
                       variant="secondary"
-                      className="font-bold w-full bg-[#0f1f17] text-white hover:bg-[#0f1f17] shadow hover:text-red-500 hover:shadow-red-700 cursor-pointer"
+                      className="font-bold w-full bg-[#0f1f17] dark:bg-emerald-900 text-white hover:bg-[#1a3828] dark:hover:bg-emerald-800 shadow hover:text-red-500 hover:shadow-red-700 cursor-pointer"
                     >
                       Logout
                     </Button>
@@ -222,7 +222,7 @@ const Navbar = () => {
                 ) : (
                   <div className="flex w-full items-center gap-4">
                     <Button
-                      className="flex-1 shadow bg-[#0f1f17] text-white hover:bg-[#0f1f17] hover:text-white"
+                      className="flex-1 shadow bg-[#0f1f17] dark:bg-emerald-900 text-white hover:bg-[#1a3828] dark:hover:bg-emerald-800 hover:text-white"
                       variant="secondary"
                       render={<Link href="/login">Login</Link>}
                       nativeButton={false}
@@ -230,7 +230,7 @@ const Navbar = () => {
                       Login
                     </Button>
                     <Button
-                      className="flex-1 shadow bg-[#0f1f17] text-white hover:bg-[#0f1f17] hover:text-white"
+                      className="flex-1 shadow bg-[#0f1f17] dark:bg-emerald-900 text-white hover:bg-[#1a3828] dark:hover:bg-emerald-800 hover:text-white"
                       variant="secondary"
                       render={<Link href="/register">Register</Link>}
                       nativeButton={false}

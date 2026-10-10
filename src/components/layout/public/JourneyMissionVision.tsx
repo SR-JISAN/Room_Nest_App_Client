@@ -95,16 +95,16 @@ export default function JourneyMissionVision() {
   return (
     <section
       aria-labelledby="journey-heading"
-      className="relative isolate overflow-hidden bg-white py-16 text-[#0f1f17] sm:py-20 lg:py-24"
+      className="relative isolate overflow-hidden bg-white dark:bg-background py-16 text-[#0f1f17] dark:text-foreground sm:py-20 lg:py-24"
     >
       {/* Soft brand atmosphere */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       >
-        <div className="absolute -left-40 top-20 size-80 rounded-full bg-emerald-100/60 blur-[100px]" />
-        <div className="absolute -right-40 top-[35%] size-96 rounded-full bg-lime-100/50 blur-[110px]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[#dce8de] to-transparent" />
+        <div className="absolute -left-40 top-20 size-80 rounded-full bg-emerald-100/60 dark:bg-emerald-950/20 blur-[100px]" />
+        <div className="absolute -right-40 top-[35%] size-96 rounded-full bg-lime-100/50 dark:bg-emerald-900/10 blur-[110px]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[#dce8de] dark:via-border to-transparent" />
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
@@ -122,7 +122,7 @@ export default function JourneyMissionVision() {
           className="mx-auto max-w-3xl text-center"
         >
           <motion.div variants={fadeUp}>
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#dce8de] bg-[#f4f8f4] px-4 py-2 text-xs font-semibold text-[#31543b] sm:text-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#dce8de] bg-[#f4f8f4] dark:border-border dark:bg-muted dark:text-emerald-300 px-4 py-2 text-xs font-semibold text-[#31543b] sm:text-sm">
               <Compass className="size-4" />
               The heart of Room Nest
             </span>
@@ -134,14 +134,14 @@ export default function JourneyMissionVision() {
             className="mt-6 text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl"
           >
             More than a place to stay.
-            <span className="mt-1 block text-[#527b40]">
+            <span className="mt-1 block text-[#527b40] dark:text-emerald-400">
               A place to belong.
             </span>
           </motion.h2>
 
           <motion.p
             variants={fadeUp}
-            className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#647067] sm:text-base sm:leading-8"
+            className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#647067] dark:text-muted-foreground sm:text-base sm:leading-8"
           >
             Every home represents a new possibility. At Room Nest, we are
             building a more thoughtful way to discover spaces, connect with
@@ -152,15 +152,15 @@ export default function JourneyMissionVision() {
         {/* Journey */}
         <div className="mt-14 sm:mt-18 lg:mt-20">
           <div className="mb-8 flex items-center gap-3 sm:mb-10">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-[#dce8de] bg-[#f2f7f1]">
-              <Milestone className="size-5 text-[#315b3b]" />
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-[#dce8de] bg-[#f2f7f1] dark:border-border dark:bg-muted">
+              <Milestone className="size-5 text-[#315b3b] dark:text-emerald-300" />
             </div>
 
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.17em] text-[#527b40]">
+              <p className="text-xs font-bold uppercase tracking-[0.17em] text-[#527b40] dark:text-emerald-400">
                 Our journey
               </p>
-              <h3 className="mt-1 text-lg font-bold tracking-tight sm:text-2xl">
+              <h3 className="mt-1 text-lg font-bold tracking-tight text-foreground sm:text-2xl">
                 A purpose that moves us forward.
               </h3>
             </div>
@@ -170,7 +170,7 @@ export default function JourneyMissionVision() {
             {/* Responsive timeline connector */}
             <div
               aria-hidden="true"
-              className="absolute bottom-8 left-4.75 top-8 w-px bg-linear-to-b from-[#9ab88c] via-[#cddbcc] to-transparent md:bottom-auto md:left-0 md:right-0 md:top-6 md:h-px md:w-auto"
+              className="absolute bottom-8 left-4.75 top-8 w-px bg-linear-to-b from-[#9ab88c] via-[#cddbcc] to-transparent dark:from-emerald-800 dark:via-emerald-950 dark:to-transparent md:bottom-auto md:left-0 md:right-0 md:top-6 md:h-px md:w-auto"
             />
 
             <div className="grid gap-5 md:grid-cols-3 md:gap-5 lg:gap-7">
@@ -189,29 +189,29 @@ export default function JourneyMissionVision() {
                     }}
                     className="relative grid grid-cols-[40px_minmax(0,1fr)] gap-3 md:block"
                   >
-                    <div className="relative z-10 flex size-10 items-center justify-center rounded-full border border-[#cfdfca] bg-white text-[#315b3b] shadow-sm md:mb-7">
+                    <div className="relative z-10 flex size-10 items-center justify-center rounded-full border border-[#cfdfca] bg-white text-[#315b3b] dark:border-border dark:bg-card dark:text-emerald-300 shadow-sm md:mb-7">
                       <Icon className="size-4" />
                     </div>
 
-                    <div className="group flex h-full min-w-0 flex-col rounded-2xl border border-[#e5ebe5] bg-[#f8faf8] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#c8dac3] hover:bg-[#f3f8f2] hover:shadow-lg hover:shadow-[#173521]/4 sm:p-6">
+                    <div className="group flex h-full min-w-0 flex-col rounded-2xl border border-[#e5ebe5] bg-[#f8faf8] dark:border-border dark:bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#c8dac3] dark:hover:border-emerald-600 hover:bg-[#f3f8f2] dark:hover:bg-card/90 hover:shadow-lg hover:shadow-[#173521]/4 sm:p-6">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="text-xs font-bold uppercase tracking-[0.13em] text-[#527b40]">
+                        <span className="text-xs font-bold uppercase tracking-[0.13em] text-[#527b40] dark:text-emerald-400">
                           {item.label}
                         </span>
-                        <span className="text-sm font-semibold text-[#a2afa3]">
+                        <span className="text-sm font-semibold text-[#a2afa3] dark:text-muted-foreground">
                           {item.step}
                         </span>
                       </div>
 
-                      <h4 className="mt-4 text-lg font-bold leading-snug tracking-tight text-[#14251a] sm:text-xl">
+                      <h4 className="mt-4 text-lg font-bold leading-snug tracking-tight text-[#14251a] dark:text-card-foreground sm:text-xl">
                         {item.title}
                       </h4>
 
-                      <p className="mt-3 flex-1 text-sm leading-7 text-[#647067]">
+                      <p className="mt-3 flex-1 text-sm leading-7 text-[#647067] dark:text-muted-foreground">
                         {item.description}
                       </p>
 
-                      <div className="mt-5 flex items-center gap-2 border-t border-[#e5ebe5] pt-4 text-xs font-medium text-[#647067]">
+                      <div className="mt-5 flex items-center gap-2 border-t border-[#e5ebe5] dark:border-border pt-4 text-xs font-medium text-[#647067] dark:text-muted-foreground">
                         <span className="size-1.5 rounded-full bg-[#71965c]" />
                         The Room Nest story
                       </div>
@@ -238,28 +238,28 @@ export default function JourneyMissionVision() {
                   duration: 0.55,
                   delay: shouldReduceMotion ? 0 : index * 0.12,
                 }}
-                className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-[#e1e9df] bg-[#f5f8f4] p-5 transition-all duration-300 hover:border-[#c8dac3] hover:shadow-xl hover:shadow-[#173521]/5 sm:p-7 lg:p-8"
+                className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-[#e1e9df] bg-[#f5f8f4] dark:border-border dark:bg-card p-5 transition-all duration-300 hover:border-[#c8dac3] dark:hover:border-emerald-600 hover:shadow-xl hover:shadow-[#173521]/5 sm:p-7 lg:p-8"
               >
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-[#dcebd5]/50 blur-3xl transition-colors duration-500 group-hover:bg-[#d1e7c6]/70"
+                  className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-[#dcebd5]/50 dark:bg-emerald-950/20 blur-3xl transition-colors duration-500 group-hover:bg-[#d1e7c6]/70"
                 />
 
                 <div className="relative flex items-center justify-between gap-4">
-                  <span className="text-xs font-bold tracking-[0.19em] text-[#527b40]">
+                  <span className="text-xs font-bold tracking-[0.19em] text-[#527b40] dark:text-emerald-400">
                     {item.label}
                   </span>
 
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-[#d9e6d4] bg-white text-[#315b3b] shadow-sm transition-transform duration-300 group-hover:scale-105">
+                  <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-[#d9e6d4] bg-white text-[#315b3b] dark:border-border dark:bg-muted dark:text-emerald-300 shadow-sm transition-transform duration-300 group-hover:scale-105">
                     <Icon className="size-5" />
                   </div>
                 </div>
 
-                <h3 className="relative mt-6 max-w-md text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+                <h3 className="relative mt-6 max-w-md text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-3xl">
                   {item.title}
                 </h3>
 
-                <p className="relative mt-4 text-sm leading-7 text-[#647067] sm:text-base sm:leading-8">
+                <p className="relative mt-4 text-sm leading-7 text-[#647067] dark:text-muted-foreground sm:text-base sm:leading-8">
                   {item.description}
                 </p>
 
@@ -267,19 +267,19 @@ export default function JourneyMissionVision() {
                   {item.points.map((point) => (
                     <div
                       key={point}
-                      className="flex items-start gap-3 text-sm text-[#34473a]"
+                      className="flex items-start gap-3 text-sm text-[#34473a] dark:text-card-foreground"
                     >
-                      <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#e2eddd]">
-                        <Check className="size-3 text-[#315b3b]" />
+                      <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#e2eddd] dark:bg-emerald-950">
+                        <Check className="size-3 text-[#315b3b] dark:text-emerald-300" />
                       </span>
                       <span className="min-w-0 leading-6">{point}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="relative mt-7 h-px bg-linear-to-r from-[#b9cfb0] via-[#dfe8dc] to-transparent" />
+                <div className="relative mt-7 h-px bg-linear-to-r from-[#b9cfb0] via-[#dfe8dc] to-transparent dark:from-border dark:via-border/50 dark:to-transparent" />
 
-                <div className="relative mt-5 flex items-center gap-2 text-sm font-medium text-[#52705a]">
+                <div className="relative mt-5 flex items-center gap-2 text-sm font-medium text-[#52705a] dark:text-emerald-400">
                   {index === 0 ? (
                     <Heart className="size-4 shrink-0" />
                   ) : (
@@ -302,7 +302,7 @@ export default function JourneyMissionVision() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.55 }}
-          className="relative mt-10 overflow-hidden rounded-3xl bg-[#0f1f17] p-6 text-white sm:mt-14 sm:p-9 lg:flex lg:items-center lg:justify-between lg:gap-8 lg:p-10"
+          className="relative mt-10 overflow-hidden rounded-3xl bg-[#0f1f17] dark:bg-card dark:border dark:border-border p-6 text-white sm:mt-14 sm:p-9 lg:flex lg:items-center lg:justify-between lg:gap-8 lg:p-10"
         >
           <div
             aria-hidden="true"
@@ -310,12 +310,12 @@ export default function JourneyMissionVision() {
           />
 
           <div className="relative max-w-2xl">
-            <div className="flex items-center gap-2 text-sm font-semibold text-lime-300">
+            <div className="flex items-center gap-2 text-sm font-semibold text-lime-300 dark:text-emerald-400">
               <ShieldCheck className="size-4" />A better way to find your next
               home
             </div>
 
-            <h3 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
+            <h3 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
               Your next chapter starts here.
             </h3>
 
@@ -328,7 +328,7 @@ export default function JourneyMissionVision() {
           <div className="relative mt-6 lg:mt-0 lg:shrink-0">
             <Button
               size="lg"
-              className="h-12 w-full rounded-xl bg-lime-300 px-5 font-semibold text-[#14251a] hover:bg-lime-200 sm:w-auto"
+              className="h-12 w-full rounded-xl bg-lime-300 dark:bg-emerald-600 dark:hover:bg-emerald-500 px-5 font-semibold text-[#14251a] dark:text-white hover:bg-lime-200 sm:w-auto"
             >
               <Link className="flex items-end" href="/properties">
                 Explore properties

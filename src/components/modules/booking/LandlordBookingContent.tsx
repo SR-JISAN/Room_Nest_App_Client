@@ -55,7 +55,7 @@ export default function LandlordBookingContent({
   return (
     <main className="mx-auto min-h-[70vh] max-w-6xl space-y-6 px-4 py-10 sm:px-6">
       <header>
-        <p className="text-sm font-medium text-emerald-800">
+        <p className="text-sm font-medium text-emerald-800 dark:text-emerald-400">
           {admin ? "Administration" : "Landlord workspace"}
         </p>
         <h1 className="mt-2 text-3xl font-bold">Booking requests</h1>

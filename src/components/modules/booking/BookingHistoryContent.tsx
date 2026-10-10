@@ -227,14 +227,16 @@ export default function BookingHistoryContent() {
   };
 
   return (
-    <main className="min-h-[70vh] bg-[#f7f9f6] px-4 py-10 text-[#172b20] sm:px-6">
+    <main className="min-h-[70vh] bg-[#f7f9f6] dark:bg-background px-4 py-10 text-[#172b20] dark:text-foreground sm:px-6">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800 dark:text-emerald-400">
               Your account
             </p>
-            <h1 className="mt-2 text-3xl font-bold">My bookings & roommates</h1>
+            <h1 className="mt-2 text-3xl font-bold text-foreground">
+              My bookings & roommates
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Manage your room bookings, roommate applications, and incoming
               roommate requests.
@@ -242,7 +244,7 @@ export default function BookingHistoryContent() {
           </div>
           <Link
             href="/properties"
-            className="text-sm font-semibold text-[#173b28] underline hover:text-[#28563b]"
+            className="text-sm font-semibold text-[#173b28] dark:text-emerald-400 underline hover:text-[#28563b] dark:hover:text-emerald-300"
           >
             Browse properties
           </Link>
@@ -255,43 +257,47 @@ export default function BookingHistoryContent() {
             aria-modal="true"
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
           >
-            <div className="relative w-full max-w-lg rounded-3xl border border-emerald-100 bg-white p-6 shadow-2xl sm:p-8">
+            <div className="relative w-full max-w-lg rounded-3xl border border-emerald-100 dark:border-border bg-white dark:bg-card p-6 shadow-2xl sm:p-8">
               <button
                 type="button"
                 onClick={() => setShowSuccessDialog(false)}
-                className="absolute top-5 right-5 rounded-full p-2 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700"
+                className="absolute top-5 right-5 rounded-full p-2 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700 dark:hover:bg-muted dark:hover:text-foreground"
                 aria-label="Close dialog"
               >
                 <X className="h-5 w-5" />
               </button>
 
               <div className="flex flex-col items-center text-center">
-                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/50">
-                  <CheckCircle2 className="h-10 w-10 text-emerald-600 stroke-[2.5]" />
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 ring-8 ring-emerald-50/50 dark:ring-emerald-950/40">
+                  <CheckCircle2 className="h-10 w-10 text-emerald-600 dark:text-emerald-400 stroke-[2.5]" />
                   <span className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#173b28] text-amber-300 shadow-sm">
                     <PartyPopper className="h-4 w-4" />
                   </span>
                 </div>
 
-                <h2 className="mt-5 text-2xl font-bold tracking-tight text-[#173b28] sm:text-3xl">
+                <h2 className="mt-5 text-2xl font-bold tracking-tight text-[#173b28] dark:text-foreground sm:text-3xl">
                   Payment Successful!
                 </h2>
-                <p className="mt-2 text-sm text-[#526859] sm:text-base">
+                <p className="mt-2 text-sm text-[#526859] dark:text-muted-foreground sm:text-base">
                   Your security deposit has been verified and your booking is
-                  now <strong className="text-emerald-700">Confirmed</strong>.
+                  now{" "}
+                  <strong className="text-emerald-700 dark:text-emerald-400">
+                    Confirmed
+                  </strong>
+                  .
                 </p>
 
                 {paymentIdParam && (
-                  <div className="mt-5 w-full rounded-2xl border border-[#e2eae3] bg-[#f4f7f4] p-4 text-left">
-                    <div className="flex items-center justify-between text-xs text-[#6b7b70]">
+                  <div className="mt-5 w-full rounded-2xl border border-[#e2eae3] dark:border-border bg-[#f4f7f4] dark:bg-muted/40 p-4 text-left">
+                    <div className="flex items-center justify-between text-xs text-[#6b7b70] dark:text-muted-foreground">
                       <span className="font-semibold uppercase tracking-wider">
                         Transaction Reference
                       </span>
-                      <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-800">
+                      <span className="rounded-full bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 text-xs font-bold text-emerald-800 dark:text-emerald-300">
                         bKash Paid
                       </span>
                     </div>
-                    <p className="mt-1 break-all font-mono text-xs font-semibold text-[#172b20] sm:text-sm">
+                    <p className="mt-1 break-all font-mono text-xs font-semibold text-[#172b20] dark:text-foreground sm:text-sm">
                       {paymentIdParam}
                     </p>
                   </div>
@@ -300,7 +306,7 @@ export default function BookingHistoryContent() {
                 <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row">
                   <Button
                     type="button"
-                    className="flex-1 bg-[#173b28] py-2.5 text-white hover:bg-[#28563b]"
+                    className="flex-1 bg-[#173b28] hover:bg-[#28563b] dark:bg-emerald-700 dark:hover:bg-emerald-600 py-2.5 text-white"
                     onClick={() => {
                       setShowSuccessDialog(false);
                       setActiveTab("bookings");
@@ -311,7 +317,7 @@ export default function BookingHistoryContent() {
 
                   <Link
                     href="/dashboard/my-payments"
-                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-[#c9d8cb] bg-white px-4 py-2 text-sm font-semibold text-[#173b28] shadow-xs hover:bg-[#edf5ed]"
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-[#c9d8cb] dark:border-border bg-white dark:bg-card px-4 py-2 text-sm font-semibold text-[#173b28] dark:text-emerald-300 shadow-xs hover:bg-[#edf5ed] dark:hover:bg-muted"
                   >
                     <Receipt className="h-4 w-4" />
                     Payment Receipts
@@ -324,16 +330,16 @@ export default function BookingHistoryContent() {
 
         {/* Status Banners */}
         {callbackStatus === "success" && (
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/80 p-4 text-emerald-900 shadow-xs">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-200 dark:border-emerald-800/40 bg-emerald-50/80 dark:bg-emerald-950/40 p-4 text-emerald-900 dark:text-emerald-200 shadow-xs">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
                 <CheckCircle2 className="h-5 w-5 stroke-[2.5]" />
               </div>
               <div>
-                <p className="font-semibold text-emerald-950">
+                <p className="font-semibold text-emerald-950 dark:text-emerald-200">
                   Payment Confirmed Successfully!
                 </p>
-                <p className="text-xs text-emerald-800 sm:text-sm">
+                <p className="text-xs text-emerald-800 dark:text-emerald-300 sm:text-sm">
                   Your room reservation is secured. You can view full
                   transaction receipts in Payment History.
                   {paymentIdParam ? ` (Ref: ${paymentIdParam})` : ""}
@@ -346,7 +352,7 @@ export default function BookingHistoryContent() {
                 size="sm"
                 onClick={() => void handleManualRefresh()}
                 disabled={isRefreshing}
-                className="border-emerald-300 bg-white text-emerald-900 hover:bg-emerald-100"
+                className="border-emerald-300 dark:border-emerald-800 bg-white dark:bg-card text-emerald-900 dark:text-emerald-200 hover:bg-emerald-100 dark:hover:bg-muted"
               >
                 <RefreshCw
                   className={`mr-1.5 h-3.5 w-3.5 ${
@@ -357,7 +363,7 @@ export default function BookingHistoryContent() {
               </Button>
               <Link
                 href="/dashboard/my-payments"
-                className="rounded-lg bg-emerald-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800"
+                className="rounded-lg bg-emerald-700 dark:bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800 dark:hover:bg-emerald-500"
               >
                 View Receipt
               </Link>
@@ -366,13 +372,13 @@ export default function BookingHistoryContent() {
         )}
 
         {callbackStatus === "failure" && (
-          <div className="mt-6 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-900 shadow-xs">
-            <CircleAlert className="h-5 w-5 shrink-0 text-red-600" />
+          <div className="mt-6 flex items-center gap-3 rounded-2xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/40 p-4 text-red-900 dark:text-red-200 shadow-xs">
+            <CircleAlert className="h-5 w-5 shrink-0 text-red-600 dark:text-red-400" />
             <div className="flex-1 text-sm">
-              <p className="font-semibold text-red-950">
+              <p className="font-semibold text-red-950 dark:text-red-200">
                 Payment Not Completed
               </p>
-              <p className="text-xs text-red-700 sm:text-sm">
+              <p className="text-xs text-red-700 dark:text-red-300 sm:text-sm">
                 The bKash transaction failed or was declined. Your booking
                 remains pending—you can retry payment below.
               </p>
@@ -381,11 +387,13 @@ export default function BookingHistoryContent() {
         )}
 
         {callbackStatus === "cancel" && (
-          <div className="mt-6 flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900 shadow-xs">
-            <CircleAlert className="h-5 w-5 shrink-0 text-amber-600" />
+          <div className="mt-6 flex items-center gap-3 rounded-2xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/40 p-4 text-amber-900 dark:text-amber-200 shadow-xs">
+            <CircleAlert className="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
             <div className="flex-1 text-sm">
-              <p className="font-semibold text-amber-950">Payment Cancelled</p>
-              <p className="text-xs text-amber-700 sm:text-sm">
+              <p className="font-semibold text-amber-950 dark:text-amber-200">
+                Payment Cancelled
+              </p>
+              <p className="text-xs text-amber-700 dark:text-amber-300 sm:text-sm">
                 You cancelled the checkout before completing payment. You can
                 resume payment at any time below.
               </p>
@@ -394,12 +402,12 @@ export default function BookingHistoryContent() {
         )}
 
         {callbackError === "having-issue-with-payment" && (
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-200 bg-amber-50/90 p-4 text-amber-950 shadow-xs">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/90 dark:bg-amber-950/40 p-4 text-amber-950 dark:text-amber-200 shadow-xs">
             <div className="flex items-center gap-3">
-              <CircleAlert className="h-5 w-5 shrink-0 text-amber-600" />
+              <CircleAlert className="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
               <div>
                 <p className="font-semibold">Payment Verification Note</p>
-                <p className="text-xs text-amber-800 sm:text-sm">
+                <p className="text-xs text-amber-800 dark:text-amber-300 sm:text-sm">
                   If your bKash payment was already completed, your booking
                   status is being updated. Click Refresh to synchronize with the
                   latest server records.
@@ -411,7 +419,7 @@ export default function BookingHistoryContent() {
               size="sm"
               onClick={() => void handleManualRefresh()}
               disabled={isRefreshing}
-              className="border-amber-300 bg-white text-amber-900 hover:bg-amber-100"
+              className="border-amber-300 dark:border-amber-800 bg-white dark:bg-card text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-muted"
             >
               <RefreshCw
                 className={`mr-1.5 h-3.5 w-3.5 ${
@@ -426,21 +434,21 @@ export default function BookingHistoryContent() {
         {errorMessage && (
           <p
             role="alert"
-            className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700"
+            className="mt-4 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 p-3 text-sm text-red-700 dark:text-red-300"
           >
             {errorMessage}
           </p>
         )}
 
         {/* Tab switcher */}
-        <div className="mt-8 flex flex-wrap gap-2 border-b border-[#e2eae3] pb-3">
+        <div className="mt-8 flex flex-wrap gap-2 border-b border-[#e2eae3] dark:border-border pb-3">
           <button
             type="button"
             onClick={() => setActiveTab("bookings")}
             className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
               activeTab === "bookings"
-                ? "bg-[#173b28] text-white shadow-xs"
-                : "bg-white text-[#526859] hover:bg-[#ebf2ec]"
+                ? "bg-[#173b28] dark:bg-emerald-700 text-white shadow-xs"
+                : "bg-white dark:bg-card border border-[#e2eae3] dark:border-border text-[#526859] dark:text-muted-foreground hover:bg-[#ebf2ec] dark:hover:bg-muted"
             }`}
           >
             Room Bookings {bookings ? `(${bookings.length})` : ""}
@@ -451,8 +459,8 @@ export default function BookingHistoryContent() {
             onClick={() => setActiveTab("applications")}
             className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
               activeTab === "applications"
-                ? "bg-[#173b28] text-white shadow-xs"
-                : "bg-white text-[#526859] hover:bg-[#ebf2ec]"
+                ? "bg-[#173b28] dark:bg-emerald-700 text-white shadow-xs"
+                : "bg-white dark:bg-card border border-[#e2eae3] dark:border-border text-[#526859] dark:text-muted-foreground hover:bg-[#ebf2ec] dark:hover:bg-muted"
             }`}
           >
             Roommate Applications {subBookings ? `(${subBookings.length})` : ""}
@@ -463,8 +471,8 @@ export default function BookingHistoryContent() {
             onClick={() => setActiveTab("requests")}
             className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
               activeTab === "requests"
-                ? "bg-[#173b28] text-white shadow-xs"
-                : "bg-white text-[#526859] hover:bg-[#ebf2ec]"
+                ? "bg-[#173b28] dark:bg-emerald-700 text-white shadow-xs"
+                : "bg-white dark:bg-card border border-[#e2eae3] dark:border-border text-[#526859] dark:text-muted-foreground hover:bg-[#ebf2ec] dark:hover:bg-muted"
             }`}
           >
             Incoming Requests{" "}
@@ -478,17 +486,20 @@ export default function BookingHistoryContent() {
             {bookingsPending && (
               <div className="space-y-4">
                 {["first", "second"].map((key) => (
-                  <Skeleton key={key} className="h-48 rounded-2xl" />
+                  <Skeleton
+                    key={key}
+                    className="h-48 rounded-2xl dark:bg-muted"
+                  />
                 ))}
               </div>
             )}
 
             {bookingsError && (
-              <Card className="rounded-2xl">
+              <Card className="rounded-2xl dark:border-border dark:bg-card">
                 <CardContent className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex gap-3">
-                    <CircleAlert className="h-5 w-5 text-amber-700" />
-                    <p>
+                    <CircleAlert className="h-5 w-5 text-amber-700 dark:text-amber-400" />
+                    <p className="text-foreground">
                       Bookings are unavailable. Sign in with a verified account
                       or try again.
                     </p>
@@ -504,10 +515,10 @@ export default function BookingHistoryContent() {
             )}
 
             {!bookingsPending && !bookingsError && bookings?.length === 0 && (
-              <Card className="rounded-2xl">
+              <Card className="rounded-2xl dark:border-border dark:bg-card">
                 <CardContent className="py-14 text-center">
-                  <CalendarDays className="mx-auto h-9 w-9 text-emerald-800" />
-                  <h2 className="mt-4 text-xl font-semibold">
+                  <CalendarDays className="mx-auto h-9 w-9 text-emerald-800 dark:text-emerald-400" />
+                  <h2 className="mt-4 text-xl font-semibold text-foreground">
                     No bookings yet
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
@@ -515,7 +526,7 @@ export default function BookingHistoryContent() {
                   </p>
                   <Link
                     href="/properties"
-                    className="mt-5 inline-flex h-9 items-center rounded-md bg-[#173b28] px-4 text-sm font-medium text-white transition hover:bg-[#28563b]"
+                    className="mt-5 inline-flex h-9 items-center rounded-md bg-[#173b28] hover:bg-[#28563b] dark:bg-emerald-700 dark:hover:bg-emerald-600 px-4 text-sm font-medium text-white transition"
                   >
                     Find a room
                   </Link>
@@ -544,17 +555,20 @@ export default function BookingHistoryContent() {
             {subBookingsPending && (
               <div className="space-y-4">
                 {["sub1", "sub2"].map((key) => (
-                  <Skeleton key={key} className="h-48 rounded-2xl" />
+                  <Skeleton
+                    key={key}
+                    className="h-48 rounded-2xl dark:bg-muted"
+                  />
                 ))}
               </div>
             )}
 
             {subBookingsError && (
-              <Card className="rounded-2xl">
+              <Card className="rounded-2xl dark:border-border dark:bg-card">
                 <CardContent className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex gap-3">
-                    <CircleAlert className="h-5 w-5 text-amber-700" />
-                    <p>
+                    <CircleAlert className="h-5 w-5 text-amber-700 dark:text-amber-400" />
+                    <p className="text-foreground">
                       Roommate applications could not be loaded. Please try
                       again.
                     </p>
@@ -572,10 +586,10 @@ export default function BookingHistoryContent() {
             {!subBookingsPending &&
               !subBookingsError &&
               subBookings?.length === 0 && (
-                <Card className="rounded-2xl">
+                <Card className="rounded-2xl dark:border-border dark:bg-card">
                   <CardContent className="py-14 text-center">
-                    <Users className="mx-auto h-9 w-9 text-emerald-800" />
-                    <h2 className="mt-4 text-xl font-semibold">
+                    <Users className="mx-auto h-9 w-9 text-emerald-800 dark:text-emerald-400" />
+                    <h2 className="mt-4 text-xl font-semibold text-foreground">
                       No roommate applications
                     </h2>
                     <p className="mt-2 text-sm text-muted-foreground">
@@ -584,7 +598,7 @@ export default function BookingHistoryContent() {
                     </p>
                     <Link
                       href="/properties"
-                      className="mt-5 inline-flex h-9 items-center rounded-md bg-[#173b28] px-4 text-sm font-medium text-white transition hover:bg-[#28563b]"
+                      className="mt-5 inline-flex h-9 items-center rounded-md bg-[#173b28] hover:bg-[#28563b] dark:bg-emerald-700 dark:hover:bg-emerald-600 px-4 text-sm font-medium text-white transition"
                     >
                       Browse shared rooms
                     </Link>
@@ -615,7 +629,10 @@ export default function BookingHistoryContent() {
             {requestsPending && (
               <div className="space-y-4">
                 {["req1", "req2"].map((key) => (
-                  <Skeleton key={key} className="h-48 rounded-2xl" />
+                  <Skeleton
+                    key={key}
+                    className="h-48 rounded-2xl dark:bg-muted"
+                  />
                 ))}
               </div>
             )}
@@ -662,21 +679,21 @@ function BookingCard({
   );
 
   return (
-    <Card className="rounded-2xl border-[#e0e8df] bg-white">
+    <Card className="rounded-2xl border-[#e0e8df] bg-white dark:border-border dark:bg-card">
       <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-4">
         <div>
-          <CardTitle className="text-lg">
+          <CardTitle className="text-lg text-card-foreground">
             {booking.room?.title ?? "Room booking"}
           </CardTitle>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" />
+            <MapPin className="h-4 w-4 text-emerald-800 dark:text-emerald-400" />
             {booking.room?.property?.title ?? "Property"}
             {booking.room?.property?.city
               ? ` · ${booking.room.property.city}`
               : ""}
           </p>
         </div>
-        <span className="rounded-full bg-[#edf5ed] px-3 py-1 text-xs font-semibold text-[#315d3d]">
+        <span className="rounded-full bg-[#edf5ed] dark:bg-emerald-950 dark:text-emerald-300 dark:border dark:border-emerald-800/40 px-3 py-1 text-xs font-semibold text-[#315d3d]">
           {label(booking.status)}
         </span>
       </CardHeader>
@@ -712,7 +729,7 @@ function BookingCard({
               <Button
                 onClick={onPay}
                 disabled={paying}
-                className="mt-2 bg-[#173b28] hover:bg-[#28563b] text-white"
+                className="mt-2 bg-[#173b28] hover:bg-[#28563b] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white"
               >
                 {paying ? (
                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
@@ -773,14 +790,14 @@ function SubBookingCard({
   const paymentRecord = booking.payments?.[0];
 
   return (
-    <Card className="rounded-2xl border-[#e0e8df] bg-white">
+    <Card className="rounded-2xl border-[#e0e8df] bg-white dark:border-border dark:bg-card">
       <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-4">
         <div>
-          <CardTitle className="text-lg">
+          <CardTitle className="text-lg text-card-foreground">
             {booking.room?.title ?? "Roommate Application"}
           </CardTitle>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" />
+            <MapPin className="h-4 w-4 text-emerald-800 dark:text-emerald-400" />
             {booking.room?.property?.title ?? "Property"}
             {booking.room?.property?.city
               ? ` · ${booking.room.property.city}`
@@ -790,12 +807,12 @@ function SubBookingCard({
         <span
           className={`rounded-full px-3 py-1 text-xs font-semibold ${
             isConfirmed
-              ? "bg-[#e5f4e8] text-[#22623a]"
+              ? "bg-[#e5f4e8] text-[#22623a] dark:bg-emerald-950 dark:text-emerald-300 dark:border dark:border-emerald-800/40"
               : isAccepted
-                ? "bg-amber-100 text-amber-800"
+                ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 dark:border dark:border-amber-800/40"
                 : isRejected || isCancelled
-                  ? "bg-rose-100 text-rose-800"
-                  : "bg-[#edf5ed] text-[#315d3d]"
+                  ? "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 dark:border dark:border-rose-800/40"
+                  : "bg-[#edf5ed] text-[#315d3d] dark:bg-emerald-950 dark:text-emerald-300 dark:border dark:border-emerald-800/40"
           }`}
         >
           {label(booking.status)}
@@ -834,7 +851,7 @@ function SubBookingCard({
           )}
 
           {isAccepted && (
-            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+            <div className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/40 p-3 text-xs text-amber-900 dark:text-amber-200">
               <p className="font-semibold">Application Accepted!</p>
               <p className="mt-1">
                 Your application has been accepted. Complete your rent payment
@@ -843,7 +860,7 @@ function SubBookingCard({
               <Button
                 onClick={onPay}
                 disabled={paying}
-                className="mt-3 bg-[#173b28] hover:bg-[#28563b] text-white"
+                className="mt-3 bg-[#173b28] hover:bg-[#28563b] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white"
                 size="sm"
               >
                 {paying ? (
@@ -917,10 +934,12 @@ function RoommateRequestsSection({
 
   if (allRequests.length === 0) {
     return (
-      <Card className="rounded-2xl">
+      <Card className="rounded-2xl dark:border-border dark:bg-card">
         <CardContent className="py-14 text-center">
-          <Users className="mx-auto h-9 w-9 text-emerald-800" />
-          <h2 className="mt-4 text-xl font-semibold">No roommate requests</h2>
+          <Users className="mx-auto h-9 w-9 text-emerald-800 dark:text-emerald-400" />
+          <h2 className="mt-4 text-xl font-semibold text-foreground">
+            No roommate requests
+          </h2>
           <p className="mt-2 text-sm text-muted-foreground">
             When prospective roommates apply for your booked rooms, requests
             will appear here.
@@ -933,16 +952,21 @@ function RoommateRequestsSection({
   return (
     <div className="space-y-4">
       {allRequests.map((req) => (
-        <Card key={req.id} className="rounded-2xl border-[#e0e8df] bg-white">
+        <Card
+          key={req.id}
+          className="rounded-2xl border-[#e0e8df] bg-white dark:border-border dark:bg-card"
+        >
           <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-4">
             <div>
-              <CardTitle className="text-lg">{req.name}</CardTitle>
+              <CardTitle className="text-lg text-card-foreground">
+                {req.name}
+              </CardTitle>
               <p className="mt-1 text-sm text-muted-foreground">
                 Applied for {req.roomTitle || "Room"} · {req.gender}, {req.age}{" "}
                 yrs
               </p>
             </div>
-            <span className="rounded-full bg-[#edf5ed] px-3 py-1 text-xs font-semibold text-[#315d3d]">
+            <span className="rounded-full bg-[#edf5ed] dark:bg-emerald-950 dark:text-emerald-300 dark:border dark:border-emerald-800/40 px-3 py-1 text-xs font-semibold text-[#315d3d]">
               {label(req.status)}
             </span>
           </CardHeader>
@@ -966,7 +990,7 @@ function RoommateRequestsSection({
                 <div className="flex gap-2">
                   <Button
                     size="sm"
-                    className="bg-[#173b28] text-white hover:bg-[#28563b]"
+                    className="bg-[#173b28] text-white hover:bg-[#28563b] dark:bg-emerald-700 dark:hover:bg-emerald-600"
                     disabled={responding}
                     onClick={() => onRespond(req.id, "ACCEPTED")}
                   >
@@ -975,7 +999,7 @@ function RoommateRequestsSection({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                    className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/40"
                     disabled={responding}
                     onClick={() => onRespond(req.id, "REJECTED")}
                   >

@@ -22,12 +22,8 @@ export default function RegisterPage() {
               height={30}
               className=""
             />
-            <h1 className="font-extrabold text-xl bg-linear-to-bl from-green-950 to-green-500 bg-clip-text text-transparent">
-              Room{" "}
-              <span className="bg-linear-to-br from-green-900 to-green-500 bg-clip-text text-transparent">
-                {" "}
-                Nest
-              </span>
+            <h1 className="font-extrabold text-xl text-white">
+              Room <span className="text-[#a8e6b5]">Nest</span>
             </h1>
           </Link>
           <Button

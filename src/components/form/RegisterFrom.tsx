@@ -160,7 +160,7 @@ export function RegisterForm({
                           <FieldLabel htmlFor="password">Password</FieldLabel>
                           <a
                             href="#"
-                            className="ml-auto text-sm underline-offset-2 hover:underline hover:text-blue-700"
+                            className="ml-auto text-sm underline-offset-2 hover:underline text-emerald-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300"
                           >
                             Forgot your password?
                           </a>
@@ -179,7 +179,7 @@ export function RegisterForm({
                           <button
                             onClick={() => setShowPass((prev) => !prev)}
                             type="button"
-                            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground hover:text-foreground"
                           >
                             {showPass ? <EyeClosed /> : <Eye />}
                           </button>
@@ -195,7 +195,7 @@ export function RegisterForm({
               <Field>
                 <Button
                   disabled={isPending}
-                  className="bg-[#1a3929] cursor-pointer"
+                  className="bg-[#1a3929] hover:bg-[#142e21] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white cursor-pointer"
                   type="submit"
                 >
                   {isPending ? (
@@ -216,7 +216,10 @@ export function RegisterForm({
               </Field>
               <FieldDescription className="text-center">
                 Already have an account?{" "}
-                <Link className="text-blue-700" href="/login">
+                <Link
+                  className="text-emerald-700 hover:underline dark:text-emerald-400 font-medium"
+                  href="/login"
+                >
                   Sign In
                 </Link>
               </FieldDescription>
@@ -228,7 +231,7 @@ export function RegisterForm({
               alt="Image"
               width={500}
               height={500}
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-90 dark:opacity-90"
             />
           </div>
         </CardContent>

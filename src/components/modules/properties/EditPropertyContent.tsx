@@ -127,7 +127,7 @@ function PropertyImagesSection({
   const images = property.propertyImages ?? [];
 
   return (
-    <Card className="rounded-2xl border-[#e0e8df]">
+    <Card className="rounded-2xl border-[#e0e8df] dark:border-border dark:bg-card">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
           <CardTitle>Property photos</CardTitle>
@@ -135,7 +135,7 @@ function PropertyImagesSection({
             Current photos representing the property exterior and shared areas.
           </p>
         </div>
-        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+        <span className="rounded-full border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:text-emerald-300">
           {images.length} photos
         </span>
       </CardHeader>
@@ -342,15 +342,15 @@ function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
   const existingImages = room.roomImages ?? [];
 
   return (
-    <Card className="rounded-2xl border-[#e0e8df]">
+    <Card className="rounded-2xl border-[#e0e8df] dark:border-border dark:bg-card">
       <CardHeader>
         <CardTitle>{room.title ?? room.name ?? "Room"}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-4 rounded-xl border border-emerald-100 bg-emerald-50/30 p-4">
+        <div className="space-y-4 rounded-xl border border-emerald-100 dark:border-border bg-emerald-50/30 dark:bg-background/70 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-semibold text-[#172b20]">
+              <h3 className="text-sm font-semibold text-[#172b20] dark:text-foreground">
                 Room photos
               </h3>
               <p className="text-xs text-muted-foreground">
@@ -358,7 +358,7 @@ function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
                 uploaded)
               </p>
             </div>
-            <span className="rounded-full border border-emerald-200 bg-white px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+            <span className="rounded-full border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-emerald-950 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:text-emerald-300">
               {existingImages.length} photos
             </span>
           </div>
@@ -374,7 +374,7 @@ function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
                 return (
                   <div
                     key={id ?? src ?? index}
-                    className="group relative overflow-hidden rounded-xl border border-muted bg-white p-1.5 shadow-xs transition hover:shadow-md"
+                    className="group relative overflow-hidden rounded-xl border border-muted bg-white dark:bg-card p-1.5 shadow-xs transition hover:shadow-md"
                   >
                     <div className="relative h-24 w-full overflow-hidden rounded-lg bg-black/5">
                       {/* biome-ignore lint/performance/noImgElement: dynamic Cloudinary image */}
@@ -418,7 +418,7 @@ function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
 
           <div className="space-y-3 pt-2">
             <div className="flex flex-wrap items-center gap-2">
-              <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg bg-[#173b28] px-3.5 text-xs font-medium text-white shadow-xs transition hover:bg-[#1f4e35]">
+              <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg bg-[#173b28] dark:bg-emerald-700 px-3.5 text-xs font-medium text-white shadow-xs transition hover:bg-[#1f4e35] dark:hover:bg-emerald-600">
                 <ImagePlus className="h-3.5 w-3.5" />
                 Choose photos to upload
                 <input
@@ -460,7 +460,7 @@ function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
                 {stagedFiles.map((file, idx) => (
                   <div
                     key={`${file.name}-${file.lastModified}-${idx}`}
-                    className="group relative overflow-hidden rounded-xl border border-emerald-200 bg-white p-2 shadow-xs"
+                    className="group relative overflow-hidden rounded-xl border border-emerald-200 dark:border-border bg-white dark:bg-card p-2 shadow-xs"
                   >
                     <div className="relative h-20 w-full overflow-hidden rounded-lg bg-muted">
                       {stagedPreviews[idx] && (
