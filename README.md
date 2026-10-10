@@ -459,7 +459,7 @@ pnpm dev
 Open the local URL printed in the terminal. Next.js commonly uses:
 
 ```text
-http://localhost:3000
+https://roomnest-ruddy.vercel.app
 ```
 
 ### 7. Verify the Application
@@ -488,7 +488,8 @@ PORT=5000
 DATABASE_URL=your_postgresql_connection_string
 REDIS_URL=your_redis_connection_string
 
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=https://roomnest-ruddy.vercel.app
+
 
 ACCESS_TOKEN_SECRET=replace_with_a_secure_secret
 REFRESH_TOKEN_SECRET=replace_with_another_secure_secret
@@ -511,7 +512,7 @@ Remove or rename example variables to match the actual backend configuration. Do
 ### Frontend `.env.local`
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_API_URL=https://room-nest-server.vercel.app
 ```
 
 Use this variable only if the frontend API client expects `NEXT_PUBLIC_API_URL`.
