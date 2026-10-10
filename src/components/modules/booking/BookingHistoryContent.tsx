@@ -34,6 +34,7 @@ import {
   useSubBookingRequests,
   useUpdateSubBooking,
 } from "@/hooks/booking.hooks";
+import { FetchError } from "ofetch";
 
 const money = (value?: number | string | null) =>
   `৳${Number(value ?? 0).toLocaleString("en-BD")}`;
@@ -149,10 +150,11 @@ export default function BookingHistoryContent() {
     try {
       await bookingCancellation.mutateAsync(id);
     } catch (error) {
+      const fetchError = error as FetchError<{ message?: string }>;
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "The booking could not be cancelled.",
+        fetchError.data?.message ??
+          fetchError.message ??
+          "The booking could not be cancelled.",
       );
     }
   };
@@ -227,7 +229,7 @@ export default function BookingHistoryContent() {
   };
 
   return (
-    <main className="min-h-[70vh] bg-[#f7f9f6] dark:bg-background px-4 py-10 text-[#172b20] dark:text-foreground sm:px-6">
+    <main className="min-h-screen bg-[#f7f9f6] px-4 pb-10 pt-28 text-[#172b20] dark:bg-background dark:text-foreground sm:px-6 sm:pt-32">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -687,6 +689,7 @@ function BookingCard({
           </CardTitle>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4 text-emerald-800 dark:text-emerald-400" />
+            
             {booking.room?.property?.title ?? "Property"}
             {booking.room?.property?.city
               ? ` · ${booking.room.property.city}`
