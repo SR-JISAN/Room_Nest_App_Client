@@ -39,39 +39,38 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
+const handelLoggedOut = () => {
+  logout(undefined, {
+    onSuccess: async () => {
+      // Stop ongoing user profile requests
+      await queryClient.cancelQueries({ queryKey: ["user"] });
 
-  const handelLoggedOut = () => {
-    logout(undefined, {
-      onSuccess: () => {
-        queryClient.setQueryData(["user"], null);
-        queryClient.cancelQueries({ queryKey: ["user"] });
-        isOpenMenu(false);
-        toast.add({
-          title: "Logged Out Successful",
-          description: "You have been logged out successfully",
-          type: "success",
-        });
-        if (
-          pathName.startsWith("/landlord") ||
-          pathName.startsWith("/admin") ||
-          pathName.startsWith("/user") ||
-          pathName.startsWith("/dashboard") ||
-          pathName.startsWith("/profile") ||
-          pathName.startsWith("/settings") ||
-          pathName.startsWith("/accounts")
-        ) {
-          router.push("/login");
-        }
-      },
-      onError() {
-        toast.add({
-          title: "Logged Out Failed",
-          description: "Something went wrong while logging out",
-          type: "error",
-        });
-      },
-    });
-  };
+      // Remove cached authentication data
+      queryClient.removeQueries({ queryKey: ["user"] });
+
+      // Close navbar menu
+      isOpenMenu(false);
+
+      toast.add({
+        title: "Logged Out Successfully",
+        description: "You have been logged out successfully",
+        type: "success",
+      });
+
+      // Redirect after logout
+      router.replace("/login");
+      router.refresh();
+    },
+
+    onError() {
+      toast.add({
+        title: "Logout Failed",
+        description: "Something went wrong while logging out",
+        type: "error",
+      });
+    },
+  });
+};
 
   return (
     <header className="w-full shadow-2xl bg-[#0f1f17] text-white fixed inset-x-0 top-0 z-50">
