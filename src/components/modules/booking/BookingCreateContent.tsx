@@ -136,11 +136,11 @@ export default function BookingCreateContent() {
   }
 
   return (
-    <main className="min-h-[70vh] bg-[#f7f9f6] dark:bg-background px-4 py-10 text-[#172b20] dark:text-foreground sm:px-6">
+    <main className="min-h-screen bg-[#f7f9f6] px-4 pb-10 pt-28 text-[#172b20] dark:bg-background dark:text-foreground sm:px-6 sm:pt-32">
       <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_360px]">
         <Card className="rounded-2xl border-[#e0e8df] dark:border-border dark:bg-card">
           <CardHeader>
-            <CardTitle>Request this room</CardTitle>
+            <CardTitle className="font-bold text-xl text-center">Request this room for rent</CardTitle>
             <CardDescription>
               Confirm your dates and occupant count. The backend validates room
               details and calculates the deposit.
