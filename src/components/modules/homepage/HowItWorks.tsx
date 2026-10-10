@@ -94,7 +94,7 @@ export default function HowItWorks() {
                   key={s.step}
                   className="relative overflow-hidden rounded-2xl border-[#e1e9e2] bg-white dark:border-border dark:bg-card p-6 shadow-xs"
                 >
-                  <span className="text-3xl font-black text-[#d2e3d5] dark:text-emerald-950">
+                  <span className="text-3xl font-black">
                     {s.step}
                   </span>
                   <div className="mt-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eaf3eb] text-[#214d2e] dark:bg-emerald-950 dark:text-emerald-300">
@@ -131,7 +131,7 @@ export default function HowItWorks() {
                   key={s.step}
                   className="relative overflow-hidden rounded-2xl border-[#e1e9e2] bg-white dark:border-border dark:bg-card p-6 shadow-xs"
                 >
-                  <span className="text-3xl font-black text-[#d2e3d5] dark:text-emerald-950">
+                  <span className="text-3xl font-black">
                     {s.step}
                   </span>
                   <div className="mt-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eaf3eb] text-[#214d2e] dark:bg-emerald-950 dark:text-emerald-300">
