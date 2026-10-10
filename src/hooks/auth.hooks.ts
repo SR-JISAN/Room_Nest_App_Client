@@ -46,10 +46,12 @@ export function useLoggedOut() {
   return useMutation({
     mutationFn: userLoggedOut,
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.setQueryData(["user"], null);
+      queryClient.cancelQueries({ queryKey: ["user"] });
       queryClient.removeQueries({ queryKey: ["dashboard"] });
       queryClient.removeQueries({ queryKey: ["booking"] });
       queryClient.removeQueries({ queryKey: ["payments"] });
+      queryClient.removeQueries({ queryKey: ["my-properties"] });
     },
   });
 }
@@ -58,6 +60,7 @@ export function useUserProfile() {
     queryKey: ["user"],
     queryFn: userProfile,
     retry: false,
+    staleTime: 5 * 60 * 1000,
   });
 }
 

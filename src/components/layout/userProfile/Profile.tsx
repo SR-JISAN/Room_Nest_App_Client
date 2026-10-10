@@ -10,6 +10,7 @@ import {
   UserRound,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -42,6 +43,9 @@ export function Profile() {
 
   const initials = getInitials(user?.name);
 
+  const pathname = usePathname();
+  const router = useRouter();
+
   if (isLoading) {
     return <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />;
   }
@@ -50,17 +54,28 @@ export function Profile() {
     logout(undefined, {
       onSuccess: () => {
         queryClient.setQueryData(["user"], null);
+        queryClient.cancelQueries({ queryKey: ["user"] });
         toast.add({
           title: "Logged Out Successful",
-          description: "You Logged Out Successfully",
+          description: "You have been logged out successfully",
           type: "success",
         });
-        queryClient.removeQueries({ queryKey: ["user"] });
+        if (
+          pathname.startsWith("/landlord") ||
+          pathname.startsWith("/admin") ||
+          pathname.startsWith("/user") ||
+          pathname.startsWith("/dashboard") ||
+          pathname.startsWith("/profile") ||
+          pathname.startsWith("/settings") ||
+          pathname.startsWith("/accounts")
+        ) {
+          router.push("/login");
+        }
       },
       onError() {
         toast.add({
           title: "Logged Out Failed",
-          description: "Something went wrong",
+          description: "Something went wrong while logging out",
           type: "error",
         });
       },

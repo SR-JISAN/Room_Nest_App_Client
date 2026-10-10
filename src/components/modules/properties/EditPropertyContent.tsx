@@ -1,7 +1,15 @@
 "use client";
 
-import { ImagePlus, LoaderCircle, RefreshCw, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Home,
+  ImagePlus,
+  LoaderCircle,
+  RefreshCw,
+  X,
+} from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { UpdateRoomPayload } from "@/api/property.api";
@@ -677,14 +685,40 @@ export default function EditPropertyContent() {
 
   return (
     <main className="mx-auto min-h-[70vh] max-w-5xl space-y-8 px-4 py-10 sm:px-6">
-      <header>
-        <p className="text-sm font-medium text-emerald-800">
-          Landlord workspace
-        </p>
-        <h1 className="mt-2 text-3xl font-bold">Edit property</h1>
-        <p className="mt-2 text-muted-foreground">
-          Update listing details and manage room information and photos.
-        </p>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/70 pb-5">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800 dark:text-emerald-400">
+            Landlord workspace
+          </p>
+          <h1 className="mt-1 text-2xl font-bold sm:text-3xl">Edit property</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Update listing details and manage room information and photos.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            render={<Link href="/landlord/properties">My Properties</Link>}
+            nativeButton={false}
+            className="gap-1.5 text-xs font-semibold"
+          >
+            <ArrowLeft className="size-3.5" />
+            <span>My Properties</span>
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            render={<Link href="/">Home</Link>}
+            nativeButton={false}
+            className="gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+          >
+            <Home className="size-3.5" />
+            <span>Home</span>
+          </Button>
+        </div>
       </header>
       <Card className="rounded-2xl">
         <CardHeader>

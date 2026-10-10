@@ -3,12 +3,15 @@
 import { motion } from "framer-motion";
 import {
   Bell,
+  Check,
   ChevronRight,
   Globe,
   Mail,
+  Monitor,
   Moon,
   ShieldCheck,
   SlidersHorizontal,
+  Sun,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +25,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { type Theme, useTheme } from "@/providers/theme.provider";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -41,6 +45,8 @@ const itemVariants = {
 };
 
 const SettingsPage = () => {
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
   return (
     <motion.div
       variants={containerVariants}
@@ -134,12 +140,81 @@ const SettingsPage = () => {
           </CardHeader>
 
           <CardContent className="space-y-5">
-            <PreferenceRow
-              icon={Moon}
-              title="Appearance"
-              description="Dark mode preference. Theme integration can be connected here."
-              badge="Coming soon"
-            />
+            <div className="space-y-3">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm font-semibold">Appearance & theme</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Customize your display mode across the entire Room Nest
+                    platform.
+                  </p>
+                </div>
+                <Badge variant="secondary" className="w-fit text-xs capitalize">
+                  Active:{" "}
+                  {theme === "system" ? `System (${resolvedTheme})` : theme}
+                </Badge>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-3">
+                {[
+                  {
+                    value: "light" as Theme,
+                    label: "Light mode",
+                    desc: "Crisp white background with forest green accents",
+                    icon: Sun,
+                  },
+                  {
+                    value: "dark" as Theme,
+                    label: "Dark mode",
+                    desc: "Deep night background with high-contrast text",
+                    icon: Moon,
+                  },
+                  {
+                    value: "system" as Theme,
+                    label: "System default",
+                    desc: "Matches your device operating system preference",
+                    icon: Monitor,
+                  },
+                ].map(({ value, label, desc, icon: Icon }) => {
+                  const isSelected = theme === value;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setTheme(value)}
+                      className={`relative flex flex-col justify-between rounded-xl border p-3.5 text-left transition hover:border-emerald-600 cursor-pointer ${
+                        isSelected
+                          ? "border-emerald-600 bg-emerald-50/50 ring-2 ring-emerald-600/30 dark:bg-emerald-950/40"
+                          : "border-border bg-card"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div
+                          className={`flex size-8 items-center justify-center rounded-lg ${
+                            isSelected
+                              ? "bg-emerald-600 text-white"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          <Icon className="size-4" />
+                        </div>
+                        {isSelected && (
+                          <div className="flex size-5 items-center justify-center rounded-full bg-emerald-600 text-white">
+                            <Check className="size-3" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-3">
+                        <p className="text-sm font-semibold">{label}</p>
+                        <p className="mt-1 text-xs text-muted-foreground leading-4">
+                          {desc}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <Separator />
 

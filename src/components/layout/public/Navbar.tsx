@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +24,12 @@ import { Profile } from "../userProfile/Profile";
 const Navbar = () => {
   const [openMenu, isOpenMenu] = useState(false);
   const pathName = usePathname();
+  const router = useRouter();
 
   const { data } = useUserProfile();
+  const user = data?.data;
+  const isLoggedIn = Boolean(user?.id);
+
   const { mutate: logout } = useLoggedOut();
   const queryClient = useQueryClient();
 
@@ -39,17 +43,30 @@ const Navbar = () => {
   const handelLoggedOut = () => {
     logout(undefined, {
       onSuccess: () => {
+        queryClient.setQueryData(["user"], null);
+        queryClient.cancelQueries({ queryKey: ["user"] });
+        isOpenMenu(false);
         toast.add({
           title: "Logged Out Successful",
-          description: "You Logged Out Successfully",
+          description: "You have been logged out successfully",
           type: "success",
         });
-        queryClient.removeQueries({ queryKey: ["user"] });
+        if (
+          pathName.startsWith("/landlord") ||
+          pathName.startsWith("/admin") ||
+          pathName.startsWith("/user") ||
+          pathName.startsWith("/dashboard") ||
+          pathName.startsWith("/profile") ||
+          pathName.startsWith("/settings") ||
+          pathName.startsWith("/accounts")
+        ) {
+          router.push("/login");
+        }
       },
       onError() {
         toast.add({
           title: "Logged Out Failed",
-          description: "Something went wrong",
+          description: "Something went wrong while logging out",
           type: "error",
         });
       },
@@ -95,18 +112,28 @@ const Navbar = () => {
             );
           })}
         </nav>
-        <div className="flex items-center gap-4 ">
-          {data ? (
+        <div className="flex items-center gap-3">
+          {isLoggedIn ? (
             <Profile />
           ) : (
-            <Button
-              variant="secondary"
-              render={<Link href="/login">Login</Link>}
-              nativeButton={false}
-              className="font-bold shadow"
-            >
-              Login
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                render={<Link href="/login">Login</Link>}
+                nativeButton={false}
+                className="font-bold shadow"
+              >
+                Login
+              </Button>
+              <Button
+                variant="outline"
+                render={<Link href="/register">Register</Link>}
+                nativeButton={false}
+                className="hidden font-bold sm:inline-flex border-white/20 text-white hover:bg-white/10"
+              >
+                Register
+              </Button>
+            </div>
           )}
 
           {/* Mobile Menu */}
@@ -182,7 +209,7 @@ const Navbar = () => {
                 </DrawerDescription>
               </DrawerHeader>
               <DrawerFooter>
-                {data ? (
+                {isLoggedIn ? (
                   <div className="flex w-full items-center gap-4">
                     <Button
                       onClick={handelLoggedOut}
