@@ -181,7 +181,11 @@ export function RegisterForm({
                             type="button"
                             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground hover:text-foreground"
                           >
-                            {showPass ? <EyeClosed /> : <Eye />}
+                            {showPass ? (
+                              <EyeClosed className="text-green-600" />
+                            ) : (
+                              <Eye className="text-green-600"/>
+                            )}
                           </button>
                         </div>
                         {isInvalid && (
