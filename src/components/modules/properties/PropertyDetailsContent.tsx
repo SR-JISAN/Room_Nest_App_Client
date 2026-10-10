@@ -3,15 +3,16 @@
 import {
   ArrowLeft,
   ArrowRight,
-  Bath,
-  BedDouble,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  ExternalLink,
   Heart,
   Home,
+  Layers,
   MapPin,
   Maximize2,
+  ShieldAlert,
   ShieldCheck,
   Star,
   UserPlus,
@@ -48,38 +49,170 @@ function getTitle(property: Property) {
   );
 }
 
-function getPropertyImages(property: Property): string[] {
-  const images = property.propertyImages?.length
-    ? property.propertyImages
-    : property.images?.length
-      ? property.images
-      : [property.imageURL || property.imageUrl || FALLBACK_IMAGE];
+function getRoomImages(room: Room, fallbackImage?: string): string[] {
+  const extracted: string[] = [];
 
-  return images.filter(
-    (image): image is string =>
-      typeof image === "string" && image.trim().length > 0,
-  );
+  if (Array.isArray(room.roomImages)) {
+    for (const item of room.roomImages) {
+      if (typeof item === "string" && item.trim()) {
+        extracted.push(item.trim());
+      } else if (item && typeof item === "object") {
+        const url =
+          (item as { roomImageURL?: string; url?: string; imageURL?: string })
+            .roomImageURL ||
+          (item as { roomImageURL?: string; url?: string; imageURL?: string })
+            .url ||
+          (item as { roomImageURL?: string; url?: string; imageURL?: string })
+            .imageURL;
+        if (typeof url === "string" && url.trim()) {
+          extracted.push(url.trim());
+        }
+      }
+    }
+  }
+
+  if (Array.isArray(room.images)) {
+    for (const item of room.images) {
+      if (typeof item === "string" && item.trim()) {
+        extracted.push(item.trim());
+      }
+    }
+  }
+
+  if (typeof room.imageURL === "string" && room.imageURL.trim()) {
+    extracted.push(room.imageURL.trim());
+  }
+  if (typeof room.imageUrl === "string" && room.imageUrl.trim()) {
+    extracted.push(room.imageUrl.trim());
+  }
+
+  if (extracted.length === 0 && fallbackImage) {
+    extracted.push(fallbackImage);
+  }
+
+  return Array.from(new Set(extracted.filter(Boolean)));
 }
 
-function getRoomImages(room: Room): string[] {
-  const images = room.roomImages?.length
-    ? room.roomImages
-    : room.images?.length
-      ? room.images
-      : [room.imageURL || room.imageUrl || FALLBACK_IMAGE];
+function getPropertyImages(property: Property): string[] {
+  const extracted: string[] = [];
 
-  return images
-    .map((img) =>
-      typeof img === "string"
-        ? img
-        : (img as { roomImageURL?: string; url?: string })?.roomImageURL ||
-          (img as { roomImageURL?: string; url?: string })?.url ||
-          "",
-    )
-    .filter(
-      (image): image is string =>
-        typeof image === "string" && image.trim().length > 0,
+  // 1. Property images from Prisma relation
+  if (Array.isArray(property.propertyImages)) {
+    for (const item of property.propertyImages) {
+      if (typeof item === "string" && item.trim()) {
+        extracted.push(item.trim());
+      } else if (item && typeof item === "object") {
+        const url =
+          (
+            item as {
+              propertyImageURL?: string;
+              url?: string;
+              imageURL?: string;
+            }
+          ).propertyImageURL ||
+          (
+            item as {
+              propertyImageURL?: string;
+              url?: string;
+              imageURL?: string;
+            }
+          ).url ||
+          (
+            item as {
+              propertyImageURL?: string;
+              url?: string;
+              imageURL?: string;
+            }
+          ).imageURL;
+        if (typeof url === "string" && url.trim()) {
+          extracted.push(url.trim());
+        }
+      }
+    }
+  }
+
+  // 2. property.images array
+  if (Array.isArray(property.images)) {
+    for (const item of property.images) {
+      if (typeof item === "string" && item.trim()) {
+        extracted.push(item.trim());
+      } else if (item && typeof item === "object") {
+        const url =
+          (item as { url?: string; imageUrl?: string; imageURL?: string })
+            .url ||
+          (item as { url?: string; imageUrl?: string; imageURL?: string })
+            .imageUrl ||
+          (item as { url?: string; imageUrl?: string; imageURL?: string })
+            .imageURL;
+        if (typeof url === "string" && url.trim()) {
+          extracted.push(url.trim());
+        }
+      }
+    }
+  }
+
+  // 3. Single image properties
+  for (const singleUrl of [
+    property.imageURL,
+    property.imageUrl,
+    property.coverImage,
+    property.thumbnail,
+    property.image,
+  ]) {
+    if (typeof singleUrl === "string" && singleUrl.trim()) {
+      extracted.push(singleUrl.trim());
+    }
+  }
+
+  // 4. Room images from this property
+  if (Array.isArray(property.rooms)) {
+    for (const room of property.rooms) {
+      const roomImgs = getRoomImages(room);
+      for (const img of roomImgs) {
+        if (!extracted.includes(img)) {
+          extracted.push(img);
+        }
+      }
+    }
+  }
+
+  const unique = Array.from(new Set(extracted.filter(Boolean)));
+  return unique.length > 0 ? unique : [FALLBACK_IMAGE];
+}
+
+function getRoomAmenities(room: Room): string[] {
+  const direct = (room.amenities ?? []).map((a) =>
+    typeof a === "string" ? a : "",
+  );
+
+  const fromRelation = (room.roomAmenities ?? []).map((ra) => {
+    if (typeof ra === "string") return ra;
+    return (
+      ra?.amenity?.amenityName ||
+      (ra as { amenityName?: string })?.amenityName ||
+      ""
     );
+  });
+
+  return Array.from(new Set([...direct, ...fromRelation].filter(Boolean)));
+}
+
+function getPropertyAmenities(property: Property): string[] {
+  const direct = [
+    ...(property.amenities ?? []),
+    ...(property.facilities ?? []),
+  ].map((a) => (typeof a === "string" ? a : ""));
+
+  const fromRelation = (property.propertyAmenities ?? []).map((pa) => {
+    if (typeof pa === "string") return pa;
+    return (
+      pa?.amenity?.amenityName ||
+      (pa as { amenityName?: string })?.amenityName ||
+      ""
+    );
+  });
+
+  return Array.from(new Set([...direct, ...fromRelation].filter(Boolean)));
 }
 
 function isRoomAvailable(room: Room) {
@@ -116,60 +249,166 @@ function SectionHeading({
 
 function PropertyGallery({
   images,
+  title,
   onOpen,
 }: {
   images: string[];
+  title: string;
   onOpen: (index: number) => void;
 }) {
+  if (images.length === 0) {
+    return (
+      <div className="relative flex h-72 w-full items-center justify-center rounded-2xl bg-[#e7eee8] text-[#5e7865] sm:h-96">
+        <div className="text-center">
+          <Home size={48} className="mx-auto text-[#799982]" />
+          <p className="mt-2 text-sm font-medium">
+            No images uploaded for this property
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Exactly 1 image: Fill full container, no empty placeholder boxes!
+  if (images.length === 1) {
+    return (
+      <div className="relative h-[340px] w-full overflow-hidden rounded-2xl bg-[#e7eee8] sm:h-[480px]">
+        <button
+          type="button"
+          onClick={() => onOpen(0)}
+          className="group relative h-full w-full text-left"
+          aria-label={`View photo for ${title}`}
+        >
+          <img
+            src={images[0]}
+            alt={title}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          />
+          <span className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#173523] shadow-md backdrop-blur-xs">
+            <Maximize2 size={16} />
+            View photo
+          </span>
+        </button>
+      </div>
+    );
+  }
+
+  // Exactly 2 images: 2 equal cards
+  if (images.length === 2) {
+    return (
+      <div className="grid h-[300px] grid-cols-1 gap-3 sm:h-[420px] sm:grid-cols-2">
+        {images.map((img, idx) => (
+          <button
+            key={img}
+            type="button"
+            onClick={() => onOpen(idx)}
+            className="group relative h-full w-full overflow-hidden rounded-2xl bg-[#e7eee8] text-left"
+            aria-label={`View photo ${idx + 1}`}
+          >
+            <img
+              src={img}
+              alt={`${title} view ${idx + 1}`}
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            />
+            {idx === 1 && (
+              <span className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-white/95 px-3.5 py-1.5 text-xs font-semibold text-[#173523] shadow-md backdrop-blur-xs">
+                <Maximize2 size={14} />2 photos
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  // Exactly 3 images: 1 large left, 2 stacked right
+  if (images.length === 3) {
+    return (
+      <div className="grid h-[320px] grid-cols-1 gap-3 sm:h-[440px] md:grid-cols-[1.4fr_1fr]">
+        <button
+          type="button"
+          onClick={() => onOpen(0)}
+          className="group relative h-full w-full overflow-hidden rounded-2xl bg-[#e7eee8] text-left"
+          aria-label="View main photo"
+        >
+          <img
+            src={images[0]}
+            alt={title}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          />
+        </button>
+        <div className="grid h-full grid-rows-2 gap-3">
+          {images.slice(1, 3).map((img, idx) => (
+            <button
+              key={img}
+              type="button"
+              onClick={() => onOpen(idx + 1)}
+              className="group relative h-full w-full overflow-hidden rounded-xl bg-[#e7eee8] text-left"
+              aria-label={`View photo ${idx + 2}`}
+            >
+              <img
+                src={img}
+                alt={`${title} view ${idx + 2}`}
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              {idx === 1 && (
+                <span className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-[#173523] shadow-md">
+                  <Maximize2 size={13} />3 photos
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // 4 or more photos: hero split grid without any empty placeholders!
   const secondaryImages = images.slice(1, 5);
+  const remainingCount = images.length - 5;
 
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-[1.4fr_1fr]">
+    <div className="grid min-h-[340px] grid-cols-1 gap-3 sm:min-h-[440px] md:grid-cols-[1.4fr_1fr]">
       <button
         type="button"
         onClick={() => onOpen(0)}
-        className="group relative min-h-[280px] overflow-hidden rounded-2xl bg-[#e7eee8] text-left sm:min-h-[400px]"
-        aria-label="View main property image"
+        className="group relative min-h-[260px] overflow-hidden rounded-2xl bg-[#e7eee8] text-left sm:min-h-[400px]"
+        aria-label="View main photo"
       >
         <img
-          src={images[0] || FALLBACK_IMAGE}
-          alt="Property main view"
+          src={images[0]}
+          alt={title}
           className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
-
-        <span className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#173523] shadow">
+        <span className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#173523] shadow-md backdrop-blur-xs">
           <Maximize2 size={16} />
-          View photos
+          View all photos ({images.length})
         </span>
       </button>
 
-      <div className="grid grid-cols-2 gap-3">
-        {Array.from({ length: 4 }).map((_, index) => {
-          const image = secondaryImages[index];
+      <div
+        className={`grid ${secondaryImages.length <= 2 ? "grid-cols-1" : "grid-cols-2"} gap-3`}
+      >
+        {secondaryImages.map((image, index) => {
+          const isLast =
+            index === secondaryImages.length - 1 && remainingCount > 0;
 
           return (
             <button
               type="button"
-              key={`${image ?? "placeholder"}-${index}`}
+              key={image}
               onClick={() => onOpen(index + 1)}
-              className="group relative min-h-[130px] overflow-hidden rounded-xl bg-[#e7eee8] sm:min-h-[190px] md:min-h-0"
-              aria-label={`View property photo ${index + 2}`}
+              className="group relative min-h-[130px] overflow-hidden rounded-xl bg-[#e7eee8] sm:min-h-[190px]"
+              aria-label={`View photo ${index + 2}`}
             >
-              {image ? (
-                <img
-                  src={image}
-                  alt={`Property view ${index + 2}`}
-                  className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                />
-              ) : (
-                <span className="absolute inset-0 flex items-center justify-center text-[#789080]">
-                  <Home size={28} />
-                </span>
-              )}
-
-              {index === 3 && images.length > 5 && (
-                <span className="absolute inset-0 flex items-center justify-center bg-black/55 text-lg font-bold text-white">
-                  +{images.length - 4} photos
+              <img
+                src={image}
+                alt={`${title} view ${index + 2}`}
+                className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              {isLast && (
+                <span className="absolute inset-0 flex items-center justify-center bg-black/60 text-lg font-bold text-white backdrop-blur-2xs">
+                  +{remainingCount} photos
                 </span>
               )}
             </button>
@@ -183,20 +422,30 @@ function PropertyGallery({
 function RoomCard({
   room,
   propertyId,
+  propertyImage,
   onOpenImages,
 }: {
   room: Room;
   propertyId: string;
+  propertyImage?: string;
   onOpenImages: (images: string[]) => void;
 }) {
   const [isRoommateOpen, setIsRoommateOpen] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
 
-  const images = getRoomImages(room);
+  const images = getRoomImages(room, propertyImage);
   const available = isRoomAvailable(room);
   const title = room.title || room.name || "Private Room";
 
+  const currentRoommates = Number(room.currentRoommates ?? 0);
+  const maxRoommates = Number(room.maxRoommates ?? 1);
+  const isFull = currentRoommates >= maxRoommates;
+  const canBookEntireRoom = available && currentRoommates === 0;
+  const canJoinAsRoommate =
+    available && currentRoommates > 0 && maxRoommates > currentRoommates;
+
+  const amenities = getRoomAmenities(room);
   const reviews = room.reviews || [];
   const ratingMap: Record<string, number> = {
     ONE: 1,
@@ -226,20 +475,28 @@ function RoomCard({
           aria-label={`View images for ${title}`}
         >
           <img
-            src={images[0] || FALLBACK_IMAGE}
+            src={images[0] || propertyImage || FALLBACK_IMAGE}
             alt={title}
             className="h-full w-full object-cover transition duration-500 hover:scale-105"
           />
 
-          <span
-            className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-xs font-bold ${
-              available
-                ? "bg-[#e5f4e8] text-[#22623a]"
-                : "bg-[#f3e9e7] text-[#9a4d40]"
-            }`}
-          >
-            {available ? "Available" : "Not available"}
-          </span>
+          <div className="absolute left-3 top-3 flex items-center gap-1.5">
+            <span
+              className={`rounded-full px-3 py-1.5 text-xs font-bold ${
+                available
+                  ? "bg-[#e5f4e8] text-[#22623a]"
+                  : "bg-[#f3e9e7] text-[#9a4d40]"
+              }`}
+            >
+              {available ? "Available" : "Not available"}
+            </span>
+
+            {room.roomType && (
+              <span className="rounded-full bg-black/60 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-xs">
+                {room.roomType.replaceAll("_", " ")}
+              </span>
+            )}
+          </div>
 
           {avgRating && (
             <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-amber-700 shadow-xs backdrop-blur-xs">
@@ -266,6 +523,11 @@ function RoomCard({
                 {formatMoney(room.rentAmount)}
               </p>
               <p className="text-xs text-[#7a887e]">per month</p>
+              {room.securityDeposit && (
+                <p className="mt-0.5 text-xs text-[#7a887e]">
+                  Deposit: {formatMoney(room.securityDeposit)}
+                </p>
+              )}
               {room.subRentAmount && (
                 <p className="mt-1 text-xs font-semibold text-[#447656]">
                   Roommate share: {formatMoney(room.subRentAmount)}/mo
@@ -281,25 +543,25 @@ function RoomCard({
           )}
 
           <div className="mt-4 flex flex-wrap gap-3 text-sm text-[#65756a]">
-            {typeof room.currentRoommates === "number" && (
-              <span className="flex items-center gap-1.5">
+            {currentRoommates === 0 ? (
+              <span className="flex items-center gap-1.5 font-medium text-emerald-800">
                 <Users size={16} />
-                {room.currentRoommates} current roommate
-                {room.currentRoommates === 1 ? "" : "s"}
+                Vacant room (0 occupants) · Capacity: {maxRoommates}
               </span>
-            )}
-
-            {typeof room.maxRoommates === "number" && (
+            ) : (
               <span className="flex items-center gap-1.5">
                 <Users size={16} />
-                Max {room.maxRoommates}
+                {currentRoommates} of {maxRoommates} roommates
+                {canJoinAsRoommate
+                  ? ` · ${maxRoommates - currentRoommates} spot${maxRoommates - currentRoommates === 1 ? "" : "s"} open`
+                  : " · Full"}
               </span>
             )}
           </div>
 
-          {room.amenities && room.amenities.length > 0 && (
+          {amenities.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
-              {room.amenities.slice(0, 4).map((amenity) => (
+              {amenities.slice(0, 4).map((amenity) => (
                 <span
                   key={amenity}
                   className="rounded-full bg-[#f2f6f2] px-3 py-1 text-xs font-medium text-[#47614f]"
@@ -356,31 +618,37 @@ function RoomCard({
       </div>
 
       <div className="space-y-2 p-5 pt-0">
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {canBookEntireRoom && (
           <Link
             href={`/booking?propertyId=${encodeURIComponent(propertyId)}&roomId=${encodeURIComponent(room.id)}`}
-            aria-disabled={!available}
-            className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-bold transition ${
-              available
-                ? "bg-[#1a3929] text-white hover:bg-[#28563b]"
-                : "pointer-events-none bg-[#e9eee9] text-[#879389]"
-            }`}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1a3929] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#28563b]"
           >
-            {available ? "Book Entire Room" : "Unavailable"}
-            {available && <ArrowRight size={14} />}
+            Book Entire Room
+            <ArrowRight size={16} />
           </Link>
+        )}
 
+        {canJoinAsRoommate && (
           <Button
             type="button"
-            variant="outline"
             onClick={() => setIsRoommateOpen(true)}
-            disabled={!available}
-            className="flex items-center justify-center gap-1.5 rounded-xl border-[#c9dccd] px-3 py-2.5 text-xs font-bold text-[#1a3929] hover:bg-[#eef4ef]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1a3929] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#28563b]"
           >
-            <UserPlus size={14} />
-            Join as Roommate
+            <UserPlus size={16} />
+            Join as Roommate{" "}
+            {room.subRentAmount
+              ? `(${formatMoney(room.subRentAmount)}/mo)`
+              : ""}
           </Button>
-        </div>
+        )}
+
+        {(!available || isFull) && !canBookEntireRoom && !canJoinAsRoommate && (
+          <div className="flex w-full items-center justify-center rounded-xl bg-[#e9eee9] px-4 py-3 text-sm font-semibold text-[#879389]">
+            {isFull
+              ? "Room is Full (Max Capacity Reached)"
+              : "Currently Unavailable"}
+          </div>
+        )}
 
         <Button
           type="button"
@@ -425,7 +693,7 @@ export default function PropertyDetailsContent() {
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   const propertyImages = useMemo(
-    () => (property ? getPropertyImages(property) : [FALLBACK_IMAGE]),
+    () => (property ? getPropertyImages(property) : []),
     [property],
   );
 
@@ -435,13 +703,9 @@ export default function PropertyDetailsContent() {
   );
 
   const amenities = useMemo(() => {
-    const items = [
-      ...(property?.amenities ?? []),
-      ...(property?.facilities ?? []),
-    ];
-
-    return [...new Set(items.filter(Boolean))];
-  }, [property?.amenities, property?.facilities]);
+    if (!property) return [];
+    return getPropertyAmenities(property);
+  }, [property]);
 
   const openGallery = (images: string[], index = 0) => {
     setGalleryImages(images.length ? images : [FALLBACK_IMAGE]);
@@ -548,6 +812,12 @@ export default function PropertyDetailsContent() {
   const startingRent =
     roomPrices.length > 0 ? Math.min(...roomPrices) : property.rentAmount;
 
+  const hasCoordinates =
+    property.latitude &&
+    property.longitude &&
+    property.latitude.trim() !== "" &&
+    property.longitude.trim() !== "";
+
   return (
     <main className="min-h-screen bg-[#f7faf7] text-[#14251b]">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-9 lg:px-8">
@@ -568,10 +838,21 @@ export default function PropertyDetailsContent() {
                 </span>
               )}
 
-              {property.verified && (
+              {property.verified ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-[#e1f3e6] px-3 py-1.5 text-xs font-bold text-[#27633a]">
                   <ShieldCheck size={14} />
                   Verified property
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#f4ece7] px-3 py-1.5 text-xs font-medium text-[#7d503f]">
+                  <ShieldAlert size={14} />
+                  Pending verification
+                </span>
+              )}
+
+              {property.propertyStatus && (
+                <span className="rounded-full bg-[#edf2ee] px-2.5 py-1 text-xs font-semibold text-[#486350]">
+                  {property.propertyStatus}
                 </span>
               )}
             </div>
@@ -580,10 +861,24 @@ export default function PropertyDetailsContent() {
               {title}
             </h1>
 
-            <p className="mt-3 flex items-start gap-2 text-sm leading-6 text-[#6b7b70] sm:text-base">
-              <MapPin size={18} className="mt-0.5 shrink-0 text-[#548365]" />
-              {location}
-            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-[#6b7b70] sm:text-base">
+              <p className="flex items-start gap-1.5">
+                <MapPin size={18} className="mt-0.5 shrink-0 text-[#548365]" />
+                {location}
+              </p>
+
+              {hasCoordinates && (
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${property.latitude},${property.longitude}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#2f5d3d] underline hover:text-[#173b28]"
+                >
+                  <ExternalLink size={13} />
+                  Open in Maps
+                </a>
+              )}
+            </div>
           </div>
 
           <button
@@ -600,42 +895,24 @@ export default function PropertyDetailsContent() {
           </button>
         </div>
 
+        {/* Gallery section with actual images and no empty placeholder cards */}
         <PropertyGallery
           images={propertyImages}
+          title={title}
           onOpen={(index) => openGallery(propertyImages, index)}
         />
 
         <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_350px] xl:gap-12">
           <div className="min-w-0 space-y-10">
-            {/* Property highlights */}
+            {/* Property Highlights from Server */}
             <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded-2xl border border-[#e3ebe4] bg-white p-4 sm:p-5">
-                <BedDouble size={22} className="text-[#548365]" />
-                <p className="mt-4 text-2xl font-extrabold">
-                  {property.bedrooms ?? "—"}
-                </p>
-                <p className="mt-1 text-xs text-[#718075] sm:text-sm">
-                  Bedrooms
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[#e3ebe4] bg-white p-4 sm:p-5">
-                <Bath size={22} className="text-[#548365]" />
-                <p className="mt-4 text-2xl font-extrabold">
-                  {property.bathrooms ?? "—"}
-                </p>
-                <p className="mt-1 text-xs text-[#718075] sm:text-sm">
-                  Bathrooms
-                </p>
-              </div>
-
               <div className="rounded-2xl border border-[#e3ebe4] bg-white p-4 sm:p-5">
                 <Home size={22} className="text-[#548365]" />
                 <p className="mt-4 text-2xl font-extrabold">
                   {property.rooms?.length ?? 0}
                 </p>
                 <p className="mt-1 text-xs text-[#718075] sm:text-sm">
-                  Total rooms
+                  Total Rooms
                 </p>
               </div>
 
@@ -645,7 +922,28 @@ export default function PropertyDetailsContent() {
                   {availableRooms.length}
                 </p>
                 <p className="mt-1 text-xs text-[#718075] sm:text-sm">
-                  Available rooms
+                  Available Rooms
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-[#e3ebe4] bg-white p-4 sm:p-5">
+                <Layers size={22} className="text-[#548365]" />
+                <p className="mt-4 text-lg font-bold capitalize truncate">
+                  {property.propertyType?.toLowerCase().replaceAll("_", " ") ||
+                    "Rental"}
+                </p>
+                <p className="mt-1 text-xs text-[#718075] sm:text-sm">
+                  Property Type
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-[#e3ebe4] bg-white p-4 sm:p-5">
+                <ShieldCheck size={22} className="text-[#548365]" />
+                <p className="mt-4 text-lg font-bold">
+                  {property.verified ? "Verified" : "Pending"}
+                </p>
+                <p className="mt-1 text-xs text-[#718075] sm:text-sm">
+                  Inspection
                 </p>
               </div>
             </section>
@@ -654,20 +952,24 @@ export default function PropertyDetailsContent() {
             <section>
               <SectionHeading
                 label="About this property"
-                title="A place to feel at home"
-                description="Explore the property details and see if it suits your needs."
+                title="Property Details & Living Experience"
+                description="Everything you need to know about this residence."
               />
 
               <div className="rounded-2xl border border-[#e3ebe4] bg-white p-5 sm:p-7">
                 <p className="whitespace-pre-line text-sm leading-7 text-[#617166] sm:text-base">
                   {property.description ||
-                    "No description has been added yet. Contact the property owner for more information."}
+                    "No description provided for this property yet. Contact the host for more information."}
                 </p>
 
-                {property.size && (
-                  <div className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#f1f6f1] px-4 py-3 text-sm font-semibold text-[#3e6048]">
-                    <Maximize2 size={17} />
-                    Property size: {property.size}
+                {property.address && (
+                  <div className="mt-5 rounded-xl bg-[#f5f8f5] p-4 text-sm text-[#3b5943]">
+                    <p className="font-semibold text-[#1f3d27]">Full Address</p>
+                    <p className="mt-1 text-[#526f5a]">
+                      {property.address},{" "}
+                      {property.area ? `${property.area}, ` : ""}
+                      {property.city}
+                    </p>
                   </div>
                 )}
               </div>
@@ -678,8 +980,8 @@ export default function PropertyDetailsContent() {
               <section>
                 <SectionHeading
                   label="Comfort and convenience"
-                  title="Property amenities"
-                  description="Facilities available at this property."
+                  title="Property Amenities & Facilities"
+                  description="Verified amenities available at this property."
                 />
 
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -705,12 +1007,12 @@ export default function PropertyDetailsContent() {
               </section>
             )}
 
-            {/* Rooms */}
+            {/* Rooms Section */}
             <section id="rooms" className="scroll-mt-28">
               <SectionHeading
                 label="Find your space"
                 title="Rooms in this property"
-                description="Compare room details, monthly rent, and availability before booking."
+                description="Compare room details, rent amounts, roommate sharing, and availability."
               />
 
               {property.rooms && property.rooms.length > 0 ? (
@@ -720,6 +1022,7 @@ export default function PropertyDetailsContent() {
                       key={room.id}
                       room={room}
                       propertyId={property.id}
+                      propertyImage={propertyImages[0]}
                       onOpenImages={(images) => openGallery(images)}
                     />
                   ))}
@@ -769,21 +1072,29 @@ export default function PropertyDetailsContent() {
                     <div className="flex items-start justify-between gap-4">
                       <span className="text-[#748178]">Property type</span>
                       <span className="text-right font-semibold text-[#334b39]">
-                        {property.propertyType || "Not specified"}
+                        {property.propertyType?.replaceAll("_", " ") ||
+                          "Not specified"}
                       </span>
                     </div>
 
                     <div className="flex items-start justify-between gap-4">
                       <span className="text-[#748178]">Verification</span>
                       <span className="font-semibold text-[#334b39]">
-                        {property.verified ? "Verified" : "Not verified"}
+                        {property.verified ? "Verified" : "Pending"}
                       </span>
                     </div>
 
                     <div className="flex items-start justify-between gap-4">
-                      <span className="text-[#748178]">Rooms</span>
+                      <span className="text-[#748178]">Total Rooms</span>
                       <span className="font-semibold text-[#334b39]">
-                        {availableRooms.length} available
+                        {property.rooms?.length ?? 0}
+                      </span>
+                    </div>
+
+                    <div className="flex items-start justify-between gap-4">
+                      <span className="text-[#748178]">Available Rooms</span>
+                      <span className="font-semibold text-[#334b39]">
+                        {availableRooms.length}
                       </span>
                     </div>
                   </div>
@@ -795,8 +1106,7 @@ export default function PropertyDetailsContent() {
                       size={17}
                       className="mt-0.5 shrink-0 text-[#548365]"
                     />
-                    Review the room details and confirm availability before
-                    booking.
+                    Review room details and confirm availability before booking.
                   </p>
 
                   <Link

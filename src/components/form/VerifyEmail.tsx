@@ -105,10 +105,13 @@ export function VerifyEmail() {
         router.push("/");
       },
       onError: (err) => {
-        const error = err as FetchError;
+        const error = err as FetchError<{ message?: string }>;
         toast.add({
-          title: "Email Verified Failed",
-          description: `${error.data.message} `,
+          title: "Email verification failed",
+          description:
+            error.data?.message ||
+            error.message ||
+            "Invalid or expired verification code.",
           type: "error",
         });
       },

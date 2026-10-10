@@ -12,7 +12,9 @@ import {
   type UpdatePropertyPayload,
   type UpdateRoomPayload,
   updateProperty,
+  updatePropertyImage,
   updateRoom,
+  updateRoomImage,
   uploadRoomImages,
 } from "@/api/property.api";
 import type { Property } from "@/types/property.type";
@@ -137,6 +139,54 @@ export function useUploadRoomImages() {
       roomId: string;
       images: File[];
     }) => uploadRoomImages(propertyId, roomId, images),
+    onSuccess: async (_data, variables) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["property-details", variables.propertyId],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["my-property-details", variables.propertyId],
+      });
+    },
+  });
+}
+
+export function useUpdateRoomImage() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      propertyId,
+      roomId,
+      roomImageId,
+      image,
+    }: {
+      propertyId: string;
+      roomId: string;
+      roomImageId: string;
+      image: File;
+    }) => updateRoomImage(propertyId, roomId, roomImageId, image),
+    onSuccess: async (_data, variables) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["property-details", variables.propertyId],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["my-property-details", variables.propertyId],
+      });
+    },
+  });
+}
+
+export function useUpdatePropertyImage() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      propertyId,
+      propertyImageId,
+      image,
+    }: {
+      propertyId: string;
+      propertyImageId: string;
+      image: File;
+    }) => updatePropertyImage(propertyId, propertyImageId, image),
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({
         queryKey: ["property-details", variables.propertyId],

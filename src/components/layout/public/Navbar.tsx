@@ -43,8 +43,8 @@ const Navbar = () => {
           title: "Logged Out Successful",
           description: "You Logged Out Successfully",
           type: "success",
-        }),
-          queryClient.removeQueries({ queryKey: ["user"] });
+        });
+        queryClient.removeQueries({ queryKey: ["user"] });
       },
       onError() {
         toast.add({
@@ -119,7 +119,10 @@ const Navbar = () => {
           >
             <DrawerTrigger
               className="block md:hidden lg:hidden"
-              render={<Button variant="secondary" />}
+              aria-label="Open navigation menu"
+              render={
+                <Button variant="secondary" aria-label="Open navigation menu" />
+              }
             >
               {openMenu ? (
                 <X size={20} strokeWidth={2.25} />
@@ -148,7 +151,13 @@ const Navbar = () => {
                     </Link>
                     <DrawerClose
                       className="cursor-pointer"
-                      render={<Button variant="secondary"></Button>}
+                      aria-label="Close navigation menu"
+                      render={
+                        <Button
+                          variant="secondary"
+                          aria-label="Close navigation menu"
+                        />
+                      }
                     >
                       <X size={20} strokeWidth={2.25} />
                     </DrawerClose>

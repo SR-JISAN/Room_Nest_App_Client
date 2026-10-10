@@ -105,6 +105,7 @@ const AllPropertyPage = () => {
     sortBy,
     sortOrder: sortBy === "title" ? "asc" : "desc",
   });
+
   const properties = data?.data.result ?? [];
   const meta = data?.data.Meta;
   const totalPages = Math.max(meta?.totalPages ?? 1, 1);
@@ -147,7 +148,7 @@ const AllPropertyPage = () => {
       return;
     }
     const params = new URLSearchParams({ id });
-    route.push(`/propertyDetails/?${params.toString()}`);
+    route.push(`/PropertyDetails/?${params.toString()}`);
   };
 
   return (

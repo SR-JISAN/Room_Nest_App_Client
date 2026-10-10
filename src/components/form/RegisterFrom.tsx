@@ -61,10 +61,13 @@ export function RegisterForm({
           form.reset();
         },
         onError: (err) => {
-          const error = err as FetchError;
+          const error = err as FetchError<{ message?: string }>;
           toast.add({
             title: "Registration failed",
-            description: `${error.data.message} `,
+            description:
+              error.data?.message ||
+              error.message ||
+              "Could not complete registration. Please try again.",
             type: "error",
           });
         },

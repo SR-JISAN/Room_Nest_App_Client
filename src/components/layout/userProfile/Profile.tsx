@@ -1,7 +1,14 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, LogOut, Settings, UserRound } from "lucide-react";
+import {
+  CalendarDays,
+  CreditCard,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  UserRound,
+} from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -47,8 +54,8 @@ export function Profile() {
           title: "Logged Out Successful",
           description: "You Logged Out Successfully",
           type: "success",
-        }),
-          queryClient.removeQueries({ queryKey: ["user"] });
+        });
+        queryClient.removeQueries({ queryKey: ["user"] });
       },
       onError() {
         toast.add({
@@ -100,20 +107,68 @@ export function Profile() {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="cursor-pointer gap-3 rounded-lg py-2.5">
+        <DropdownMenuItem
+          className="cursor-pointer gap-3 rounded-lg py-2.5"
+          render={<Link href="/profile" />}
+        >
           <UserRound className="h-4 w-4" />
-          <Link href="/profile">Profile</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer gap-3 rounded-lg py-2.5">
-          <LayoutDashboard className="h-4 w-4" />
-          {user?.role === "ADMIN" && <Link href="/admin">Dashboard</Link>}
-          {user?.role === "LANDLORD" && <Link href="/landlord">Dashboard</Link>}
-          {user?.role === "USER" && <Link href="/user">Dashboard</Link>}
+          <span>Profile</span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="cursor-pointer gap-3 rounded-lg py-2.5">
+        {user?.role === "ADMIN" && (
+          <DropdownMenuItem
+            className="cursor-pointer gap-3 rounded-lg py-2.5"
+            render={<Link href="/admin" />}
+          >
+            <LayoutDashboard className="h-4 w-4" />
+            <span>Admin Dashboard</span>
+          </DropdownMenuItem>
+        )}
+
+        {user?.role === "LANDLORD" && (
+          <DropdownMenuItem
+            className="cursor-pointer gap-3 rounded-lg py-2.5"
+            render={<Link href="/landlord" />}
+          >
+            <LayoutDashboard className="h-4 w-4" />
+            <span>Landlord Dashboard</span>
+          </DropdownMenuItem>
+        )}
+
+        {user?.role === "USER" && (
+          <>
+            <DropdownMenuItem
+              className="cursor-pointer gap-3 rounded-lg py-2.5"
+              render={<Link href="/user" />}
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              <span>User Dashboard</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              className="cursor-pointer gap-3 rounded-lg py-2.5"
+              render={<Link href="/dashboard/my-bookings" />}
+            >
+              <CalendarDays className="h-4 w-4" />
+              <span>My Bookings</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              className="cursor-pointer gap-3 rounded-lg py-2.5"
+              render={<Link href="/dashboard/my-payments" />}
+            >
+              <CreditCard className="h-4 w-4" />
+              <span>My Payments</span>
+            </DropdownMenuItem>
+          </>
+        )}
+
+        <DropdownMenuItem
+          className="cursor-pointer gap-3 rounded-lg py-2.5"
+          render={<Link href="/settings" />}
+        >
           <Settings className="h-4 w-4" />
-          <Link href="/settings">Settings</Link>
+          <span>Settings</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

@@ -156,6 +156,33 @@ export const uploadRoomImages = (
     { method: "POST", body },
   );
 };
+
+export const updateRoomImage = (
+  propertyId: string,
+  roomId: string,
+  roomImageId: string,
+  image: File,
+) => {
+  const body = new FormData();
+  body.append("rooms_images", image);
+  return apiClient(
+    `/api/properties/update-room-images/${encodeURIComponent(propertyId)}/${encodeURIComponent(roomId)}/${encodeURIComponent(roomImageId)}`,
+    { method: "PATCH", body },
+  );
+};
+
+export const updatePropertyImage = (
+  propertyId: string,
+  propertyImageId: string,
+  image: File,
+) => {
+  const body = new FormData();
+  body.append("property_images", image);
+  return apiClient(
+    `/api/properties/update-property-images/${encodeURIComponent(propertyId)}/${encodeURIComponent(propertyImageId)}`,
+    { method: "PATCH", body },
+  );
+};
 interface PropertyDetailsResponse {
   success: boolean;
   statusCode: number;

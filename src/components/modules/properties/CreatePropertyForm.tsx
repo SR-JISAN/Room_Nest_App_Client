@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { CircleAlert, LoaderCircle, Plus } from "lucide-react";
+import { CircleAlert, ImagePlus, LoaderCircle, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { FetchError } from "ofetch";
@@ -12,9 +12,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/toast";
 import {
   useCreateProperty,
   usePropertyAmenities,
+  useUploadRoomImages,
 } from "@/hooks/property.hooks";
 
 const schema = z.object({
@@ -55,6 +57,7 @@ type Fields = {
 };
 
 const roomTypes = ["SINGLE_ROOM", "SHARED_ROOM", "MASTER_ROOM"] as const;
+
 const fileError = (files: File[]) => {
   if (files.length > 6) return "Choose up to 6 property images.";
   if (
@@ -62,9 +65,22 @@ const fileError = (files: File[]) => {
       (file) => !["image/jpeg", "image/png", "image/webp"].includes(file.type),
     )
   )
-    return "Images must be JPG, PNG, or WebP files.";
+    return "Property images must be JPG, PNG, or WebP files.";
   if (files.some((file) => file.size > 5 * 1024 * 1024))
-    return "Each image must be 5 MB or smaller.";
+    return "Each property image must be 5 MB or smaller.";
+  return "";
+};
+
+const roomFileError = (files: File[]) => {
+  if (files.length > 4) return "Choose up to 4 room images.";
+  if (
+    files.some(
+      (file) => !["image/jpeg", "image/png", "image/webp"].includes(file.type),
+    )
+  )
+    return "Room images must be JPG, PNG, or WebP files.";
+  if (files.some((file) => file.size > 5 * 1024 * 1024))
+    return "Each room image must be 5 MB or smaller.";
   return "";
 };
 
@@ -72,9 +88,15 @@ export default function CreatePropertyForm() {
   const router = useRouter();
   const amenitiesQuery = usePropertyAmenities();
   const create = useCreateProperty();
+  const uploadRoom = useUploadRoomImages();
+
   const [amenities, setAmenities] = useState<string[]>([]);
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  const [roomImages, setRoomImages] = useState<File[]>([]);
+  const [roomImagePreviews, setRoomImagePreviews] = useState<string[]>([]);
+
   const [room, setRoom] = useState({
     roomTitle: "",
     roomDescription: "",
@@ -96,6 +118,58 @@ export default function CreatePropertyForm() {
       });
     };
   }, [images]);
+
+  useEffect(() => {
+    const urls = roomImages.map((image) => URL.createObjectURL(image));
+    setRoomImagePreviews(urls);
+    return () => {
+      urls.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
+    };
+  }, [roomImages]);
+
+  const handleAddPropertyImages = (files: FileList | null) => {
+    if (!files) return;
+    const newFiles = Array.from(files);
+    const combined = [...images, ...newFiles];
+    if (combined.length > 6) {
+      setFieldError("A property can have at most 6 images.");
+      return;
+    }
+    const error = fileError(combined);
+    if (error) {
+      setFieldError(error);
+      return;
+    }
+    setFieldError("");
+    setImages(combined);
+  };
+
+  const handleRemovePropertyImage = (indexToRemove: number) => {
+    setImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const handleAddRoomImages = (files: FileList | null) => {
+    if (!files) return;
+    const newFiles = Array.from(files);
+    const combined = [...roomImages, ...newFiles];
+    if (combined.length > 4) {
+      setFieldError("A room can have at most 4 images.");
+      return;
+    }
+    const error = roomFileError(combined);
+    if (error) {
+      setFieldError(error);
+      return;
+    }
+    setFieldError("");
+    setRoomImages(combined);
+  };
+
+  const handleRemoveRoomImage = (indexToRemove: number) => {
+    setRoomImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
 
   const form = useForm({
     defaultValues: {
@@ -127,17 +201,39 @@ export default function CreatePropertyForm() {
         setFieldError(imageIssue);
         return;
       }
+      const roomImageIssue = roomFileError(roomImages);
+      if (roomImageIssue) {
+        setFieldError(roomImageIssue);
+        return;
+      }
       try {
         const result = await create.mutateAsync({
           payload: validation.data,
           images,
         });
         const propertyId = result.data?.id;
-        setMessage(
-          propertyId
-            ? `Property created (${propertyId}).`
-            : "Property created successfully.",
-        );
+        const createdRoomId = result.data?.rooms?.[0]?.id;
+
+        if (propertyId && createdRoomId && roomImages.length > 0) {
+          try {
+            await uploadRoom.mutateAsync({
+              propertyId,
+              roomId: createdRoomId,
+              images: roomImages,
+            });
+          } catch (uploadError) {
+            console.error("Room photos upload failed:", uploadError);
+            toast.add({
+              title: "Property created, but room photos failed to upload",
+              type: "warning",
+            });
+          }
+        }
+
+        toast.add({
+          title: "Property and room created successfully!",
+          type: "success",
+        });
         router.push("/landlord/properties");
       } catch (error) {
         const fetchError = error as FetchError<{ message?: string }>;
@@ -265,35 +361,92 @@ export default function CreatePropertyForm() {
                 )}
               </form.Field>
               <div className="space-y-3 sm:col-span-2">
-                <Label>Property images (up to 6, 5 MB each)</Label>
-                <Input
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  multiple
-                  onChange={(event) =>
-                    setImages(Array.from(event.target.files ?? []))
-                  }
-                />
+                <div className="flex items-center justify-between">
+                  <Label
+                    htmlFor="property-images-input"
+                    className="text-sm font-semibold"
+                  >
+                    Property images (up to 6, 5 MB each)
+                  </Label>
+                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+                    {images.length} of 6 selected
+                  </span>
+                </div>
+
+                <div className="rounded-xl border-2 border-dashed border-[#cfe2ce] bg-[#f9fcf9] p-5 transition hover:border-emerald-600">
+                  <div className="flex flex-col items-center justify-center text-center">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-800">
+                      <ImagePlus className="h-5 w-5" />
+                    </div>
+                    <p className="mt-2 text-sm font-medium text-[#172b20]">
+                      Upload exterior, common area, and building photos
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Supported formats: JPG, PNG, WebP (up to 5 MB per photo)
+                    </p>
+                    <label
+                      htmlFor="property-images-input"
+                      className={`mt-3 inline-flex cursor-pointer items-center justify-center rounded-lg bg-[#173b28] px-4 py-2 text-xs font-medium text-white shadow-xs transition hover:bg-[#1f4e35] ${
+                        images.length >= 6
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }`}
+                    >
+                      Choose property photos
+                      <input
+                        id="property-images-input"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        disabled={
+                          images.length >= 6 ||
+                          create.isPending ||
+                          uploadRoom.isPending
+                        }
+                        className="sr-only"
+                        onChange={(event) => {
+                          handleAddPropertyImages(event.target.files);
+                          event.target.value = "";
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+
                 {images.length > 0 && (
-                  <div className="flex flex-wrap gap-3">
+                  <div className="grid grid-cols-2 gap-3 pt-2 sm:grid-cols-3 md:grid-cols-6">
                     {images.map((file, index) => (
                       <div
-                        key={`${file.name}-${file.lastModified}`}
-                        className="w-24"
+                        key={`${file.name}-${file.lastModified}-${index}`}
+                        className="group relative overflow-hidden rounded-xl border border-emerald-100 bg-white p-2 shadow-xs transition hover:shadow-md"
                       >
-                        <div className="relative h-20 overflow-hidden rounded-lg bg-muted">
+                        <div className="relative h-24 w-full overflow-hidden rounded-lg bg-muted">
                           {imagePreviews[index] && (
                             <Image
                               src={imagePreviews[index]}
-                              alt={`Property image preview ${index + 1}`}
+                              alt={`Property view ${index + 1}`}
                               fill
                               unoptimized
-                              className="object-cover"
+                              className="object-cover transition duration-200 group-hover:scale-105"
                             />
                           )}
+                          <button
+                            type="button"
+                            aria-label={`Remove property image ${file.name}`}
+                            onClick={() => handleRemovePropertyImage(index)}
+                            className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs transition hover:bg-red-600"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                          <span className="absolute bottom-1 left-1 rounded-md bg-black/60 px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-xs">
+                            Photo {index + 1}
+                          </span>
                         </div>
-                        <p className="mt-1 truncate text-xs text-muted-foreground">
+                        <p className="mt-1.5 truncate text-xs font-medium text-foreground">
                           {file.name}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground">
+                          {(file.size / (1024 * 1024)).toFixed(2)} MB
                         </p>
                       </div>
                     ))}
@@ -435,10 +588,100 @@ export default function CreatePropertyForm() {
                   className="w-full rounded-xl border border-input bg-transparent px-3 py-2 text-sm"
                 />
               </div>
-              <p className="text-xs leading-5 text-muted-foreground sm:col-span-2">
-                Add property photos here. After creating the listing, upload
-                room-specific photos from its edit page.
-              </p>
+              <div className="space-y-3 sm:col-span-2">
+                <div className="flex items-center justify-between">
+                  <Label
+                    htmlFor="room-images-input"
+                    className="text-sm font-semibold"
+                  >
+                    Room photos (up to 4, 5 MB each)
+                  </Label>
+                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+                    {roomImages.length} of 4 selected
+                  </span>
+                </div>
+
+                <div className="rounded-xl border-2 border-dashed border-[#cfe2ce] bg-[#f9fcf9] p-5 transition hover:border-emerald-600">
+                  <div className="flex flex-col items-center justify-center text-center">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-800">
+                      <ImagePlus className="h-5 w-5" />
+                    </div>
+                    <p className="mt-2 text-sm font-medium text-[#172b20]">
+                      Upload photos for this room
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Show bedroom view, windows, closets, or attached washroom.
+                      JPG, PNG, or WebP up to 5 MB each.
+                    </p>
+                    <label
+                      htmlFor="room-images-input"
+                      className={`mt-3 inline-flex cursor-pointer items-center justify-center rounded-lg bg-[#173b28] px-4 py-2 text-xs font-medium text-white shadow-xs transition hover:bg-[#1f4e35] ${
+                        roomImages.length >= 4
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }`}
+                    >
+                      Choose room photos
+                      <input
+                        id="room-images-input"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        disabled={
+                          roomImages.length >= 4 ||
+                          create.isPending ||
+                          uploadRoom.isPending
+                        }
+                        className="sr-only"
+                        onChange={(event) => {
+                          handleAddRoomImages(event.target.files);
+                          event.target.value = "";
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {roomImages.length > 0 && (
+                  <div className="grid grid-cols-2 gap-3 pt-2 sm:grid-cols-4">
+                    {roomImages.map((file, index) => (
+                      <div
+                        key={`${file.name}-${file.lastModified}-${index}`}
+                        className="group relative overflow-hidden rounded-xl border border-emerald-100 bg-white p-2 shadow-xs transition hover:shadow-md"
+                      >
+                        <div className="relative h-28 w-full overflow-hidden rounded-lg bg-muted">
+                          {roomImagePreviews[index] && (
+                            <Image
+                              src={roomImagePreviews[index]}
+                              alt={`Room view ${index + 1}`}
+                              fill
+                              unoptimized
+                              className="object-cover transition duration-200 group-hover:scale-105"
+                            />
+                          )}
+                          <button
+                            type="button"
+                            aria-label={`Remove room photo ${file.name}`}
+                            onClick={() => handleRemoveRoomImage(index)}
+                            className="absolute top-1.5 right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs transition hover:bg-red-600"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                          <span className="absolute bottom-1.5 left-1.5 rounded-md bg-black/60 px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-xs">
+                            Photo {index + 1}
+                          </span>
+                        </div>
+                        <p className="mt-1.5 truncate text-xs font-medium text-foreground">
+                          {file.name}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground">
+                          {(file.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
 
@@ -450,15 +693,22 @@ export default function CreatePropertyForm() {
           )}
           <Button
             type="submit"
-            disabled={create.isPending}
+            disabled={create.isPending || uploadRoom.isPending}
             className="h-11 w-full bg-[#173b28] sm:w-auto"
           >
-            {create.isPending ? (
-              <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+            {create.isPending || uploadRoom.isPending ? (
+              <>
+                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                {uploadRoom.isPending
+                  ? "Uploading room photos…"
+                  : "Creating property…"}
+              </>
             ) : (
-              <Plus className="mr-2 h-4 w-4" />
+              <>
+                <Plus className="mr-2 h-4 w-4" />
+                Create property
+              </>
             )}
-            Create property
           </Button>
         </form>
       </div>

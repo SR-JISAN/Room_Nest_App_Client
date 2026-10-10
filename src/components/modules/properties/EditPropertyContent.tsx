@@ -1,7 +1,9 @@
 "use client";
 
+import { ImagePlus, LoaderCircle, RefreshCw, X } from "lucide-react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { UpdateRoomPayload } from "@/api/property.api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,10 +13,12 @@ import { toast } from "@/components/ui/toast";
 import {
   useMyPropertyDetails,
   useUpdateProperty,
+  useUpdatePropertyImage,
   useUpdateRoom,
+  useUpdateRoomImage,
   useUploadRoomImages,
 } from "@/hooks/property.hooks";
-import type { Room } from "@/types/property.type";
+import type { Property, Room } from "@/types/property.type";
 
 function errorMessage(error: unknown) {
   if (error && typeof error === "object" && "data" in error) {
@@ -30,11 +34,257 @@ function errorMessage(error: unknown) {
   return "The update could not be saved. Please check the fields and try again.";
 }
 
+function getRoomImageUrl(item: unknown): string {
+  if (typeof item === "string") return item;
+  if (item && typeof item === "object") {
+    const obj = item as {
+      roomImageURL?: string;
+      url?: string;
+      imageURL?: string;
+    };
+    return obj.roomImageURL || obj.url || obj.imageURL || "";
+  }
+  return "";
+}
+
+function getRoomImageId(item: unknown): string | undefined {
+  if (item && typeof item === "object" && "id" in item) {
+    const id = (item as { id?: unknown }).id;
+    return typeof id === "string" ? id : undefined;
+  }
+  return undefined;
+}
+
+function getPropertyImageUrl(item: unknown): string {
+  if (typeof item === "string") return item;
+  if (item && typeof item === "object") {
+    const obj = item as {
+      propertyImageURL?: string;
+      url?: string;
+      imageUrl?: string;
+      imageURL?: string;
+    };
+    return (
+      obj.propertyImageURL || obj.url || obj.imageUrl || obj.imageURL || ""
+    );
+  }
+  return "";
+}
+
+function getPropertyImageId(item: unknown): string | undefined {
+  if (item && typeof item === "object" && "id" in item) {
+    const id = (item as { id?: unknown }).id;
+    return typeof id === "string" ? id : undefined;
+  }
+  return undefined;
+}
+
+function PropertyImagesSection({
+  propertyId,
+  property,
+}: {
+  propertyId: string;
+  property: Property;
+}) {
+  const updateImage = useUpdatePropertyImage();
+  const [replacingId, setReplacingId] = useState<string | null>(null);
+
+  async function handleReplace(imageId: string, file: File) {
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      toast.add({ title: "Must be a JPG, PNG, or WebP file", type: "error" });
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.add({ title: "Image must be 5 MB or smaller", type: "error" });
+      return;
+    }
+    setReplacingId(imageId);
+    try {
+      await updateImage.mutateAsync({
+        propertyId,
+        propertyImageId: imageId,
+        image: file,
+      });
+      toast.add({
+        title: "Property photo updated successfully",
+        type: "success",
+      });
+    } catch (err) {
+      toast.add({ title: errorMessage(err), type: "error" });
+    } finally {
+      setReplacingId(null);
+    }
+  }
+
+  const images = property.propertyImages ?? [];
+
+  return (
+    <Card className="rounded-2xl border-[#e0e8df]">
+      <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <div>
+          <CardTitle>Property photos</CardTitle>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Current photos representing the property exterior and shared areas.
+          </p>
+        </div>
+        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+          {images.length} photos
+        </span>
+      </CardHeader>
+      <CardContent>
+        {images.length > 0 ? (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {images.map((item, idx) => {
+              const src = getPropertyImageUrl(item);
+              const id = getPropertyImageId(item);
+              if (!src) return null;
+              const isReplacing = replacingId === id;
+
+              return (
+                <div
+                  key={id ?? src ?? idx}
+                  className="group relative overflow-hidden rounded-xl border border-muted bg-muted/20 p-1.5 transition hover:shadow-md"
+                >
+                  <div className="relative h-28 w-full overflow-hidden rounded-lg bg-black/5">
+                    {/* biome-ignore lint/performance/noImgElement: dynamic Cloudinary image */}
+                    <img
+                      src={src}
+                      alt={`${property.title} view ${idx + 1}`}
+                      className="h-full w-full object-cover transition duration-200 group-hover:scale-105"
+                    />
+                    <span className="absolute bottom-1 left-1 rounded-md bg-black/60 px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-xs">
+                      Photo {idx + 1}
+                    </span>
+                  </div>
+                  {id && (
+                    <div className="mt-2">
+                      <label className="flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-input bg-background px-2 py-1 text-xs font-medium text-foreground transition hover:bg-muted">
+                        {isReplacing ? (
+                          <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <RefreshCw className="h-3 w-3" />
+                        )}
+                        <span>{isReplacing ? "Updating…" : "Replace"}</span>
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          className="sr-only"
+                          disabled={isReplacing}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) void handleReplace(id, file);
+                            e.target.value = "";
+                          }}
+                        />
+                      </label>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            No property photos uploaded yet.
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
   const update = useUpdateRoom();
   const upload = useUploadRoomImages();
-  const [busy, setBusy] = useState(false);
+  const updateImage = useUpdateRoomImage();
+
+  const [savingDetails, setSavingDetails] = useState(false);
+  const [replacingId, setReplacingId] = useState<string | null>(null);
+  const [stagedFiles, setStagedFiles] = useState<File[]>([]);
+  const [stagedPreviews, setStagedPreviews] = useState<string[]>([]);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const urls = stagedFiles.map((file) => URL.createObjectURL(file));
+    setStagedPreviews(urls);
+    return () => {
+      urls.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
+    };
+  }, [stagedFiles]);
+
+  const handleStageFiles = (files: FileList | null) => {
+    if (!files) return;
+    const incoming = Array.from(files);
+    const combined = [...stagedFiles, ...incoming];
+    if (combined.length > 4) {
+      setMessage("You can stage up to 4 photos per upload.");
+      return;
+    }
+    const invalidType = combined.some(
+      (file) => !["image/jpeg", "image/png", "image/webp"].includes(file.type),
+    );
+    if (invalidType) {
+      setMessage("Images must be JPG, PNG, or WebP files.");
+      return;
+    }
+    const tooLarge = combined.some((file) => file.size > 5 * 1024 * 1024);
+    if (tooLarge) {
+      setMessage("Each image must be 5 MB or smaller.");
+      return;
+    }
+    setMessage("");
+    setStagedFiles(combined);
+  };
+
+  const handleRemoveStaged = (index: number) => {
+    setStagedFiles((prev) => prev.filter((_, idx) => idx !== index));
+  };
+
+  const handleUploadStaged = async () => {
+    if (!stagedFiles.length) return;
+    setMessage("");
+    try {
+      await upload.mutateAsync({
+        propertyId,
+        roomId: room.id,
+        images: stagedFiles,
+      });
+      setStagedFiles([]);
+      toast.add({
+        title: "Room photos uploaded successfully",
+        type: "success",
+      });
+    } catch (err) {
+      setMessage(errorMessage(err));
+    }
+  };
+
+  const handleReplaceExisting = async (imageId: string, file: File) => {
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      toast.add({ title: "Must be a JPG, PNG, or WebP file", type: "error" });
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.add({ title: "Image must be 5 MB or smaller", type: "error" });
+      return;
+    }
+    setReplacingId(imageId);
+    try {
+      await updateImage.mutateAsync({
+        propertyId,
+        roomId: room.id,
+        roomImageId: imageId,
+        image: file,
+      });
+      toast.add({ title: "Room photo updated successfully", type: "success" });
+    } catch (err) {
+      toast.add({ title: errorMessage(err), type: "error" });
+    } finally {
+      setReplacingId(null);
+    }
+  };
 
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -69,7 +319,7 @@ function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
       );
       return;
     }
-    setBusy(true);
+    setSavingDetails(true);
     setMessage("");
     try {
       await update.mutateAsync({ propertyId, roomId: room.id, payload });
@@ -77,66 +327,165 @@ function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
     } catch (error) {
       setMessage(errorMessage(error));
     } finally {
-      setBusy(false);
+      setSavingDetails(false);
     }
   }
 
-  async function addImages(event: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(event.target.files ?? []);
-    if (!files.length) return;
-    if (
-      files.length > 4 ||
-      files.some(
-        (file) =>
-          !["image/jpeg", "image/png", "image/webp"].includes(file.type) ||
-          file.size > 5 * 1024 * 1024,
-      )
-    ) {
-      setMessage(
-        "Choose up to 4 JPG, PNG, or WebP images, each no larger than 5 MB.",
-      );
-      event.target.value = "";
-      return;
-    }
-    setBusy(true);
-    setMessage("");
-    try {
-      await upload.mutateAsync({ propertyId, roomId: room.id, images: files });
-      toast.add({ title: "Room photos uploaded", type: "success" });
-      event.target.value = "";
-    } catch (error) {
-      setMessage(errorMessage(error));
-    } finally {
-      setBusy(false);
-    }
-  }
+  const existingImages = room.roomImages ?? [];
 
   return (
-    <Card className="rounded-2xl">
+    <Card className="rounded-2xl border-[#e0e8df]">
       <CardHeader>
         <CardTitle>{room.title ?? room.name ?? "Room"}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-5">
-        {room.roomImages?.length ? (
-          <div className="flex gap-3 overflow-x-auto">
-            {room.roomImages.map((item, index) => {
-              const src =
-                typeof item === "string"
-                  ? item
-                  : (item.roomImageURL ?? item.url);
-              return src ? (
-                // API image URLs are hosted dynamically; next/image would require unsafe remote host configuration.
-                // biome-ignore lint/performance/noImgElement: room images come from backend-configured Cloudinary URLs.
-                <img
-                  key={typeof item === "string" ? item : (item.id ?? src)}
-                  src={src}
-                  alt={`${room.title ?? "Room"}, view ${index + 1}`}
-                  className="h-24 w-32 shrink-0 rounded-lg object-cover"
-                />
-              ) : null;
-            })}
+      <CardContent className="space-y-6">
+        <div className="space-y-4 rounded-xl border border-emerald-100 bg-emerald-50/30 p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-[#172b20]">
+                Room photos
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                Manage photos for this specific room ({existingImages.length}{" "}
+                uploaded)
+              </p>
+            </div>
+            <span className="rounded-full border border-emerald-200 bg-white px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+              {existingImages.length} photos
+            </span>
           </div>
-        ) : null}
+
+          {existingImages.length > 0 && (
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {existingImages.map((item, index) => {
+                const src = getRoomImageUrl(item);
+                const id = getRoomImageId(item);
+                if (!src) return null;
+                const isReplacing = replacingId === id;
+
+                return (
+                  <div
+                    key={id ?? src ?? index}
+                    className="group relative overflow-hidden rounded-xl border border-muted bg-white p-1.5 shadow-xs transition hover:shadow-md"
+                  >
+                    <div className="relative h-24 w-full overflow-hidden rounded-lg bg-black/5">
+                      {/* biome-ignore lint/performance/noImgElement: dynamic Cloudinary image */}
+                      <img
+                        src={src}
+                        alt={`${room.title ?? "Room"} view ${index + 1}`}
+                        className="h-full w-full object-cover transition duration-200 group-hover:scale-105"
+                      />
+                      <span className="absolute bottom-1 left-1 rounded-md bg-black/60 px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-xs">
+                        Photo {index + 1}
+                      </span>
+                    </div>
+                    {id && (
+                      <div className="mt-1.5">
+                        <label className="flex cursor-pointer items-center justify-center gap-1 rounded-md border border-input bg-background px-2 py-1 text-[11px] font-medium text-foreground transition hover:bg-muted">
+                          {isReplacing ? (
+                            <LoaderCircle className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <RefreshCw className="h-3 w-3" />
+                          )}
+                          <span>{isReplacing ? "Updating…" : "Replace"}</span>
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
+                            className="sr-only"
+                            disabled={isReplacing}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) void handleReplaceExisting(id, file);
+                              e.target.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          <div className="space-y-3 pt-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg bg-[#173b28] px-3.5 text-xs font-medium text-white shadow-xs transition hover:bg-[#1f4e35]">
+                <ImagePlus className="h-3.5 w-3.5" />
+                Choose photos to upload
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  disabled={upload.isPending}
+                  className="sr-only"
+                  onChange={(e) => {
+                    handleStageFiles(e.target.files);
+                    e.target.value = "";
+                  }}
+                />
+              </label>
+              {stagedFiles.length > 0 && (
+                <Button
+                  type="button"
+                  onClick={handleUploadStaged}
+                  disabled={upload.isPending}
+                  className="h-9 bg-emerald-700 text-xs text-white hover:bg-emerald-800"
+                >
+                  {upload.isPending ? (
+                    <>
+                      <LoaderCircle className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                      Uploading…
+                    </>
+                  ) : (
+                    `Upload ${stagedFiles.length} selected ${stagedFiles.length === 1 ? "photo" : "photos"}`
+                  )}
+                </Button>
+              )}
+              <span className="text-xs text-muted-foreground">
+                Up to 4 JPG, PNG, or WebP images per upload · 5 MB each
+              </span>
+            </div>
+
+            {stagedFiles.length > 0 && (
+              <div className="grid grid-cols-2 gap-3 pt-1 sm:grid-cols-4">
+                {stagedFiles.map((file, idx) => (
+                  <div
+                    key={`${file.name}-${file.lastModified}-${idx}`}
+                    className="group relative overflow-hidden rounded-xl border border-emerald-200 bg-white p-2 shadow-xs"
+                  >
+                    <div className="relative h-20 w-full overflow-hidden rounded-lg bg-muted">
+                      {stagedPreviews[idx] && (
+                        <Image
+                          src={stagedPreviews[idx]}
+                          alt={`Staged preview ${idx + 1}`}
+                          fill
+                          unoptimized
+                          className="object-cover"
+                        />
+                      )}
+                      <button
+                        type="button"
+                        aria-label={`Remove photo ${file.name}`}
+                        onClick={() => handleRemoveStaged(idx)}
+                        className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs transition hover:bg-red-600"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                    <p className="mt-1 truncate text-[11px] font-medium text-foreground">
+                      {file.name}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground">
+                      {(file.size / (1024 * 1024)).toFixed(2)} MB (Ready)
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
         <form
           className="grid gap-4 sm:grid-cols-2"
           onSubmit={(event) => void save(event)}
@@ -226,23 +575,16 @@ function RoomEditor({ propertyId, room }: { propertyId: string; room: Room }) {
             />
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
-            <Button type="submit" disabled={busy}>
-              {busy ? "Saving…" : "Save room details"}
+            <Button type="submit" disabled={savingDetails}>
+              {savingDetails ? (
+                <>
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                  Saving room details…
+                </>
+              ) : (
+                "Save room details"
+              )}
             </Button>
-            <label className="inline-flex h-9 cursor-pointer items-center rounded-lg border px-3 text-sm hover:bg-muted">
-              Upload room photos
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                multiple
-                className="sr-only"
-                disabled={busy}
-                onChange={(event) => void addImages(event)}
-              />
-            </label>
-            <span className="text-xs text-muted-foreground">
-              Up to 4 JPG, PNG, or WebP images per upload · 5 MB each
-            </span>
           </div>
           {message && (
             <p role="alert" className="text-sm text-destructive sm:col-span-2">
@@ -399,6 +741,7 @@ export default function EditPropertyContent() {
           </form>
         </CardContent>
       </Card>
+      <PropertyImagesSection propertyId={propertyId} property={property} />
       <section className="space-y-4">
         <div>
           <h2 className="text-2xl font-semibold">Rooms</h2>

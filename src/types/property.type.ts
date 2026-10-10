@@ -26,6 +26,15 @@ export type Room = {
   size?: number | string;
   bathroom?: string;
   amenities?: string[];
+  roomAmenities?: Array<
+    | string
+    | {
+        id?: string;
+        amenityId?: string;
+        amenity?: { id?: string; amenityName: string };
+        amenityName?: string;
+      }
+  >;
   reviews?: Array<{
     id: string;
     name: string;

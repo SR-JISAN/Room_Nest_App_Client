@@ -49,10 +49,13 @@ export default function UpdatePasswordForm() {
           form.reset();
         },
         onError: (err) => {
-          const error = err as FetchError;
+          const error = err as FetchError<{ message?: string }>;
           toast.add({
-            title: "Password Update failed",
-            description: `${error.data.message} `,
+            title: "Password update failed",
+            description:
+              error.data?.message ||
+              error.message ||
+              "Could not update password. Please verify current password.",
             type: "error",
           });
         },

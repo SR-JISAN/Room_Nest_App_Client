@@ -1,17 +1,24 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import {
   CalendarDays,
+  CheckCircle2,
   CircleAlert,
   CreditCard,
   LoaderCircle,
   MapPin,
+  PartyPopper,
+  Receipt,
+  RefreshCw,
+  ShieldCheck,
   Trash2,
   Users,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { BookingRecord, SubBookingRecord } from "@/api/booking.api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,12 +46,19 @@ const label = (value?: string | null) =>
 
 export default function BookingHistoryContent() {
   const params = useSearchParams();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<
     "bookings" | "applications" | "requests"
   >("bookings");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const callbackStatus = params.get("status");
+  const callbackError = params.get("error");
+  const paymentIdParam = params.get("paymentID") || params.get("paymentId");
+  const [showSuccessDialog, setShowSuccessDialog] = useState(
+    callbackStatus === "success",
+  );
 
   // Bookings (Primary rooms)
   const {
@@ -68,11 +82,8 @@ export default function BookingHistoryContent() {
   const subBookingDeletion = useDeleteSubBooking();
 
   // Incoming Roommate Requests for user's booked rooms
-  const {
-    data: incomingGroups,
-    isPending: requestsPending,
-    refetch: refetchRequests,
-  } = useSubBookingRequests();
+  const { data: incomingGroups, isPending: requestsPending } =
+    useSubBookingRequests();
   const updateSubRequest = useUpdateSubBooking();
 
   const totalIncomingRequests = useMemo(() => {
@@ -82,6 +93,34 @@ export default function BookingHistoryContent() {
       0,
     );
   }, [incomingGroups]);
+
+  useEffect(() => {
+    if (callbackStatus === "success") {
+      setShowSuccessDialog(true);
+      void queryClient.invalidateQueries({ queryKey: ["booking"] });
+      void queryClient.invalidateQueries({ queryKey: ["sub-booking"] });
+      void queryClient.invalidateQueries({ queryKey: ["payments"] });
+      void queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      void refetchBookings();
+      void refetchSubBookings();
+    }
+  }, [callbackStatus, queryClient, refetchBookings, refetchSubBookings]);
+
+  const handleManualRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["booking"] }),
+        queryClient.invalidateQueries({ queryKey: ["sub-booking"] }),
+        queryClient.invalidateQueries({ queryKey: ["payments"] }),
+        queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
+        refetchBookings(),
+        refetchSubBookings(),
+      ]);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const startBookingPayment = async (id: string) => {
     setErrorMessage("");
@@ -209,11 +248,179 @@ export default function BookingHistoryContent() {
           </Link>
         </div>
 
-        {callbackStatus && (
-          <output className="mt-6 block rounded-xl border border-[#dce8dc] bg-white p-4 text-sm shadow-xs">
-            Payment callback: <strong>{label(callbackStatus)}</strong>. Check
-            the payment state below for the latest backend record.
-          </output>
+        {/* Payment Success Celebration Dialog */}
+        {showSuccessDialog && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+          >
+            <div className="relative w-full max-w-lg rounded-3xl border border-emerald-100 bg-white p-6 shadow-2xl sm:p-8">
+              <button
+                type="button"
+                onClick={() => setShowSuccessDialog(false)}
+                className="absolute top-5 right-5 rounded-full p-2 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700"
+                aria-label="Close dialog"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <div className="flex flex-col items-center text-center">
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/50">
+                  <CheckCircle2 className="h-10 w-10 text-emerald-600 stroke-[2.5]" />
+                  <span className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#173b28] text-amber-300 shadow-sm">
+                    <PartyPopper className="h-4 w-4" />
+                  </span>
+                </div>
+
+                <h2 className="mt-5 text-2xl font-bold tracking-tight text-[#173b28] sm:text-3xl">
+                  Payment Successful!
+                </h2>
+                <p className="mt-2 text-sm text-[#526859] sm:text-base">
+                  Your security deposit has been verified and your booking is
+                  now <strong className="text-emerald-700">Confirmed</strong>.
+                </p>
+
+                {paymentIdParam && (
+                  <div className="mt-5 w-full rounded-2xl border border-[#e2eae3] bg-[#f4f7f4] p-4 text-left">
+                    <div className="flex items-center justify-between text-xs text-[#6b7b70]">
+                      <span className="font-semibold uppercase tracking-wider">
+                        Transaction Reference
+                      </span>
+                      <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-800">
+                        bKash Paid
+                      </span>
+                    </div>
+                    <p className="mt-1 break-all font-mono text-xs font-semibold text-[#172b20] sm:text-sm">
+                      {paymentIdParam}
+                    </p>
+                  </div>
+                )}
+
+                <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row">
+                  <Button
+                    type="button"
+                    className="flex-1 bg-[#173b28] py-2.5 text-white hover:bg-[#28563b]"
+                    onClick={() => {
+                      setShowSuccessDialog(false);
+                      setActiveTab("bookings");
+                    }}
+                  >
+                    View My Confirmed Room
+                  </Button>
+
+                  <Link
+                    href="/dashboard/my-payments"
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-[#c9d8cb] bg-white px-4 py-2 text-sm font-semibold text-[#173b28] shadow-xs hover:bg-[#edf5ed]"
+                  >
+                    <Receipt className="h-4 w-4" />
+                    Payment Receipts
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Status Banners */}
+        {callbackStatus === "success" && (
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/80 p-4 text-emerald-900 shadow-xs">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+                <CheckCircle2 className="h-5 w-5 stroke-[2.5]" />
+              </div>
+              <div>
+                <p className="font-semibold text-emerald-950">
+                  Payment Confirmed Successfully!
+                </p>
+                <p className="text-xs text-emerald-800 sm:text-sm">
+                  Your room reservation is secured. You can view full
+                  transaction receipts in Payment History.
+                  {paymentIdParam ? ` (Ref: ${paymentIdParam})` : ""}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => void handleManualRefresh()}
+                disabled={isRefreshing}
+                className="border-emerald-300 bg-white text-emerald-900 hover:bg-emerald-100"
+              >
+                <RefreshCw
+                  className={`mr-1.5 h-3.5 w-3.5 ${
+                    isRefreshing ? "animate-spin" : ""
+                  }`}
+                />
+                Refresh Status
+              </Button>
+              <Link
+                href="/dashboard/my-payments"
+                className="rounded-lg bg-emerald-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800"
+              >
+                View Receipt
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {callbackStatus === "failure" && (
+          <div className="mt-6 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-900 shadow-xs">
+            <CircleAlert className="h-5 w-5 shrink-0 text-red-600" />
+            <div className="flex-1 text-sm">
+              <p className="font-semibold text-red-950">
+                Payment Not Completed
+              </p>
+              <p className="text-xs text-red-700 sm:text-sm">
+                The bKash transaction failed or was declined. Your booking
+                remains pending—you can retry payment below.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {callbackStatus === "cancel" && (
+          <div className="mt-6 flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900 shadow-xs">
+            <CircleAlert className="h-5 w-5 shrink-0 text-amber-600" />
+            <div className="flex-1 text-sm">
+              <p className="font-semibold text-amber-950">Payment Cancelled</p>
+              <p className="text-xs text-amber-700 sm:text-sm">
+                You cancelled the checkout before completing payment. You can
+                resume payment at any time below.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {callbackError === "having-issue-with-payment" && (
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-200 bg-amber-50/90 p-4 text-amber-950 shadow-xs">
+            <div className="flex items-center gap-3">
+              <CircleAlert className="h-5 w-5 shrink-0 text-amber-600" />
+              <div>
+                <p className="font-semibold">Payment Verification Note</p>
+                <p className="text-xs text-amber-800 sm:text-sm">
+                  If your bKash payment was already completed, your booking
+                  status is being updated. Click Refresh to synchronize with the
+                  latest server records.
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void handleManualRefresh()}
+              disabled={isRefreshing}
+              className="border-amber-300 bg-white text-amber-900 hover:bg-amber-100"
+            >
+              <RefreshCw
+                className={`mr-1.5 h-3.5 w-3.5 ${
+                  isRefreshing ? "animate-spin" : ""
+                }`}
+              />
+              Refresh Status
+            </Button>
+          </div>
         )}
 
         {errorMessage && (

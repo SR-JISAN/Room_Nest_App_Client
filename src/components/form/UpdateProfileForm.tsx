@@ -108,10 +108,13 @@ export default function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
           form.reset();
         },
         onError: (err) => {
-          const error = err as FetchError;
+          const error = err as FetchError<{ message?: string }>;
           toast.add({
-            title: "Profile Update failed",
-            description: `${error.data.message} `,
+            title: "Profile update failed",
+            description:
+              error.data?.message ||
+              error.message ||
+              "Could not update profile details.",
             type: "error",
           });
         },

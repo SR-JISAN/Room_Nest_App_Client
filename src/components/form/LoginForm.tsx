@@ -67,10 +67,13 @@ export function LoginForm({
           }
         },
         onError: (err) => {
-          const error = err as FetchError;
+          const error = err as FetchError<{ message?: string }>;
           toast.add({
-            title: "Welcome Back to Room Nest",
-            description: `${error.data.message} `,
+            title: "Login failed",
+            description:
+              error.data?.message ||
+              error.message ||
+              "Invalid email or password. Please try again.",
             type: "error",
           });
         },
